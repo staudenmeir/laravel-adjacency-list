@@ -1,0 +1,198 @@
+<?php
+
+namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Ancestors extends HasMany
+{
+    use IsRecursiveRelation;
+
+    /**
+     * Set the base constraints on the relation query.
+     *
+     * @return void
+     */
+    public function addConstraints()
+    {
+        if (static::$constraints) {
+            $constraint = function (Builder $query) {
+                $key = $this->andSelf ? $this->getParentKey() : $this->getForeignKey();
+
+                $query->where($this->getQualifiedParentKeyName(), '=', $key);
+            };
+
+            $this->addExpression($constraint);
+        }
+    }
+
+    /**
+     * Set the constraints for an eager load of the relation.
+     *
+     * @param array $models
+     * @return void
+     */
+    public function addEagerConstraints(array $models)
+    {
+        $key = $this->andSelf ? $this->localKey : $this->getForeignKeyName();
+
+        $keys = $this->getKeys($models, $key);
+
+        $constraint = function (Builder $query) use ($keys) {
+            $query->whereIn($this->getQualifiedParentKeyName(), $keys);
+        };
+
+        $this->addExpression($constraint);
+    }
+
+    /**
+     * Get all of the primary keys for an array of models.
+     *
+     * @param array $models
+     * @param string $key
+     * @return array
+     */
+    protected function getKeys(array $models, $key = null)
+    {
+        $keys = parent::getKeys($models, $key);
+
+        return array_filter($keys, function ($value) {
+            return !is_null($value);
+        });
+    }
+
+    /**
+     * Match the eagerly loaded results to their parents.
+     *
+     * @param array $models
+     * @param \Illuminate\Database\Eloquent\Collection $results
+     * @param string $relation
+     * @return array
+     */
+    public function match(array $models, Collection $results, $relation)
+    {
+        $dictionary = $this->buildDictionary($results);
+
+        $attribute = $this->andSelf ? $this->localKey : $this->getForeignKeyName();
+
+        foreach ($models as $model) {
+            $key = $model->{$attribute};
+
+            if (isset($dictionary[$key])) {
+                $value = $this->related->newCollection($dictionary[$key]);
+
+                $model->setRelation($relation, $value);
+            }
+        }
+
+        return $models;
+    }
+
+    /**
+     * Get the results of the relationship.
+     *
+     * @return mixed
+     */
+    public function getResults()
+    {
+        return !is_null($this->getForeignKey())
+            ? $this->query->get()
+            : $this->related->newCollection();
+    }
+
+    /**
+     * Add the constraints for a relationship query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
+     * @param array|mixed $columns
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
+    {
+        if ($query->getQuery()->from === $parentQuery->getQuery()->from) {
+            return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
+        }
+
+        $key = $this->andSelf ? $this->localKey : $this->getForeignKeyName();
+
+        $constraint = function (Builder $query) use ($key) {
+            $query->whereColumn(
+                $query->getQuery()->from.'.'.$this->localKey,
+                '=',
+                $this->parent->qualifyColumn($key)
+            );
+        };
+
+        return $this->addExpression($constraint, $query->select($columns));
+    }
+
+    /**
+     * Add the constraints for a relationship query on the same table.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
+     * @param array|mixed $columns
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
+    {
+        $table = $this->getRelationCountHash();
+
+        $from = $query->getModel()->getTable().' as '.$table;
+
+        $query->getModel()->setTable($table);
+
+        $key = $this->andSelf ? $this->localKey : $this->getForeignKeyName();
+
+        $constraint = function (Builder $query) use ($table, $key) {
+            $query->whereColumn(
+                $table.'.'.$this->localKey,
+                '=',
+                $this->parent->qualifyColumn($key)
+            );
+        };
+
+        return $this->addExpression($constraint, $query->select($columns), $from);
+    }
+
+    /**
+     * Add a recursive expression to the query.
+     *
+     * @param callable $constraint
+     * @param \Illuminate\Database\Eloquent\Builder|null $query
+     * @param string|null $from
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function addExpression(callable $constraint, Builder $query = null, $from = null)
+    {
+        $query = $query ?: $this->query;
+
+        $initialDepth = $this->andSelf ? 0 : -1;
+
+        return $query->withRelationshipExpression('asc', $constraint, $initialDepth, $from);
+    }
+
+    /**
+     * Get the key value of the parent's foreign key.
+     *
+     * @return mixed
+     */
+    public function getForeignKey()
+    {
+        return $this->parent->{$this->getForeignKeyName()};
+    }
+
+    /**
+     * Perform an update on all the related models.
+     *
+     * @param  array  $attributes
+     * @return int
+     */
+    public function update(array $attributes)
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+}

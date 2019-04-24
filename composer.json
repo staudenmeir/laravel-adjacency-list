@@ -1,0 +1,31 @@
+{
+    "name": "staudenmeir/laravel-adjacency-list",
+    "description": "Recursive Laravel Eloquent relationships with CTEs",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonas Staudenmeir",
+            "email": "mail@jonas-staudenmeir.de"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "illuminate/database": "~5.5.29|5.6.*|5.7.*",
+        "illuminate/support": "^5.5.14",
+        "staudenmeir/laravel-cte": "^1.0.3"
+    },
+    "require-dev": {
+        "laravel/homestead": "^7.0",
+        "phpunit/phpunit": "~6.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Staudenmeir\\LaravelAdjacencyList\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}
