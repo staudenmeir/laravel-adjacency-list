@@ -36,12 +36,14 @@ class Ancestors extends HasMany
      */
     public function addEagerConstraints(array $models)
     {
+        $whereIn = $this->whereInMethod($this->parent, $this->localKey);
+
         $key = $this->andSelf ? $this->localKey : $this->getForeignKeyName();
 
         $keys = $this->getKeys($models, $key);
 
-        $constraint = function (Builder $query) use ($keys) {
-            $query->whereIn($this->getQualifiedParentKeyName(), $keys);
+        $constraint = function (Builder $query) use ($whereIn, $keys) {
+            $query->$whereIn($this->getQualifiedParentKeyName(), $keys);
         };
 
         $this->addExpression($constraint);
@@ -183,16 +185,5 @@ class Ancestors extends HasMany
     public function getForeignKey()
     {
         return $this->parent->{$this->getForeignKeyName()};
-    }
-
-    /**
-     * Perform an update on all the related models.
-     *
-     * @param  array  $attributes
-     * @return int
-     */
-    public function update(array $attributes)
-    {
-        return $this->__call(__FUNCTION__, func_get_args());
     }
 }

@@ -42,12 +42,14 @@ class Descendants extends HasMany
      */
     public function addEagerConstraints(array $models)
     {
+        $whereIn = $this->whereInMethod($this->parent, $this->localKey);
+
         $column = $this->andSelf ? $this->getQualifiedParentKeyName() : $this->foreignKey;
 
         $keys = $this->getKeys($models, $this->localKey);
 
-        $constraint = function (Builder $query) use ($models, $column, $keys) {
-            $query->whereIn($column, $keys);
+        $constraint = function (Builder $query) use ($models, $whereIn, $column, $keys) {
+            $query->$whereIn($column, $keys);
         };
 
         $this->addExpression($constraint);
@@ -180,16 +182,5 @@ class Descendants extends HasMany
         $initialDepth = $this->andSelf ? 0 : 1;
 
         return $query->withRelationshipExpression('desc', $constraint, $initialDepth, $from);
-    }
-
-    /**
-     * Perform an update on all the related models.
-     *
-     * @param  array  $attributes
-     * @return int
-     */
-    public function update(array $attributes)
-    {
-        return $this->__call(__FUNCTION__, func_get_args());
     }
 }

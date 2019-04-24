@@ -286,8 +286,7 @@ trait HasRecursiveRelationships
     {
         $keys = (new static)->newQuery()
             ->select($this->getParentKeyName())
-            ->hasParent()
-            ->toBase();
+            ->hasParent();
 
         return $query->whereIn($this->getKeyName(), $keys);
     }
@@ -313,8 +312,7 @@ trait HasRecursiveRelationships
     {
         $keys = (new static)->newQuery()
             ->select($this->getParentKeyName())
-            ->hasParent()
-            ->toBase();
+            ->hasParent();
 
         return $query->whereNotIn($this->getKeyName(), $keys);
     }
@@ -413,7 +411,7 @@ trait HasRecursiveRelationships
             $this->getPathName()
         );
 
-        $query = $this->newEloquentBuilder($this->newBaseQueryBuilder())->setModel($this)
+        $query = $this->newModelQuery()
             ->select('*')
             ->selectRaw($initialDepth.' as '.$depth)
             ->selectRaw($initialPath)
@@ -447,7 +445,7 @@ trait HasRecursiveRelationships
             $this->getPathSeparator()
         );
 
-        $query = $this->newEloquentBuilder($this->newBaseQueryBuilder())->setModel($this)
+        $query = $this->newModelQuery()
             ->select($table.'.*')
             ->selectRaw($recursiveDepth)
             ->selectRaw($recursivePath)
