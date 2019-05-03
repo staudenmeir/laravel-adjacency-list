@@ -2,8 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Database\Eloquent\Collection;
 use Tests\Models\User;
 
 class AncestorsTest extends TestCase
@@ -17,6 +15,13 @@ class AncestorsTest extends TestCase
         $this->assertEquals(['5', '5.2', '5.2.1'], $ancestors->pluck('path')->all());
     }
 
+    public function testLazyLoadingWithRoot()
+    {
+        $ancestors = User::find(1)->ancestors;
+
+        $this->assertEmpty($ancestors);
+    }
+
     public function testLazyLoadingAndSelf()
     {
         $ancestorsAndSelf = User::find(8)->ancestorsAndSelf;
@@ -26,16 +31,11 @@ class AncestorsTest extends TestCase
         $this->assertEquals(['8', '8.5', '8.5.2', '8.5.2.1'], $ancestorsAndSelf->pluck('path')->all());
     }
 
-    public function testEmptyLazyLoading()
+    public function testLazyLoadingAndSelfWithRoot()
     {
-        $user = User::find(1);
+        $ancestorsAndSelf = User::find(1)->ancestorsAndSelf;
 
-        DB::enableQueryLog();
-
-        $ancestors = $user->ancestors;
-
-        $this->assertInstanceOf(Collection::class, $ancestors);
-        $this->assertEmpty(DB::getQueryLog());
+        $this->assertEquals([1], $ancestorsAndSelf->pluck('id')->all());
     }
 
     public function testEagerLoading()
