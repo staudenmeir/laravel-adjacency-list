@@ -88,6 +88,10 @@ $users = User::with('descendants')->get();
 $users = User::whereHas('siblings', function ($query) {
     $query->where('name', '=', 'John');
 })->get();
+
+User::find($id)->descendants()->update(['active' => false]);
+
+User::find($id)->siblings()->delete();
 ```
 
 ### Tree
