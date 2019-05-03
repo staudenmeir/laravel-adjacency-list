@@ -93,18 +93,6 @@ class Ancestors extends HasMany
     }
 
     /**
-     * Get the results of the relationship.
-     *
-     * @return mixed
-     */
-    public function getResults()
-    {
-        return !is_null($this->getForeignKey())
-            ? $this->query->get()
-            : $this->related->newCollection();
-    }
-
-    /**
      * Add the constraints for a relationship query.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
