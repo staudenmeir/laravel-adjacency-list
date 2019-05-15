@@ -45,12 +45,9 @@ before_script:
       sudo apt-get update
       sudo apt-get install -y --allow-unauthenticated -o Dpkg::Options::=--force-confnew mysql-server
       sudo systemctl restart mysql
-      mysql -e 'create database `test`;'
     fi
-  - |
-    if [ $DB == "pgsql" ]; then
-      psql -c 'create database "test";' -U postgres
-    fi
+  - mysql -e 'create database `test`;'
+  - psql -c 'create database "test";' -U postgres
 
 script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS

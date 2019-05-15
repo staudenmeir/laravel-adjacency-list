@@ -6,7 +6,8 @@
 [![License](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/license)](https://packagist.org/packages/staudenmeir/laravel-adjacency-list)
 
 ## Introduction
-This Laravel Eloquent extension provides recursive relationships using common table expressions (CTE).  
+This Laravel Eloquent extension provides recursive relationships using common table expressions (CTE).
+
 Supports Laravel 5.5.29+.
 
 ## Compatibility
