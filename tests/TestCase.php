@@ -11,7 +11,7 @@ use Tests\Models\User;
 
 abstract class TestCase extends Base
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

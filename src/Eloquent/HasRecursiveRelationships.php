@@ -436,6 +436,8 @@ trait HasRecursiveRelationships
 
         $table = explode(' as ', $from)[1] ?? $from;
 
+        $depth = $grammar->wrap($this->getDepthName());
+
         $recursiveDepth = $grammar->wrap($name.'.'.$this->getDepthName())
             .' '.($direction === 'asc' ? '-' : '+').' 1';
 
@@ -447,7 +449,7 @@ trait HasRecursiveRelationships
 
         $query = $this->newModelQuery()
             ->select($table.'.*')
-            ->selectRaw($recursiveDepth)
+            ->selectRaw($recursiveDepth.' as '.$depth)
             ->selectRaw($recursivePath)
             ->from($from);
 
