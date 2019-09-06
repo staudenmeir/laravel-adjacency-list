@@ -25,6 +25,8 @@ matrix:
       env: COVERAGE=yes DB=sqlite
     - php: 7.3
       env: COVERAGE=yes DB=sqlsrv
+    - php: 7.4snapshot
+      env: DB=pgsql
 
 cache:
   directories:
