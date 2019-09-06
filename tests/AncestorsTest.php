@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Database\Capsule\Manager as DB;
 use Tests\Models\User;
 
 class AncestorsTest extends TestCase
@@ -84,6 +85,10 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQuery()
     {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $descendants = User::first()->descendants()->has('ancestors', '>', 2)->get();
 
         $this->assertEquals([8, 9], $descendants->pluck('id')->all());
@@ -91,6 +96,10 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $descendants = User::first()->descendants()->has('ancestorsAndSelf', '>', 2)->get();
 
         $this->assertEquals([5, 6, 7, 8, 9], $descendants->pluck('id')->all());
@@ -98,6 +107,10 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $users = User::has('ancestors')->get();
 
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8, 9, 12], $users->pluck('id')->all());
@@ -105,6 +118,10 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $users = User::has('ancestorsAndSelf', '>', 2)->get();
 
         $this->assertEquals([5, 6, 7, 8, 9], $users->pluck('id')->all());

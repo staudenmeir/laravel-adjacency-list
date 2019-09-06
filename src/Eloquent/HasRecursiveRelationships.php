@@ -394,7 +394,7 @@ trait HasRecursiveRelationships
     }
 
     /**
-     * Get the initial query for relationship expression.
+     * Get the initial query for a relationship expression.
      *
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar|\Illuminate\Database\Grammar $grammar
      * @param callable $constraint
@@ -423,7 +423,7 @@ trait HasRecursiveRelationships
     }
 
     /**
-     * Get the recursive query for relationship expression.
+     * Get the recursive query for a relationship expression.
      *
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar|\Illuminate\Database\Grammar $grammar
      * @param string $direction
@@ -438,8 +438,7 @@ trait HasRecursiveRelationships
 
         $depth = $grammar->wrap($this->getDepthName());
 
-        $recursiveDepth = $grammar->wrap($name.'.'.$this->getDepthName())
-            .' '.($direction === 'asc' ? '-' : '+').' 1';
+        $recursiveDepth = $grammar->wrap($this->getDepthName()).' '.($direction === 'asc' ? '-' : '+').' 1';
 
         $recursivePath = $grammar->compileRecursivePath(
             $this->getQualifiedKeyName(),

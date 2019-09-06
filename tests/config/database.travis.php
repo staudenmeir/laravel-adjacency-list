@@ -32,4 +32,15 @@ return [
         'database' => ':memory:',
         'prefix' => '',
     ],
+    'sqlsrv' => [
+        'driver' => 'sqlsrv',
+        'host' => '127.0.0.1',
+        'port' => '1433',
+        'database' => 'test',
+        'username' => 'sa',
+        'password' => 'Password!',
+        'charset' => 'utf8',
+        'prefix' => '',
+        'prefix_indexes' => true,
+    ],
 ];

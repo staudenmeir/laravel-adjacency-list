@@ -23,6 +23,8 @@ matrix:
       env: COVERAGE=yes DB=pgsql
     - php: 7.3
       env: COVERAGE=yes DB=sqlite
+    - php: 7.3
+      env: COVERAGE=yes DB=sqlsrv
 
 cache:
   directories:
@@ -47,6 +49,20 @@ before_script:
     fi
   - mysql -e 'create database `test`;'
   - psql -c 'create database "test";' -U postgres
+  - |
+      if [ $DB == "sqlsrv" ]; then
+        curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+        curl https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list | sudo tee /etc/apt/sources.list.d/mssql-server-2017.list
+        sudo apt-get update
+        sudo apt-get install mssql-server
+        sudo MSSQL_SA_PASSWORD=Password! MSSQL_PID=developer /opt/mssql/bin/mssql-conf -n setup accept-eula
+        curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+        curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+        sudo apt-get update
+        sudo ACCEPT_EULA=Y apt-get install mssql-tools unixodbc-dev
+        pecl install pdo_sqlsrv
+        sudo /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Password! -Q "create database [test]"
+      fi
 
 script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS

@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Illuminate\Database\Capsule\Manager as DB;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Tests\Models\User;
 
 class DescendantsTest extends TestCase
@@ -33,7 +35,9 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoading()
     {
-        $users = User::with('descendants')->get();
+        $users = User::with(['descendants' => function (Descendants $query) {
+            $query->orderBy('id');
+        }])->get();
 
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8, 9], $users[0]->descendants->pluck('id')->all());
         $this->assertEquals([12], $users[9]->descendants->pluck('id')->all());
@@ -44,7 +48,9 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
-        $users = User::with('descendantsAndSelf')->get();
+        $users = User::with(['descendantsAndSelf' => function (Descendants $query) {
+            $query->orderBy('id');
+        }])->get();
 
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users[0]->descendantsAndSelf->pluck('id')->all());
         $this->assertEquals([11, 12], $users[9]->descendantsAndSelf->pluck('id')->all());
@@ -55,7 +61,9 @@ class DescendantsTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load('descendants');
+        $users = User::all()->load(['descendants' => function (Descendants $query) {
+            $query->orderBy('id');
+        }]);
 
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8, 9], $users[0]->descendants->pluck('id')->all());
         $this->assertEquals([12], $users[9]->descendants->pluck('id')->all());
@@ -66,7 +74,9 @@ class DescendantsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf()
     {
-        $users = User::all()->load('descendantsAndSelf');
+        $users = User::all()->load(['descendantsAndSelf' => function (Descendants $query) {
+            $query->orderBy('id');
+        }]);
 
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users[0]->descendantsAndSelf->pluck('id')->all());
         $this->assertEquals([11, 12], $users[9]->descendantsAndSelf->pluck('id')->all());
@@ -77,6 +87,10 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQuery()
     {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $ancestors = User::find(8)->ancestors()->has('descendants', '>', 2)->get();
 
         $this->assertEquals([1], $ancestors->pluck('id')->all());
@@ -84,6 +98,10 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $ancestors = User::find(8)->ancestors()->has('descendantsAndSelf', '>', 2)->get();
 
         $this->assertEquals([2, 1], $ancestors->pluck('id')->all());
@@ -91,6 +109,10 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $users = User::has('descendants')->get();
 
         $this->assertEquals([1, 2, 3, 4, 5, 6, 11], $users->pluck('id')->all());
@@ -98,6 +120,10 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
+        if (DB::connection()->getDriverName() === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $users = User::has('descendantsAndSelf', '>', 2)->get();
 
         $this->assertEquals([1, 2, 3], $users->pluck('id')->all());
