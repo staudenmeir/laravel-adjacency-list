@@ -203,3 +203,7 @@ class User extends Model
     }
 }
 ```
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) and [CODE OF CONDUCT](CODE_OF_CONDUCT.md) for details.
