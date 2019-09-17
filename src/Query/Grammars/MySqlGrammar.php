@@ -15,7 +15,7 @@ class MySqlGrammar extends Base implements ExpressionGrammar
      */
     public function compileInitialPath($column, $alias)
     {
-        return 'cast('.$this->wrap($column).' as char) as '.$this->wrap($alias);
+        return 'cast('.$this->wrap($column).' as char(65535)) as '.$this->wrap($alias);
     }
 
     /**
