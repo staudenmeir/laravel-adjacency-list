@@ -1,7 +1,5 @@
 language: php
 
-dist: xenial
-
 services:
   - mysql
   - postgresql
@@ -43,8 +41,8 @@ before_script:
   - cp tests/config/database.travis.php tests/config/database.php
   - |
     if [ $DB == "mysql" ]; then
-      wget https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
-      sudo dpkg -i mysql-apt-config_0.8.12-1_all.deb
+      wget https://dev.mysql.com/get/mysql-apt-config_0.8.13-1_all.deb
+      sudo dpkg -i mysql-apt-config_0.8.13-1_all.deb
       sudo apt-get update
       sudo apt-get install -y --allow-unauthenticated -o Dpkg::Options::=--force-confnew mysql-server
       sudo systemctl restart mysql

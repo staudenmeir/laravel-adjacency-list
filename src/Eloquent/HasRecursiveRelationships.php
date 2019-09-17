@@ -379,7 +379,7 @@ trait HasRecursiveRelationships
     {
         $from = $from ?: $this->getTable();
 
-        $grammar = $query->getConnection()->withTablePrefix($this->getExpressionGrammar($query));
+        $grammar = $this->getExpressionGrammar($query);
 
         $expression = $this->getInitialQuery($grammar, $constraint, $initialDepth, $from)
             ->unionAll(
@@ -477,13 +477,13 @@ trait HasRecursiveRelationships
 
         switch ($driver) {
             case 'mysql':
-                return new MySqlGrammar;
+                return $query->getConnection()->withTablePrefix(new MySqlGrammar);
             case 'pgsql':
-                return new PostgresGrammar;
+                return $query->getConnection()->withTablePrefix(new PostgresGrammar);
             case 'sqlite':
-                return new SQLiteGrammar;
+                return $query->getConnection()->withTablePrefix(new SQLiteGrammar);
             case 'sqlsrv':
-                return new SqlServerGrammar;
+                return $query->getConnection()->withTablePrefix(new SqlServerGrammar);
         }
 
         throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore
