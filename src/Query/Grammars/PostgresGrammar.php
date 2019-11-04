@@ -15,7 +15,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
      */
     public function compileInitialPath($column, $alias)
     {
-        return 'array['.$this->wrap($column).'] as '.$this->wrap($alias);
+        return 'array['.$this->wrap($column).'::varchar] as '.$this->wrap($alias);
     }
 
     /**
@@ -28,6 +28,6 @@ class PostgresGrammar extends Base implements ExpressionGrammar
      */
     public function compileRecursivePath($column, $alias, $separator)
     {
-        return $this->wrap($alias)." || ".$this->wrap($column);
+        return $this->wrap($alias)." || ".$this->wrap($column).'::varchar';
     }
 }
