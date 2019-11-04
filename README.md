@@ -90,6 +90,8 @@ $users = User::whereHas('siblings', function ($query) {
     $query->where('name', '=', 'John');
 })->get();
 
+$total = User::find($id)->descendants()->count();
+
 User::find($id)->descendants()->update(['active' => false]);
 
 User::find($id)->siblings()->delete();
