@@ -46,6 +46,16 @@ trait IsRecursiveRelation
     }
 
     /**
+     * Get the fully qualified local key name.
+     *
+     * @return string
+     */
+    public function getQualifiedLocalKeyName()
+    {
+        return $this->qualifyColumn($this->localKey);
+    }
+
+    /**
      * Handle dynamic method calls to the relationship.
      *
      * @param string $method

@@ -42,7 +42,7 @@ class Descendants extends HasMany
      */
     public function addEagerConstraints(array $models)
     {
-        $column = $this->andSelf ? $this->getQualifiedParentKeyName() : $this->foreignKey;
+        $column = $this->andSelf ? $this->getQualifiedLocalKeyName() : $this->foreignKey;
 
         $keys = $this->getKeys($models, $this->localKey);
 
