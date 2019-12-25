@@ -43,7 +43,7 @@ class Ancestors extends HasMany
         $keys = $this->getKeys($models, $key);
 
         $constraint = function (Builder $query) use ($whereIn, $keys) {
-            $query->$whereIn($this->getQualifiedParentKeyName(), $keys);
+            $query->$whereIn($this->getQualifiedLocalKeyName(), $keys);
         };
 
         $this->addExpression($constraint);

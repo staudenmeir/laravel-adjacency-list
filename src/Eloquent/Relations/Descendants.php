@@ -44,7 +44,7 @@ class Descendants extends HasMany
     {
         $whereIn = $this->whereInMethod($this->parent, $this->localKey);
 
-        $column = $this->andSelf ? $this->getQualifiedParentKeyName() : $this->foreignKey;
+        $column = $this->andSelf ? $this->getQualifiedLocalKeyName() : $this->foreignKey;
 
         $keys = $this->getKeys($models, $this->localKey);
 
