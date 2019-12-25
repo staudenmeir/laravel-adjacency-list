@@ -77,7 +77,7 @@ trait IsRecursiveRelation
 
             $keys = $this->query->getQuery()->newQuery()->from($expression)->select($this->localKey);
 
-            return $this->query->whereIn($this->getQualifiedParentKeyName(), $keys)->$method(...$parameters);
+            return $this->query->whereIn($this->getQualifiedLocalKeyName(), $keys)->$method(...$parameters);
         }
 
         return parent::__call($method, $parameters);

@@ -21,7 +21,7 @@ class Ancestors extends HasMany
             $constraint = function (Builder $query) {
                 $key = $this->andSelf ? $this->getParentKey() : $this->getForeignKey();
 
-                $query->where($this->getQualifiedParentKeyName(), '=', $key);
+                $query->where($this->getQualifiedLocalKeyName(), '=', $key);
             };
 
             $this->addExpression($constraint);
