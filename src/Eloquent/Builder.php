@@ -28,9 +28,7 @@ class Builder extends Base
             }
         }
 
-        $class = get_class($this->model);
-
-        $table = (new $class)->getTable();
+        $table = (new $this->model)->getTable();
 
         $models = $this->model->hydrate($items)->each->setTable($table);
 

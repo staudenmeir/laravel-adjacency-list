@@ -36,12 +36,12 @@ class EloquentTest extends TestCase
 
     public function testScopeTree()
     {
-        $tree = User::tree()->orderBy('id')->get();
+        $users = User::tree()->orderBy('id')->get();
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12], $tree->pluck('id')->all());
-        $this->assertEquals([0, 1, 1, 1, 2, 2, 2, 3, 3, 0, 1], $tree->pluck('depth')->all());
-        $this->assertEquals(['1', '1.2', '1.3', '1.4', '1.2.5', '1.3.6', '1.4.7', '1.2.5.8', '1.3.6.9', '11', '11.12'], $tree->pluck('path')->all());
-        $this->assertEquals('users', $tree[0]->getTable());
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12], $users->pluck('id')->all());
+        $this->assertEquals([0, 1, 1, 1, 2, 2, 2, 3, 3, 0, 1], $users->pluck('depth')->all());
+        $this->assertEquals(['1', '1.2', '1.3', '1.4', '1.2.5', '1.3.6', '1.4.7', '1.2.5.8', '1.3.6.9', '11', '11.12'], $users->pluck('path')->all());
+        $this->assertEquals('users', $users[0]->getTable());
     }
 
     public function testScopeHasChildren()
@@ -74,29 +74,29 @@ class EloquentTest extends TestCase
 
     public function testScopeWhereDepth()
     {
-        $descendants = User::find(1)->descendants()->whereDepth(1)->get();
+        $users = User::find(1)->descendants()->whereDepth(1)->get();
 
-        $this->assertEquals([2, 3, 4], $descendants->pluck('id')->all());
+        $this->assertEquals([2, 3, 4], $users->pluck('id')->all());
     }
 
     public function testScopeWhereDepthWithOperator()
     {
-        $descendants = User::find(1)->descendants()->whereDepth('>', 2)->orderBy('id')->get();
+        $users = User::find(1)->descendants()->whereDepth('>', 2)->orderBy('id')->get();
 
-        $this->assertEquals([8, 9], $descendants->pluck('id')->all());
+        $this->assertEquals([8, 9], $users->pluck('id')->all());
     }
 
     public function testScopeBreadthFirst()
     {
-        $descendants = User::tree()->breadthFirst()->orderByDesc('id')->get();
+        $users = User::tree()->breadthFirst()->orderByDesc('id')->get();
 
-        $this->assertEquals([11, 1, 12, 4, 3, 2, 7, 6, 5, 9, 8], $descendants->pluck('id')->all());
+        $this->assertEquals([11, 1, 12, 4, 3, 2, 7, 6, 5, 9, 8], $users->pluck('id')->all());
     }
 
     public function testScopeDepthFirst()
     {
-        $descendants = User::tree()->depthFirst()->get();
+        $users = User::tree()->depthFirst()->get();
 
-        $this->assertEquals([1, 2, 5, 8, 3, 6, 9, 4, 7, 11, 12], $descendants->pluck('id')->all());
+        $this->assertEquals([1, 2, 5, 8, 3, 6, 9, 4, 7, 11, 12], $users->pluck('id')->all());
     }
 }
