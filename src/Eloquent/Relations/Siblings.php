@@ -44,7 +44,11 @@ class Siblings extends HasMany
             $this->query->where($this->foreignKey, '=', $this->getParentKey());
 
             if (!$this->andSelf) {
-                $this->query->where($this->related->getQualifiedKeyName(), '<>', $this->parent->getKey());
+                $this->query->where(
+                    $this->related->getQualifiedLocalKeyName(),
+                    '<>',
+                    $this->parent->{$this->parent->getLocalKeyName()}
+                );
             }
 
             if (!array_key_exists($this->localKey, $this->parent->getAttributes())) {
@@ -89,7 +93,9 @@ class Siblings extends HasMany
                 $value = $this->related->newCollection($dictionary[$key]);
 
                 if (!$this->andSelf) {
-                    $value = $value->except($model->getKey());
+                    $value = $value->reject(function (Model $result) use ($model) {
+                        return $result->{$result->getLocalKeyName()} == $model->{$model->getLocalKeyName()};
+                    })->values();
                 }
 
                 $model->setRelation($relation, $value);
@@ -136,9 +142,9 @@ class Siblings extends HasMany
 
         if (!$this->andSelf) {
             $query->whereColumn(
-                $this->related->getQualifiedKeyName(),
+                $this->related->getQualifiedLocalKeyName(),
                 '<>',
-                $this->parent->getQualifiedKeyName()
+                $this->parent->getQualifiedLocalKeyName()
             );
         }
 
@@ -174,9 +180,9 @@ class Siblings extends HasMany
 
         if (!$this->andSelf) {
             $query->whereColumn(
-                $table.'.'.$this->related->getKeyName(),
+                $table.'.'.$this->related->getLocalKeyName(),
                 '<>',
-                $this->parent->getQualifiedKeyName()
+                $this->parent->getQualifiedLocalKeyName()
             );
         }
 

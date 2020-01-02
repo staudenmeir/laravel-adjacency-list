@@ -92,7 +92,7 @@ class Descendants extends HasMany
             return $this->buildDictionaryParent($results);
         }
 
-        $dictionary = $results->getDictionary();
+        $dictionary = $results->keyBy($this->localKey);
 
         $foreignKey = $this->getForeignKeyName();
 

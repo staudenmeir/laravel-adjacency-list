@@ -66,6 +66,20 @@ class User extends Model
 }
 ```
 
+By default, the trait uses the model's primary key as the local key. You can customize it by overriding `getLocalKeyName()`:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+    
+    public function getLocalKeyName()
+    {
+        return 'id';
+    }
+}
+```
+
 ### Relationships
 
 The trait provides various relationships:
@@ -177,7 +191,7 @@ $descendants = User::find($id)->descendants()->whereDepth('<', 3)->get();
 
 The results of ancestor, descendant and tree queries include an additional `path` column.
 
-It contains the dot-separated path of primary keys from the query's parent to the model:
+It contains the dot-separated path of local keys from the query's parent to the model:
 
 ```php
 $descendantsAndSelf = User::find(1)->descendantsAndSelf()->depthFirst()->get();
