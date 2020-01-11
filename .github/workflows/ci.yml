@@ -1,0 +1,79 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+      
+    strategy:
+      matrix:
+        php: [7.4, 7.3, 7.2]
+        database: [mysql, pgsql, sqlite, sqlsrv]
+        release: [stable, lowest]
+        include: 
+          - php: 7.4
+            release: stable 
+            coverage: xdebug
+    
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
+        ports:
+          - 3306
+      pgsql:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test
+        ports:
+          - 5432/tcp
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
+      - uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php }}
+          tools: pecl
+          extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_${{ matrix.database }}, tokenizer, xml
+          coverage: ${{ matrix.coverage }}
+      - run: |
+          mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password'"
+          mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'"
+        if: matrix.database == 'mysql' && matrix.php < 7.4
+      - run: |
+          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+          curl https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list | sudo tee /etc/apt/sources.list.d/mssql-server-2017.list
+          sudo apt-get update
+          sudo apt-get install mssql-server=14.0.3192.2-2
+          sudo MSSQL_SA_PASSWORD=Password! MSSQL_PID=developer /opt/mssql/bin/mssql-conf -n setup accept-eula
+          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+          curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install mssql-tools unixodbc-dev
+          sudo /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Password! -Q "create database [test]"
+          sudo pecl install pdo_sqlsrv-5.7.1preview
+          echo 'extension=pdo_sqlsrv.so' | sudo tee /etc/php/${{ matrix.php }}/cli/conf.d/20-pdo_sqlsrv.ini
+          sudo sed -i 's/extension="pdo_sqlsrv.so"//' /etc/php/${{ matrix.php }}/cli/php.ini
+        if: matrix.database == 'sqlsrv'
+      - run: composer update --no-interaction --no-progress --no-suggest --prefer-dist --prefer-${{ matrix.release }}
+      - run: cp tests/config/database.ci.php tests/config/database.php
+      - run: |
+          PHPUNIT_FLAGS=$([ "${{ matrix.coverage }}" == "xdebug" ] && echo "--coverage-clover=coverage.xml" || echo "")
+          vendor/bin/phpunit $PHPUNIT_FLAGS
+        env:
+          DATABASE: ${{ matrix.database }}
+          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+          PGSQL_PORT: ${{ job.services.pgsql.ports[5432] }}
+      - run: |
+          wget -q https://scrutinizer-ci.com/ocular.phar
+          php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+        if: matrix.coverage == 'xdebug'
