@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/staudenmeir/laravel-adjacency-list.svg?branch=master)](https://travis-ci.org/staudenmeir/laravel-adjacency-list)
+![CI](https://github.com/staudenmeir/laravel-adjacency-list/workflows/CI/badge.svg)
 [![Code Coverage](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/v/stable)](https://packagist.org/packages/staudenmeir/laravel-adjacency-list)
