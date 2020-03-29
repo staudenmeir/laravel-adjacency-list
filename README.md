@@ -20,7 +20,7 @@ Supports Laravel 5.5.29+.
  
 ## Installation
 
-    composer require staudenmeir/laravel-adjacency-list:"^1.0"
+    composer require staudenmeir/laravel-adjacency-list
 
 ## Usage
 
