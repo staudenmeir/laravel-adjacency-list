@@ -28,6 +28,8 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
      */
     public function compileRecursivePath($column, $alias, $separator)
     {
-        return "cast(concat(".$this->wrap($alias).", '".$separator."', ".$this->wrap($column).") as varchar) as ".$this->wrap($alias);
+        $alias = $this->wrap($alias);
+
+        return "cast($alias + '$separator' + cast(".$this->wrap($column)." as varchar) as varchar) as $alias";
     }
 }
