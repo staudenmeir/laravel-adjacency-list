@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings;
 use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
@@ -313,6 +314,71 @@ trait HasRecursiveRelationships
     protected function newSiblings(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
         return new Siblings($query, $parent, $foreignKey, $localKey, $andSelf);
+    }
+
+    /**
+     * Define a one-to-many relationship of the model's descendants.
+     *
+     * @param string $related
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants
+     */
+    public function hasManyOfDescendants($related, $foreignKey = null, $localKey = null)
+    {
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignKey = $foreignKey ?: $this->getForeignKey();
+
+        $localKey = $localKey ?: $this->getKeyName();
+
+        return $this->newHasManyOfDescendants(
+            $instance->newQuery(),
+            $this,
+            $instance->qualifyColumn($foreignKey),
+            $localKey,
+            false
+        );
+    }
+
+    /**
+     * Define a one-to-many relationship of the model's descendants and itself.
+     *
+     * @param string $related
+     * @param string|null $foreignKey
+     * @param string|null $localKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants
+     */
+    public function hasManyOfDescendantsAndSelf($related, $foreignKey = null, $localKey = null)
+    {
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignKey = $foreignKey ?: $this->getForeignKey();
+
+        $localKey = $localKey ?: $this->getKeyName();
+
+        return $this->newHasManyOfDescendants(
+            $instance->newQuery(),
+            $this,
+            $instance->qualifyColumn($foreignKey),
+            $localKey,
+            true
+        );
+    }
+
+    /**
+     * Instantiate a new HasManyOfDescendants relationship.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param string $foreignKey
+     * @param string $localKey
+     * @param bool $andSelf
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants
+     */
+    protected function newHasManyOfDescendants(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
+    {
+        return new HasManyOfDescendants($query, $parent, $foreignKey, $localKey, $andSelf);
     }
 
     /**

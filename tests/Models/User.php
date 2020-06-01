@@ -20,4 +20,14 @@ class User extends Model
             ],
         ];
     }
+
+    public function posts()
+    {
+        return $this->hasManyOfDescendants(Post::class);
+    }
+
+    public function postsAndSelf()
+    {
+        return $this->hasManyOfDescendantsAndSelf(Post::class);
+    }
 }

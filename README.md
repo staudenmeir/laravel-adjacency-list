@@ -25,7 +25,8 @@ Supports Laravel 5.5.29+.
 ## Usage
 
 - [Getting Started](#getting-started)
-- [Relationships](#relationships)
+- [Included Relationships](#included-relationships)
+- [Custom Relationships](#custom-relationships)
 - [Tree](#tree)
 - [Filters](#filters)
 - [Order](#order)
@@ -81,7 +82,7 @@ class User extends Model
 }
 ```
 
-### Relationships
+### Included Relationships
 
 The trait provides various relationships:
 
@@ -111,6 +112,63 @@ $total = User::find($id)->descendants()->count();
 User::find($id)->descendants()->update(['active' => false]);
 
 User::find($id)->siblings()->delete();
+```
+
+### Custom Relationships
+
+You can also define custom relationships to retrieve related models recursively.
+
+Consider a `HasMany` relationship between `User` and `Post`:
+ 
+ ```php
+ class User extends Model
+ {
+     public function posts()
+     {
+         return $this->hasMany('App\Post');
+     }
+ }
+ ```
+
+Define a `HasManyOfDescendants` relationship to get all posts of a user and its descendants:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function recursivePosts()
+    {
+        return $this->hasManyOfDescendantsAndSelf('App\Post');
+    }
+}
+
+$recursivePosts = User::find($id)->recursivePosts;
+
+$users = User::withCount('recursivePosts')->get();
+```
+
+Use `hasManyOfDescendants()` to only get the descendants' posts:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantPosts()
+    {
+        return $this->hasManyOfDescendants('App\Post');
+    }
+}
+```
+
+If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you need to add support for common table expressions to the related model:
+
+```php
+class Post extends Model
+{
+    use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
+}
 ```
 
 ### Tree
