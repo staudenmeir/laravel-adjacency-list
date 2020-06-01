@@ -23,11 +23,21 @@ class MySqlGrammar extends Base implements ExpressionGrammar
      *
      * @param string $column
      * @param string $alias
-     * @param string $separator
      * @return string
      */
-    public function compileRecursivePath($column, $alias, $separator)
+    public function compileRecursivePath($column, $alias)
     {
-        return "concat(".$this->wrap($alias).", '".$separator."', ".$this->wrap($column).")";
+        return 'concat('.$this->wrap($alias).', ?, '.$this->wrap($column).')';
+    }
+
+    /**
+     * Get the recursive path bindings.
+     *
+     * @param string $separator
+     * @return array
+     */
+    public function getRecursivePathBindings($separator)
+    {
+        return [$separator];
     }
 }

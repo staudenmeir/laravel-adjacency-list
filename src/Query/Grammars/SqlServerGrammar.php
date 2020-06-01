@@ -23,13 +23,21 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
      *
      * @param string $column
      * @param string $alias
-     * @param string $separator
      * @return string
      */
-    public function compileRecursivePath($column, $alias, $separator)
+    public function compileRecursivePath($column, $alias)
     {
-        $alias = $this->wrap($alias);
+        return 'cast('.$this->wrap($alias).' + ? + cast('.$this->wrap($column).' as varchar) as varchar) as '.$this->wrap($alias);
+    }
 
-        return "cast($alias + '$separator' + cast(".$this->wrap($column)." as varchar) as varchar) as $alias";
+    /**
+     * Get the recursive path bindings.
+     *
+     * @param string $separator
+     * @return array
+     */
+    public function getRecursivePathBindings($separator)
+    {
+        return [$separator];
     }
 }
