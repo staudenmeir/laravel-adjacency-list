@@ -23,11 +23,21 @@ class PostgresGrammar extends Base implements ExpressionGrammar
      *
      * @param string $column
      * @param string $alias
-     * @param string $separator
      * @return string
      */
-    public function compileRecursivePath($column, $alias, $separator)
+    public function compileRecursivePath($column, $alias)
     {
-        return $this->wrap($alias)." || ".$this->wrap($column).'::varchar';
+        return $this->wrap($alias).' || '.$this->wrap($column).'::varchar';
+    }
+
+    /**
+     * Get the recursive path bindings.
+     *
+     * @param string $separator
+     * @return array
+     */
+    public function getRecursivePathBindings($separator)
+    {
+        return [];
     }
 }

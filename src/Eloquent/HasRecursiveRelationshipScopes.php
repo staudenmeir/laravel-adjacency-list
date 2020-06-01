@@ -193,14 +193,15 @@ trait HasRecursiveRelationshipScopes
 
         $recursivePath = $grammar->compileRecursivePath(
             $this->getQualifiedLocalKeyName(),
-            $this->getPathName(),
-            $this->getPathSeparator()
+            $this->getPathName()
         );
+
+        $recursivePathBindings = $grammar->getRecursivePathBindings($this->getPathSeparator());
 
         $query = $this->newModelQuery()
             ->select($table.'.*')
             ->selectRaw($recursiveDepth.' as '.$depth)
-            ->selectRaw($recursivePath)
+            ->selectRaw($recursivePath, $recursivePathBindings)
             ->from($from);
 
         if ($direction === 'asc') {
