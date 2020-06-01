@@ -249,12 +249,22 @@ class User extends Model
 }
 ```
 
+#### Depth Constraints
+
 You can use the `whereDepth()` query scope to filter models by their relative depth:
 
 ```php
 $descendants = User::find($id)->descendants()->whereDepth(2)->get();
 
 $descendants = User::find($id)->descendants()->whereDepth('<', 3)->get();
+```
+
+Queries with `whereDepth()` constraints that limit the maximum depth still build the entire (sub)tree internally. Both tree scopes allow you to provide a maximum depth that improves query performance by only building the requested section of the tree:
+
+```php
+$tree = User::tree(3)->get();
+
+$tree = User::treeOf($constraint, 3)->get();
 ```
 
 ### Path
