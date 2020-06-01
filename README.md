@@ -27,7 +27,7 @@ Supports Laravel 5.5.29+.
 - [Getting Started](#getting-started)
 - [Included Relationships](#included-relationships)
 - [Custom Relationships](#custom-relationships)
-- [Tree](#tree)
+- [Trees](#trees)
 - [Filters](#filters)
 - [Order](#order)
 - [Depth](#depth)
@@ -171,12 +171,22 @@ class Post extends Model
 }
 ```
 
-### Tree
+### Trees
 
 The trait provides the `tree()` query scope to get all models, beginning at the root(s):
 
 ```php
 $tree = User::tree()->get();
+```
+
+`treeOf()` allows you to query trees with custom constraints for the root model(s). Consider a table with multiple separate lists:
+
+```php
+$constraint = function ($query) {
+    $query->whereNull('parent_id')->where('list_id', 1);
+};
+
+$tree = User::treeOf($constraint)->get();
 ```
 
 ### Filters

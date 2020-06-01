@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Database\Eloquent\Builder;
 use Tests\Models\User;
 
 class EloquentTest extends TestCase
@@ -43,6 +44,17 @@ class EloquentTest extends TestCase
         $this->assertEquals(['1', '1.2', '1.3', '1.4', '1.2.5', '1.3.6', '1.4.7', '1.2.5.8', '1.3.6.9', '11', '11.12'], $users->pluck('path')->all());
         $this->assertEquals(['user-1', 'user-1/user-2', 'user-1/user-3'], $users->pluck('slug_path')->slice(0, 3)->all());
         $this->assertEquals('users', $users[0]->getTable());
+    }
+
+    public function testScopeTreeOf()
+    {
+        $constraint = function (Builder $query) {
+            $query->whereIn('id', [2, 4]);
+        };
+
+        $tree = User::treeOf($constraint)->orderBy('id')->get();
+
+        $this->assertEquals([2, 4, 5, 7, 8], $tree->pluck('id')->all());
     }
 
     public function testScopeHasChildren()

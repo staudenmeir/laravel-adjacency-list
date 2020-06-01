@@ -8,7 +8,7 @@ use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 trait HasRecursiveRelationshipScopes
 {
     /**
-     * Add a recursive expression for the relationship's whole tree to the query.
+     * Add a recursive expression for the whole tree to the query.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
@@ -19,6 +19,18 @@ trait HasRecursiveRelationshipScopes
             $query->isRoot();
         };
 
+        return $query->treeOf($constraint);
+    }
+
+    /**
+     * Add a recursive expression for a custom tree to the query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param callable $constraint
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeTreeOf(Builder $query, callable $constraint)
+    {
         return $query->withRelationshipExpression('desc', $constraint, 0);
     }
 
