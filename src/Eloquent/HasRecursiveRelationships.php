@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings;
 use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
@@ -236,6 +237,35 @@ trait HasRecursiveRelationships
     public function parentAndSelf()
     {
         return $this->ancestorsAndSelf()->whereDepth('>=', -1);
+    }
+
+    /**
+     * Get the model's root ancestor.
+     *
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor
+     */
+    public function rootAncestor()
+    {
+        return $this->newRootAncestor(
+            (new static)->newQuery(),
+            $this,
+            $this->getQualifiedParentKeyName(),
+            $this->getLocalKeyName()
+        );
+    }
+
+    /**
+     * Instantiate a new RootAncestor relationship.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param string $foreignKey
+     * @param string $localKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor
+     */
+    protected function newRootAncestor(Builder $query, Model $parent, $foreignKey, $localKey)
+    {
+        return new RootAncestor($query, $parent, $foreignKey, $localKey);
     }
 
     /**
