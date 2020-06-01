@@ -93,6 +93,7 @@ The trait provides various relationships:
 - `descendantsAndSelf()`: The model's recursive children and itself.
 - `parent()`: The model's direct parent.
 - `parentAndSelf()`: The model's direct parent and itself.
+- `rootAncestor()`: The model's topmost parent.
 - `siblings()`: The parent's other children.
 - `siblingsAndSelf()`: All the parent's children.
 
