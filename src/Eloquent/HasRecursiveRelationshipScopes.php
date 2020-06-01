@@ -168,6 +168,12 @@ trait HasRecursiveRelationshipScopes
             ->selectRaw($initialPath)
             ->from($from);
 
+        foreach ($this->getCustomPaths() as $path) {
+            $query->selectRaw(
+                $grammar->compileInitialPath($path['column'], $path['name'])
+            );
+        }
+
         $constraint($query);
 
         return $query;
@@ -203,6 +209,16 @@ trait HasRecursiveRelationshipScopes
             ->selectRaw($recursiveDepth.' as '.$depth)
             ->selectRaw($recursivePath, $recursivePathBindings)
             ->from($from);
+
+        foreach ($this->getCustomPaths() as $path) {
+            $query->selectRaw(
+                $grammar->compileRecursivePath(
+                    $this->qualifyColumn($path['column']),
+                    $path['name']
+                ),
+                $grammar->getRecursivePathBindings($path['separator'])
+            );
+        }
 
         if ($direction === 'asc') {
             $first = $this->getParentKeyName();

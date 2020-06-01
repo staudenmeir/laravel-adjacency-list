@@ -15,7 +15,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
      */
     public function compileInitialPath($column, $alias)
     {
-        return 'array['.$this->wrap($column).'::varchar] as '.$this->wrap($alias);
+        return 'array[('.$this->wrap($column)." || '')::varchar] as ".$this->wrap($alias);
     }
 
     /**

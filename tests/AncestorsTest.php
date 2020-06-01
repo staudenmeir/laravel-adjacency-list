@@ -14,6 +14,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([5, 2, 1], $ancestors->pluck('id')->all());
         $this->assertEquals([-1, -2, -3], $ancestors->pluck('depth')->all());
         $this->assertEquals(['5', '5.2', '5.2.1'], $ancestors->pluck('path')->all());
+        $this->assertEquals(['user-5', 'user-5/user-2', 'user-5/user-2/user-1'], $ancestors->pluck('slug_path')->all());
     }
 
     public function testLazyLoadingWithRoot()
