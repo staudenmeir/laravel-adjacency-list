@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Query\Grammars;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\PostgresGrammar as Base;
 
 class PostgresGrammar extends Base implements ExpressionGrammar
@@ -39,5 +40,23 @@ class PostgresGrammar extends Base implements ExpressionGrammar
     public function getRecursivePathBindings($separator)
     {
         return [];
+    }
+
+    /**
+     * Select a concatenated list of paths.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param string $expression
+     * @param string $column
+     * @param string $pathSeparator
+     * @param string $listSeparator
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function selectPathList(Builder $query, $expression, $column, $pathSeparator, $listSeparator)
+    {
+        return $query->selectRaw(
+            'string_agg(array_to_string('.$this->wrap($column).', ?), ?)',
+            [$pathSeparator, $listSeparator]
+        )->from($expression);
     }
 }
