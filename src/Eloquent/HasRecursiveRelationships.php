@@ -85,6 +85,16 @@ trait HasRecursiveRelationships
     }
 
     /**
+     * Get the additional custom paths.
+     *
+     * @return array
+     */
+    public function getCustomPaths()
+    {
+        return [];
+    }
+
+    /**
      * Get the name of the common table expression.
      *
      * @return string

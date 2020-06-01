@@ -19,11 +19,20 @@ class Builder extends Base
 
         if ($this->getConnection() instanceof PostgresConnection) {
             $path = $this->model->getPathName();
-            $separator = $this->model->getPathSeparator();
 
             if (isset($items[0]->$path)) {
-                foreach ($items as $item) {
-                    $item->$path = str_replace(',', $separator, substr($item->$path, 1, -1));
+                $this->replacePathSeparator(
+                    $items,
+                    $path,
+                    $this->model->getPathSeparator()
+                );
+
+                foreach ($this->model->getCustomPaths() as $path) {
+                    $this->replacePathSeparator(
+                        $items,
+                        $path['name'],
+                        $path['separator']
+                    );
                 }
             }
         }
@@ -33,5 +42,24 @@ class Builder extends Base
         $models = $this->model->hydrate($items)->each->setTable($table);
 
         return $models->all();
+    }
+
+    /**
+     * Replace the separator in a PostgreSQL path column.
+     *
+     * @param array $items
+     * @param string $path
+     * @param string $separator
+     * @return void
+     */
+    protected function replacePathSeparator(array $items, $path, $separator)
+    {
+        foreach ($items as $item) {
+            $item->$path = str_replace(
+                ',',
+                $separator,
+                substr($item->$path, 1, -1)
+            );
+        }
     }
 }

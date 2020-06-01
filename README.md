@@ -31,6 +31,7 @@ Supports Laravel 5.5.29+.
 - [Order](#order)
 - [Depth](#depth)
 - [Path](#path)
+- [Custom Paths](#custom-paths)
 
 ### Getting Started
 
@@ -218,6 +219,34 @@ class User extends Model
         return '.';
     }
 }
+```
+
+### Custom Paths
+
+You can add custom path columns to the query results:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function getCustomPaths()
+    {
+        return [
+            [
+                'name' => 'slug_path',
+                'column' => 'slug',
+                'separator' => '/',
+            ],
+        ];
+    }
+}
+
+$descendantsAndSelf = User::find(1)->descendantsAndSelf;
+
+echo $descendantsAndSelf[0]->slug_path; // user-1
+echo $descendantsAndSelf[1]->slug_path; // user-1/user-2
+echo $descendantsAndSelf[2]->slug_path; // user-1/user-2/user-3
 ```
 
 ## Contributing
