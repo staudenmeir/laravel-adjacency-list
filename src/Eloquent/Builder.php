@@ -4,6 +4,11 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder as Base;
 use Illuminate\Database\PostgresConnection;
+use RuntimeException;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MySqlGrammar;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\PostgresGrammar;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SQLiteGrammar;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SqlServerGrammar;
 
 class Builder extends Base
 {
@@ -61,5 +66,28 @@ class Builder extends Base
                 substr($item->$path, 1, -1)
             );
         }
+    }
+
+    /**
+     * Get the expression grammar.
+     *
+     * @return \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar
+     */
+    public function getExpressionGrammar()
+    {
+        $driver = $this->query->getConnection()->getDriverName();
+
+        switch ($driver) {
+            case 'mysql':
+                return $this->query->getConnection()->withTablePrefix(new MySqlGrammar);
+            case 'pgsql':
+                return $this->query->getConnection()->withTablePrefix(new PostgresGrammar);
+            case 'sqlite':
+                return $this->query->getConnection()->withTablePrefix(new SQLiteGrammar);
+            case 'sqlsrv':
+                return $this->query->getConnection()->withTablePrefix(new SqlServerGrammar);
+        }
+
+        throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore
     }
 }

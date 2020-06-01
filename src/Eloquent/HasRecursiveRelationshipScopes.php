@@ -3,12 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
-use RuntimeException;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
-use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MySqlGrammar;
-use Staudenmeir\LaravelAdjacencyList\Query\Grammars\PostgresGrammar;
-use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SQLiteGrammar;
-use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SqlServerGrammar;
 
 trait HasRecursiveRelationshipScopes
 {
@@ -130,7 +125,7 @@ trait HasRecursiveRelationshipScopes
     {
         $from = $from ?: $this->getTable();
 
-        $grammar = $this->getExpressionGrammar($query);
+        $grammar = $query->getExpressionGrammar();
 
         $expression = $this->getInitialQuery($grammar, $constraint, $initialDepth, $from)
             ->unionAll(
@@ -231,29 +226,5 @@ trait HasRecursiveRelationshipScopes
         $query->join($name, $name.'.'.$first, '=', $second);
 
         return $query;
-    }
-
-    /**
-     * Get the expression grammar.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar
-     */
-    protected function getExpressionGrammar(Builder $query)
-    {
-        $driver = $query->getConnection()->getDriverName();
-
-        switch ($driver) {
-            case 'mysql':
-                return $query->getConnection()->withTablePrefix(new MySqlGrammar);
-            case 'pgsql':
-                return $query->getConnection()->withTablePrefix(new PostgresGrammar);
-            case 'sqlite':
-                return $query->getConnection()->withTablePrefix(new SQLiteGrammar);
-            case 'sqlsrv':
-                return $query->getConnection()->withTablePrefix(new SqlServerGrammar);
-        }
-
-        throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore
     }
 }
