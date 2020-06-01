@@ -11,15 +11,16 @@ trait HasRecursiveRelationshipScopes
      * Add a recursive expression for the whole tree to the query.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|null $maxDepth
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeTree(Builder $query)
+    public function scopeTree(Builder $query, $maxDepth = null)
     {
         $constraint = function (Builder $query) {
             $query->isRoot();
         };
 
-        return $query->treeOf($constraint);
+        return $query->treeOf($constraint, $maxDepth);
     }
 
     /**
@@ -27,11 +28,12 @@ trait HasRecursiveRelationshipScopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param callable $constraint
+     * @param int|null $maxDepth
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeTreeOf(Builder $query, callable $constraint)
+    public function scopeTreeOf(Builder $query, callable $constraint, $maxDepth = null)
     {
-        return $query->withRelationshipExpression('desc', $constraint, 0);
+        return $query->withRelationshipExpression('desc', $constraint, 0, null, $maxDepth);
     }
 
     /**
@@ -131,9 +133,10 @@ trait HasRecursiveRelationshipScopes
      * @param callable $constraint
      * @param int $initialDepth
      * @param string|null $from
+     * @param int|null $maxDepth
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithRelationshipExpression(Builder $query, $direction, callable $constraint, $initialDepth, $from = null)
+    public function scopeWithRelationshipExpression(Builder $query, $direction, callable $constraint, $initialDepth, $from = null, $maxDepth = null)
     {
         $from = $from ?: $this->getTable();
 
@@ -141,7 +144,7 @@ trait HasRecursiveRelationshipScopes
 
         $expression = $this->getInitialQuery($grammar, $constraint, $initialDepth, $from)
             ->unionAll(
-                $this->getRecursiveQuery($grammar, $direction, $from)
+                $this->getRecursiveQuery($grammar, $direction, $from, $maxDepth)
             );
 
         $name = $this->getExpressionName();
@@ -192,9 +195,10 @@ trait HasRecursiveRelationshipScopes
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar|\Illuminate\Database\Grammar $grammar
      * @param string $direction
      * @param string $from
+     * @param int|null $maxDepth
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
-    protected function getRecursiveQuery(ExpressionGrammar $grammar, $direction, $from)
+    protected function getRecursiveQuery(ExpressionGrammar $grammar, $direction, $from, $maxDepth = null)
     {
         $name = $this->getExpressionName();
 
@@ -236,6 +240,10 @@ trait HasRecursiveRelationshipScopes
         }
 
         $query->join($name, $name.'.'.$first, '=', $second);
+
+        if (!is_null($maxDepth)) {
+            $query->where($this->getDepthName(), '<', $maxDepth);
+        }
 
         return $query;
     }

@@ -46,6 +46,13 @@ class EloquentTest extends TestCase
         $this->assertEquals('users', $users[0]->getTable());
     }
 
+    public function testScopeTreeWithMaxDepth()
+    {
+        $tree = User::tree(2)->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 11, 12], $tree->pluck('id')->all());
+    }
+
     public function testScopeTreeOf()
     {
         $constraint = function (Builder $query) {
@@ -55,6 +62,17 @@ class EloquentTest extends TestCase
         $tree = User::treeOf($constraint)->orderBy('id')->get();
 
         $this->assertEquals([2, 4, 5, 7, 8], $tree->pluck('id')->all());
+    }
+
+    public function testScopeTreeOfWithMaxDepth()
+    {
+        $constraint = function (Builder $query) {
+            $query->whereIn('id', [2, 4]);
+        };
+
+        $tree = User::treeOf($constraint, 1)->orderBy('id')->get();
+
+        $this->assertEquals([2, 4, 5, 7], $tree->pluck('id')->all());
     }
 
     public function testScopeHasChildren()
