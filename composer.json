@@ -9,13 +9,13 @@
         }
     ],
     "require": {
-        "php": "^7.2.5",
-        "illuminate/database": "^7.0",
-        "staudenmeir/laravel-cte": "^1.3"
+        "php": "^7.3",
+        "illuminate/database": "^8.0",
+        "staudenmeir/laravel-cte": "^1.4"
     },
     "require-dev": {
-        "laravel/homestead": "^10.0",
-        "phpunit/phpunit": "^8.5"
+        "laravel/homestead": "^11.0",
+        "phpunit/phpunit": "^9.3"
     },
     "autoload": {
         "psr-4": {
