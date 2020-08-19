@@ -40,11 +40,6 @@ class RootAncestorTest extends TestCase
 
     public function testExistenceQuery()
     {
-        // TODO: https://bugs.mysql.com/bug.php?id=99025
-        if (DB::connection()->getDriverName() === 'mysql') {
-            $this->markTestSkipped();
-        }
-
         if (DB::connection()->getDriverName() === 'sqlsrv') {
             $this->markTestSkipped();
         }
@@ -56,11 +51,6 @@ class RootAncestorTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        // TODO: https://bugs.mysql.com/bug.php?id=99025
-        if (DB::connection()->getDriverName() === 'mysql') {
-            $this->markTestSkipped();
-        }
-
         if (DB::connection()->getDriverName() === 'sqlsrv') {
             $this->markTestSkipped();
         }
