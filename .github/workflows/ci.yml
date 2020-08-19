@@ -5,17 +5,17 @@ on: [push, pull_request]
 jobs:
   tests:
     runs-on: ubuntu-latest
-      
+
     strategy:
       matrix:
         php: [7.4, 7.3, 7.2]
         database: [mysql, pgsql, sqlite, sqlsrv]
         release: [stable, lowest]
-        include: 
+        include:
           - php: 7.4
-            release: stable 
+            release: stable
             coverage: xdebug
-    
+
     services:
       mysql:
         image: mysql:latest
@@ -34,12 +34,12 @@ jobs:
           - 5432/tcp
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
         with:
           path: ~/.composer/cache/files
           key: php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-      - uses: shivammathur/setup-php@v1
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           tools: pecl
