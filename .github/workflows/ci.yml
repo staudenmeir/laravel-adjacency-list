@@ -8,13 +8,15 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.4, 7.3]
+        php: [8.0, 7.4, 7.3]
         database: [mysql, pgsql, sqlite, sqlsrv]
         release: [stable, lowest]
         include:
           - php: 7.4
             release: stable
             coverage: xdebug
+          - database: sqlsrv
+            pdo_suffix: -5.9.0preview1
 
     services:
       mysql:
@@ -32,6 +34,16 @@ jobs:
           POSTGRES_DB: test
         ports:
           - 5432/tcp
+      sqlsrv:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password!
+        options: >-
+          --name sqlsrv
+          --health-cmd "echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P Password!"
+        ports:
+          - 1433
 
     steps:
       - uses: actions/checkout@v2
@@ -43,23 +55,13 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: pecl
-          extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_${{ matrix.database }}, tokenizer, xml
+          extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_${{ matrix.database }}${{ matrix.pdo_suffix }}, tokenizer, xml
           coverage: ${{ matrix.coverage }}
       - run: |
           mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password'"
           mysql -h 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -u root -ppassword -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'"
         if: matrix.database == 'mysql' && matrix.php < 7.4
-      - run: |
-          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          curl https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list | sudo tee /etc/apt/sources.list.d/mssql-server-2017.list
-          sudo apt-get update
-          sudo apt-get install mssql-server=14.0.3192.2-2
-          sudo MSSQL_SA_PASSWORD=Password! MSSQL_PID=developer /opt/mssql/bin/mssql-conf -n setup accept-eula
-          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
-          sudo apt-get update
-          sudo ACCEPT_EULA=Y apt-get install mssql-tools unixodbc-dev
-          sudo /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Password! -Q "create database [test]"
+      - run: docker exec sqlsrv /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P Password! -Q "create database [test]"
         if: matrix.database == 'sqlsrv'
       - run: composer update --no-interaction --no-progress --no-suggest --prefer-dist --prefer-${{ matrix.release }}
       - run: cp tests/config/database.ci.php tests/config/database.php
@@ -70,6 +72,7 @@ jobs:
           DATABASE: ${{ matrix.database }}
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
           PGSQL_PORT: ${{ job.services.pgsql.ports[5432] }}
+          SQLSRV_PORT: ${{ job.services.sqlsrv.ports[1433] }}
       - run: |
           wget -q https://scrutinizer-ci.com/ocular.phar
           php ocular.phar code-coverage:upload --format=php-clover coverage.xml

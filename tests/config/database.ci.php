@@ -35,7 +35,7 @@ return [
     'sqlsrv' => [
         'driver' => 'sqlsrv',
         'host' => '127.0.0.1',
-        'port' => '1433',
+        'port' => getenv('SQLSRV_PORT'),
         'database' => 'test',
         'username' => 'sa',
         'password' => 'Password!',
