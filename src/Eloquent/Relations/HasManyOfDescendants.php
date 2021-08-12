@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\TracksIntermediateScopes;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
 class HasManyOfDescendants extends HasMany
 {
+    use TracksIntermediateScopes;
+
     /**
      * Whether to include the parent model.
      *
@@ -216,7 +219,11 @@ class HasManyOfDescendants extends HasMany
         $query->withGlobalScope('HasManyOfDescendants', function (Builder $query) use ($name) {
             $query->whereIn(
                 $this->foreignKey,
-                (new $this->parent)->setTable($name)->newQuery()->select($this->localKey)
+                (new $this->parent)->setTable($name)
+                    ->newQuery()
+                    ->select($this->localKey)
+                    ->withGlobalScopes($this->intermediateScopes)
+                    ->withoutGlobalScopes($this->removedIntermediateScopes)
             );
         });
 
