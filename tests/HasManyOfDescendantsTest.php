@@ -25,7 +25,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testLazyLoadingWithoutParentKey()
     {
-        $posts = (new User)->posts()->get();
+        $posts = (new User())->posts()->get();
 
         $this->assertEmpty($posts);
     }

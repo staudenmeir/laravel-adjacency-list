@@ -166,7 +166,7 @@ class HasManyOfDescendants extends HasMany
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
-        $table = (new $this->parent)->getTable();
+        $table = (new $this->parent())->getTable();
 
         if ($table === $parentQuery->getQuery()->from) {
             $table = $alias = $this->getRelationCountHash();
@@ -216,7 +216,7 @@ class HasManyOfDescendants extends HasMany
         $query->withGlobalScope('HasManyOfDescendants', function (Builder $query) use ($name) {
             $query->whereIn(
                 $this->foreignKey,
-                (new $this->parent)->setTable($name)->newQuery()->select($this->localKey)
+                (new $this->parent())->setTable($name)->newQuery()->select($this->localKey)
             );
         });
 
@@ -234,7 +234,7 @@ class HasManyOfDescendants extends HasMany
      */
     protected function getInitialQuery(ExpressionGrammar $grammar, callable $constraint, $alias, $selectPath)
     {
-        $model = new $this->parent;
+        $model = new $this->parent();
         $query = $model->newModelQuery();
 
         if ($alias) {
@@ -264,7 +264,7 @@ class HasManyOfDescendants extends HasMany
      */
     protected function getRecursiveQuery(ExpressionGrammar $grammar, $selectPath)
     {
-        $model = new $this->parent;
+        $model = new $this->parent();
         $name = $model->getExpressionName();
         $query = $model->newModelQuery();
 
@@ -325,7 +325,7 @@ class HasManyOfDescendants extends HasMany
         $this->query->withoutGlobalScope('HasManyOfDescendants')
             ->whereIn(
                 $this->foreignKey,
-                (new $this->parent)->setTable($table)->newModelQuery()->select($this->localKey)
+                (new $this->parent())->setTable($table)->newModelQuery()->select($this->localKey)
             );
 
         return $this;

@@ -14,7 +14,8 @@ use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
 trait HasRecursiveRelationships
 {
-    use HasRecursiveRelationshipScopes, QueriesExpressions;
+    use HasRecursiveRelationshipScopes;
+    use QueriesExpressions;
 
     /**
      * Get the name of the parent key column.
@@ -33,7 +34,7 @@ trait HasRecursiveRelationships
      */
     public function getQualifiedParentKeyName()
     {
-        return (new static)->getTable().'.'.$this->getParentKeyName();
+        return (new static())->getTable().'.'.$this->getParentKeyName();
     }
 
     /**
@@ -105,7 +106,7 @@ trait HasRecursiveRelationships
     {
         return 'laravel_cte';
     }
-    
+
     /**
      * Get the model's ancestors.
      *
@@ -114,7 +115,7 @@ trait HasRecursiveRelationships
     public function ancestors()
     {
         return $this->newAncestors(
-            (new static)->newQuery(),
+            (new static())->newQuery(),
             $this,
             $this->getQualifiedParentKeyName(),
             $this->getLocalKeyName(),
@@ -130,7 +131,7 @@ trait HasRecursiveRelationships
     public function ancestorsAndSelf()
     {
         return $this->newAncestors(
-            (new static)->newQuery(),
+            (new static())->newQuery(),
             $this,
             $this->getQualifiedParentKeyName(),
             $this->getLocalKeyName(),
@@ -181,7 +182,7 @@ trait HasRecursiveRelationships
     public function descendants()
     {
         return $this->newDescendants(
-            (new static)->newQuery(),
+            (new static())->newQuery(),
             $this,
             $this->getQualifiedParentKeyName(),
             $this->getLocalKeyName(),
@@ -197,7 +198,7 @@ trait HasRecursiveRelationships
     public function descendantsAndSelf()
     {
         return $this->newDescendants(
-            (new static)->newQuery(),
+            (new static())->newQuery(),
             $this,
             $this->getQualifiedParentKeyName(),
             $this->getLocalKeyName(),
@@ -248,7 +249,7 @@ trait HasRecursiveRelationships
     public function rootAncestor()
     {
         return $this->newRootAncestor(
-            (new static)->newQuery(),
+            (new static())->newQuery(),
             $this,
             $this->getQualifiedParentKeyName(),
             $this->getLocalKeyName()
@@ -277,7 +278,7 @@ trait HasRecursiveRelationships
     public function siblings()
     {
         return $this->newSiblings(
-            (new static)->newQuery(),
+            (new static())->newQuery(),
             $this,
             $this->getQualifiedParentKeyName(),
             $this->getParentKeyName(),
@@ -293,7 +294,7 @@ trait HasRecursiveRelationships
     public function siblingsAndSelf()
     {
         return $this->newSiblings(
-            (new static)->newQuery(),
+            (new static())->newQuery(),
             $this,
             $this->getQualifiedParentKeyName(),
             $this->getParentKeyName(),

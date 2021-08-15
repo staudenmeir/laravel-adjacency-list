@@ -37,7 +37,7 @@ class SiblingsTest extends TestCase
 
     public function testLazyLoadingWithoutParentKey()
     {
-        $siblings = (new User)->siblings;
+        $siblings = (new User())->siblings;
 
         $this->assertEmpty($siblings);
     }

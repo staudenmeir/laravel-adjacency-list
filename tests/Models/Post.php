@@ -8,5 +8,6 @@ use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
 class Post extends Model
 {
-    use QueriesExpressions, SoftDeletes;
+    use QueriesExpressions;
+    use SoftDeletes;
 }

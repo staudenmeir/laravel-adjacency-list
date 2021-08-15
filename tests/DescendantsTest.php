@@ -29,7 +29,7 @@ class DescendantsTest extends TestCase
 
     public function testLazyLoadingWithoutParentKey()
     {
-        $descendants = (new User)->descendants()->get();
+        $descendants = (new User())->descendants()->get();
 
         $this->assertEmpty($descendants);
     }
