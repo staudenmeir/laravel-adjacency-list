@@ -33,6 +33,7 @@ Supports Laravel 5.5.29+.
 - [Depth](#depth)
 - [Path](#path)
 - [Custom Paths](#custom-paths)
+- [Nested Results](#nested-results)
 
 ### Getting Started
 
@@ -326,6 +327,50 @@ $descendantsAndSelf = User::find(1)->descendantsAndSelf;
 echo $descendantsAndSelf[0]->slug_path; // user-1
 echo $descendantsAndSelf[1]->slug_path; // user-1/user-2
 echo $descendantsAndSelf[2]->slug_path; // user-1/user-2/user-3
+```
+
+# Nested Results
+
+Use the `toTree()` method on the result collection to generate a nested tree:
+
+```php
+$users = User::tree()->get();
+
+$tree = $users->toTree();
+```
+
+This recursively sets `children` and `parent` relationships:
+
+```json
+[
+  {
+    "id": 1,
+    "children": [
+      {
+        "id": 2,
+        "children": [
+          {
+            "id": 4,
+            "children": [],
+            "parent": {
+              "id": 2
+            }
+          }
+        ],
+        "parent": {
+          "id": 1
+        }
+      },
+      {
+        "id": 3,
+        "children": [],
+        "parent": {
+          "id": 1
+        }
+      }
+    ]
+  }
+]
 ```
 
 ## Contributing

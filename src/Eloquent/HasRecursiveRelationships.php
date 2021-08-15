@@ -416,4 +416,15 @@ trait HasRecursiveRelationships
     {
         return new \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder($query);
     }
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param array $models
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new Collection($models);
+    }
 }
