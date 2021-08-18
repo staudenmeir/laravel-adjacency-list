@@ -339,7 +339,7 @@ $users = User::tree()->get();
 $tree = $users->toTree();
 ```
 
-This recursively sets `children` and `parent` relationships:
+This recursively sets `children` relationships:
 
 ```json
 [
@@ -350,23 +350,19 @@ This recursively sets `children` and `parent` relationships:
         "id": 2,
         "children": [
           {
-            "id": 4,
-            "children": [],
-            "parent": {
-              "id": 2
-            }
+            "id": 3,
+            "children": []
           }
-        ],
-        "parent": {
-          "id": 1
-        }
+        ]
       },
       {
-        "id": 3,
-        "children": [],
-        "parent": {
-          "id": 1
-        }
+        "id": 4,
+        "children": [
+          {
+            "id": 5,
+            "children": []
+          }
+        ]
       }
     ]
   }

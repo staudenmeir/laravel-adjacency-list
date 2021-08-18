@@ -13,10 +13,7 @@ class CollectionTest extends TestCase
         $tree = $users->toTree();
 
         $this->assertEquals([1, 11], $tree->pluck('id')->all());
-        $this->assertFalse($tree[0]->relationLoaded('parent'));
         $this->assertEquals([2, 3, 4], $tree[0]->children->pluck('id')->all());
-        $this->assertTrue($tree[0]->children[0]->relationLoaded('parent'));
-        $this->assertEquals(1, $tree[0]->children[0]->parent->id);
         $this->assertEquals([5], $tree[0]->children[0]->children->pluck('id')->all());
         $this->assertEquals([8], $tree[0]->children[0]->children[0]->children->pluck('id')->all());
         $this->assertEquals([12], $tree[1]->children->pluck('id')->all());
@@ -29,10 +26,7 @@ class CollectionTest extends TestCase
         $tree = $users->toTree();
 
         $this->assertEquals([2, 3, 4], $tree->pluck('id')->all());
-        $this->assertFalse($tree[0]->relationLoaded('parent'));
         $this->assertEquals([5], $tree[0]->children->pluck('id')->all());
-        $this->assertTrue($tree[0]->children[0]->relationLoaded('parent'));
-        $this->assertEquals(2, $tree[0]->children[0]->parent->id);
         $this->assertEquals([8], $tree[0]->children[0]->children->pluck('id')->all());
     }
 

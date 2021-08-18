@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection as Base;
 
 class Collection extends Base
 {
-    public function toTree($childrenRelation = 'children', $parentRelation = 'parent')
+    public function toTree($childrenRelation = 'children')
     {
         if ($this->isEmpty()) {
             return $this;
@@ -23,14 +23,9 @@ class Collection extends Base
         );
 
         $itemsByParentKey = $this->groupBy($parentKeyName);
-        $itemsByLocalKey = $this->keyBy($localKeyName);
 
         foreach ($this->items as $item) {
             $item->setRelation($childrenRelation, $itemsByParentKey[$item->$localKeyName] ?? new static());
-
-            if (isset($item->$parentKeyName, $itemsByLocalKey[$item->$parentKeyName])) {
-                $item->setRelation($parentRelation, $itemsByLocalKey[$item->$parentKeyName]);
-            }
         }
 
         return $tree;
