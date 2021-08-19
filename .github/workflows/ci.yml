@@ -12,7 +12,7 @@ jobs:
         database: [mysql, pgsql, sqlite, sqlsrv]
         release: [stable, lowest]
         include:
-          - php: 7.4
+          - php: 8.0
             release: stable
             coverage: xdebug
 
@@ -45,6 +45,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - uses: actions/cache@v2
         with:
           path: ~/.cache/composer/files
@@ -71,7 +73,5 @@ jobs:
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
           PGSQL_PORT: ${{ job.services.pgsql.ports[5432] }}
           SQLSRV_PORT: ${{ job.services.sqlsrv.ports[1433] }}
-      - run: |
-          wget -q https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+      - run: vendor/bin/ocular code-coverage:upload --format=php-clover coverage.xml
         if: matrix.coverage == 'xdebug'
