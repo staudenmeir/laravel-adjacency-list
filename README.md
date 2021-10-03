@@ -329,7 +329,7 @@ echo $descendantsAndSelf[1]->slug_path; // user-1/user-2
 echo $descendantsAndSelf[2]->slug_path; // user-1/user-2/user-3
 ```
 
-# Nested Results
+### Nested Results
 
 Use the `toTree()` method on the result collection to generate a nested tree:
 
