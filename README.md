@@ -22,6 +22,10 @@ Supports Laravel 5.5.29+.
 
     composer require staudenmeir/laravel-adjacency-list:"^1.0"
 
+Use this command if you are in PowerShell on Windows (e.g. in VS Code):
+
+    composer require staudenmeir/laravel-adjacency-list:"^^^^1.0"
+
 ## Usage
 
 - [Getting Started](#getting-started)
