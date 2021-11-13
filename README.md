@@ -6,6 +6,7 @@
 [![License](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/license)](https://packagist.org/packages/staudenmeir/laravel-adjacency-list)
 
 ## Introduction
+
 This Laravel Eloquent extension provides recursive relationships using common table expressions (CTE).
 
 Supports Laravel 5.5.29+.
@@ -17,7 +18,7 @@ Supports Laravel 5.5.29+.
 - PostgreSQL 9.4+
 - SQLite 3.8.3+
 - SQL Server 2008+
- 
+
 ## Installation
 
     composer require staudenmeir/laravel-adjacency-list:"^1.0"
@@ -73,7 +74,8 @@ class User extends Model
 }
 ```
 
-By default, the trait uses the model's primary key as the local key. You can customize it by overriding `getLocalKeyName()`:
+By default, the trait uses the model's primary key as the local key. You can customize it by
+overriding `getLocalKeyName()`:
 
 ```php
 class User extends Model
@@ -123,8 +125,10 @@ User::find($id)->siblings()->delete();
 
 You can also define custom relationships to retrieve related models recursively.
 
+#### HasManyOfDescendants
+
 Consider a `HasMany` relationship between `User` and `Post`:
- 
+
  ```php
  class User extends Model
  {
@@ -167,13 +171,26 @@ class User extends Model
 }
 ```
 
-If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you need to add support for common table expressions to the related model:
+If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you
+need to add support for common table expressions to the related model:
 
 ```php
 class Post extends Model
 {
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 }
+```
+
+#### Intermediate Scopes
+
+You can adjust the descendants query (e.g. child users) by adding or removing intermediate scopes:
+
+```php
+$recursivePosts = User::find($id)->recursivePosts()->withTrashedDescendants()->get();
+
+$recursivePosts = User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveScope())->get();
+
+$recursivePosts = User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
 ```
 
 ### Trees
@@ -184,7 +201,8 @@ The trait provides the `tree()` query scope to get all models, beginning at the 
 $tree = User::tree()->get();
 ```
 
-`treeOf()` allows you to query trees with custom constraints for the root model(s). Consider a table with multiple separate lists:
+`treeOf()` allows you to query trees with custom constraints for the root model(s). Consider a table with multiple
+separate lists:
 
 ```php
 $constraint = function ($query) {
@@ -230,7 +248,8 @@ $descendants = User::find($id)->descendants()->depthFirst()->get();
 
 The results of ancestor, descendant and tree queries include an additional `depth` column.
 
-It contains the model's depth *relative* to the query's parent. The depth is positive for descendants and negative for ancestors:
+It contains the model's depth *relative* to the query's parent. The depth is positive for descendants and negative for
+ancestors:
 
 ```php
 $descendantsAndSelf = User::find($id)->descendantsAndSelf()->depthFirst()->get();
@@ -264,7 +283,9 @@ $descendants = User::find($id)->descendants()->whereDepth(2)->get();
 $descendants = User::find($id)->descendants()->whereDepth('<', 3)->get();
 ```
 
-Queries with `whereDepth()` constraints that limit the maximum depth still build the entire (sub)tree internally. Both tree scopes allow you to provide a maximum depth that improves query performance by only building the requested section of the tree:
+Queries with `whereDepth()` constraints that limit the maximum depth still build the entire (sub)tree internally. Both
+tree scopes allow you to provide a maximum depth that improves query performance by only building the requested section
+of the tree:
 
 ```php
 $tree = User::tree(3)->get();
