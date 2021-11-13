@@ -187,11 +187,11 @@ class Post extends Model
 You can adjust the descendants query (e.g. child users) by adding or removing intermediate scopes:
 
 ```php
-$recursivePosts = User::find($id)->recursivePosts()->withTrashedDescendants()->get();
+User::find($id)->recursivePosts()->withTrashedDescendants()->get();
 
-$recursivePosts = User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveScope())->get();
+User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveScope())->get();
 
-$recursivePosts = User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
+User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
 ```
 
 ### Trees
