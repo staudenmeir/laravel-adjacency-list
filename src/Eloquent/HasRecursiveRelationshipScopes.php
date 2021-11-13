@@ -44,7 +44,7 @@ trait HasRecursiveRelationshipScopes
      */
     public function scopeHasChildren(Builder $query)
     {
-        $keys = (new static)->newQuery()
+        $keys = (new static())->newQuery()
             ->select($this->getParentKeyName())
             ->hasParent();
 
@@ -70,7 +70,7 @@ trait HasRecursiveRelationshipScopes
      */
     public function scopeIsLeaf(Builder $query)
     {
-        $keys = (new static)->newQuery()
+        $keys = (new static())->newQuery()
             ->select($this->getParentKeyName())
             ->hasParent();
 

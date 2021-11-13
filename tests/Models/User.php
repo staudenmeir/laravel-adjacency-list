@@ -8,7 +8,8 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class User extends Model
 {
-    use HasRecursiveRelationships, SoftDeletes;
+    use HasRecursiveRelationships;
+    use SoftDeletes;
 
     public function getCustomPaths()
     {

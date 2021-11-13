@@ -57,7 +57,7 @@ class Builder extends Base
             }
         }
 
-        $table = (new $this->model)->getTable();
+        $table = (new $this->model())->getTable();
 
         $models = $this->model->hydrate($items)->each->setTable($table);
 
@@ -94,13 +94,13 @@ class Builder extends Base
 
         switch ($driver) {
             case 'mysql':
-                return $this->query->getConnection()->withTablePrefix(new MySqlGrammar);
+                return $this->query->getConnection()->withTablePrefix(new MySqlGrammar());
             case 'pgsql':
-                return $this->query->getConnection()->withTablePrefix(new PostgresGrammar);
+                return $this->query->getConnection()->withTablePrefix(new PostgresGrammar());
             case 'sqlite':
-                return $this->query->getConnection()->withTablePrefix(new SQLiteGrammar);
+                return $this->query->getConnection()->withTablePrefix(new SQLiteGrammar());
             case 'sqlsrv':
-                return $this->query->getConnection()->withTablePrefix(new SqlServerGrammar);
+                return $this->query->getConnection()->withTablePrefix(new SqlServerGrammar());
         }
 
         throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore

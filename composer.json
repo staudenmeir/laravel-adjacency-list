@@ -14,8 +14,9 @@
         "staudenmeir/laravel-cte": "^1.4"
     },
     "require-dev": {
-        "laravel/homestead": "^11.0",
-        "phpunit/phpunit": "^9.3"
+        "laravel/homestead": "^11.0|^12.0",
+        "phpunit/phpunit": "^9.3",
+        "scrutinizer/ocular": "^1.8"
     },
     "autoload": {
         "psr-4": {
