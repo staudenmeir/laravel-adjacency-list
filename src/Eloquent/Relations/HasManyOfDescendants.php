@@ -113,22 +113,17 @@ class HasManyOfDescendants extends HasMany
     {
         $dictionary = [];
 
-        $foreignKey = $this->getForeignKeyName();
+        $paths = explode(
+            $this->getPathListSeparator(),
+            $results[0]->{$this->pathListAlias}
+        );
 
+        $foreignKey = $this->getForeignKeyName();
         $pathSeparator = $this->parent->getPathSeparator();
-        $pathListSeparator = $this->getPathListSeparator();
 
         foreach ($results as $result) {
-            $paths = explode($pathListSeparator, $result->{$this->pathListAlias});
-
             foreach ($paths as $path) {
-                $isDescendant = Str::endsWith($path, $pathSeparator.$result->$foreignKey);
-
-                if ($this->andSelf) {
-                    if (!$isDescendant && $path !== (string) $result->$foreignKey) {
-                        continue;
-                    }
-                } elseif (!$isDescendant) {
+                if (!$this->pathMatches($result, $foreignKey, $pathSeparator, $path)) {
                     continue;
                 }
 
@@ -157,6 +152,30 @@ class HasManyOfDescendants extends HasMany
         }
 
         return $dictionary;
+    }
+
+    /**
+     * Determine whether a path belongs to a result.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $result
+     * @param string $foreignKey
+     * @param string $pathSeparator
+     * @param string $path
+     * @return bool
+     */
+    protected function pathMatches(Model $result, $foreignKey, $pathSeparator, $path)
+    {
+        $isDescendant = Str::endsWith($path, $pathSeparator.$result->$foreignKey);
+
+        if ($this->andSelf) {
+            if ($isDescendant || $path === (string) $result->$foreignKey) {
+                return true;
+            }
+        } elseif ($isDescendant) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
