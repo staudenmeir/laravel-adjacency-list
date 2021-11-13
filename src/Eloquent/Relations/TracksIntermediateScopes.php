@@ -2,6 +2,8 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
 
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 trait TracksIntermediateScopes
 {
     /**
@@ -72,6 +74,16 @@ trait TracksIntermediateScopes
         }
 
         return $this;
+    }
+
+    /**
+     * Include trashed descendants in the query.
+     *
+     * @return $this
+     */
+    public function withTrashedDescendants()
+    {
+        return $this->withoutIntermediateScope(SoftDeletingScope::class);
     }
 
     /**

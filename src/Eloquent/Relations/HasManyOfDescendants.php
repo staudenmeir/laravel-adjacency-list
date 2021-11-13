@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
@@ -337,15 +336,5 @@ class HasManyOfDescendants extends HasMany
             $this->parent->getPathSeparator(),
             2
         );
-    }
-
-    /**
-     * Include trashed descendants in the query.
-     *
-     * @return $this
-     */
-    public function withTrashedDescendants()
-    {
-        return $this->withoutIntermediateScope(SoftDeletingScope::class);
     }
 }
