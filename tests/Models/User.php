@@ -8,18 +8,23 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class User extends Model
 {
-    use HasRecursiveRelationships;
+    use HasRecursiveRelationships {
+        getCustomPaths as getCustomPathsParent;
+    }
     use SoftDeletes;
 
     public function getCustomPaths()
     {
-        return [
+        return array_merge(
+            $this->getCustomPathsParent(),
             [
-                'name' => 'slug_path',
-                'column' => 'slug',
-                'separator' => '/',
-            ],
-        ];
+                [
+                    'name' => 'slug_path',
+                    'column' => 'slug',
+                    'separator' => '/',
+                ],
+            ]
+        );
     }
 
     public function posts()
