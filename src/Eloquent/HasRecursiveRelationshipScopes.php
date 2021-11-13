@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
 trait HasRecursiveRelationshipScopes
@@ -206,7 +207,22 @@ trait HasRecursiveRelationshipScopes
 
         $depth = $grammar->wrap($this->getDepthName());
 
-        $recursiveDepth = $grammar->wrap($this->getDepthName()).' '.($direction === 'asc' ? '-' : '+').' 1';
+        $joinColumns = [
+            'asc' => [
+                $name.'.'.$this->getParentKeyName(),
+                $this->getQualifiedLocalKeyName(),
+            ],
+            'desc' => [
+                $name.'.'.$this->getLocalKeyName(),
+                $this->qualifyColumn($this->getParentKeyName()),
+            ],
+        ];
+
+        if ($direction === 'both') {
+            $recursiveDepth = "$depth + (case when {$joinColumns['desc'][1]}={$joinColumns['desc'][0]} then 1 else -1 end)";
+        } else {
+            $recursiveDepth = $depth.' '.($direction === 'asc' ? '-' : '+').' 1';
+        }
 
         $recursivePath = $grammar->compileRecursivePath(
             $this->getQualifiedLocalKeyName(),
@@ -231,15 +247,28 @@ trait HasRecursiveRelationshipScopes
             );
         }
 
-        if ($direction === 'asc') {
-            $first = $this->getParentKeyName();
-            $second = $this->getQualifiedLocalKeyName();
-        } else {
-            $first = $this->getLocalKeyName();
-            $second = $this->qualifyColumn($this->getParentKeyName());
-        }
+        if ($direction === 'both') {
+            $query->join($name, function (JoinClause $join) use ($joinColumns) {
+                $join->on($joinColumns['asc'][0], '=', $joinColumns['asc'][1])
+                    ->orOn($joinColumns['desc'][0], '=', $joinColumns['desc'][1]);
+            });
 
-        $query->join($name, $name.'.'.$first, '=', $second);
+            $depth = $this->getDepthName();
+
+            $query->where(function (Builder  $query) use ($depth, $joinColumns) {
+                $query->where($depth, '=', 0)
+                    ->orWhere(function (Builder $query) use ($depth, $joinColumns) {
+                        $query->whereColumn($joinColumns['asc'][0], '=', $joinColumns['asc'][1])
+                            ->where($depth, '<', 0);
+                    })
+                    ->orWhere(function (Builder $query) use ($depth, $joinColumns) {
+                        $query->whereColumn($joinColumns['desc'][0], '=', $joinColumns['desc'][1])
+                            ->where($depth, '>', 0);
+                    });
+            });
+        } else {
+            $query->join($name, $joinColumns[$direction][0], '=', $joinColumns[$direction][1]);
+        }
 
         if (!is_null($maxDepth)) {
             $query->where($this->getDepthName(), '<', $maxDepth);

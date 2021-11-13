@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor;
@@ -152,6 +153,35 @@ trait HasRecursiveRelationships
     protected function newAncestors(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
         return new Ancestors($query, $parent, $foreignKey, $localKey, $andSelf);
+    }
+
+    /**
+     * Get the model's bloodline.
+     *
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline
+     */
+    public function bloodline()
+    {
+        return $this->newBloodline(
+            (new static())->newQuery(),
+            $this,
+            $this->getQualifiedParentKeyName(),
+            $this->getLocalKeyName()
+        );
+    }
+
+    /**
+     * Instantiate a new Bloodline relationship.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param string $foreignKey
+     * @param string $localKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline
+     */
+    protected function newBloodline(Builder $query, Model $parent, $foreignKey, $localKey)
+    {
+        return new Bloodline($query, $parent, $foreignKey, $localKey);
     }
 
     /**

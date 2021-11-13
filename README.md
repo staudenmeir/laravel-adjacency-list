@@ -95,6 +95,7 @@ The trait provides various relationships:
 
 - `ancestors()`: The model's recursive parents.
 - `ancestorsAndSelf()`: The model's recursive parents and itself.
+- `bloodline()`: The model's ancestors, descendants and itself.
 - `children()`: The model's direct children.
 - `childrenAndSelf()`: The model's direct children and itself.
 - `descendants()`: The model's recursive children.
@@ -246,7 +247,7 @@ $descendants = User::find($id)->descendants()->depthFirst()->get();
 
 ### Depth
 
-The results of ancestor, descendant and tree queries include an additional `depth` column.
+The results of ancestor, bloodline, descendant and tree queries include an additional `depth` column.
 
 It contains the model's depth *relative* to the query's parent. The depth is positive for descendants and negative for
 ancestors:
@@ -295,7 +296,7 @@ $tree = User::treeOf($constraint, 3)->get();
 
 ### Path
 
-The results of ancestor, descendant and tree queries include an additional `path` column.
+The results of ancestor, bloodline, descendant and tree queries include an additional `path` column.
 
 It contains the dot-separated path of local keys from the query's parent to the model:
 
