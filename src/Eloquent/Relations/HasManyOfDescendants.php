@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\TracksIntermediateScopes;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
 class HasManyOfDescendants extends HasMany
@@ -327,14 +327,6 @@ class HasManyOfDescendants extends HasMany
      */
     public function withTrashedDescendants()
     {
-        $table = $this->parent->getExpressionName();
-
-        $this->query->withoutGlobalScope('HasManyOfDescendants')
-            ->whereIn(
-                $this->foreignKey,
-                (new $this->parent())->setTable($table)->newModelQuery()->select($this->localKey)
-            );
-
-        return $this;
+        return $this->withoutIntermediateScope(SoftDeletingScope::class);
     }
 }

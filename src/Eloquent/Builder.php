@@ -13,21 +13,6 @@ use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SqlServerGrammar;
 class Builder extends Base
 {
     /**
-     * Register all passed global scopes.
-     *
-     * @param  array|null  $scopes
-     * @return $this
-     */
-    public function withGlobalScopes(array $scopes)
-	{
-		foreach ($scopes as $identifier => $scope) {
-			$this->withGlobalScope($identifier, $scope);
-		}
-
-        return $this;
-	}
-
-    /**
      * Get the hydrated models without eager loading.
      *
      * @param array $columns
@@ -104,5 +89,20 @@ class Builder extends Base
         }
 
         throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore
+    }
+
+    /**
+     * Register all passed global scopes.
+     *
+     * @param array $scopes
+     * @return $this
+     */
+    public function withGlobalScopes(array $scopes)
+    {
+        foreach ($scopes as $identifier => $scope) {
+            $this->withGlobalScope($identifier, $scope);
+        }
+
+        return $this;
     }
 }

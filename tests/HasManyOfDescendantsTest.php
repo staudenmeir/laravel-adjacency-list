@@ -3,9 +3,11 @@
 namespace Tests;
 
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Tests\Models\Post;
 use Tests\Models\User;
+use Tests\Scopes\TestScope;
 
 class HasManyOfDescendantsTest extends TestCase
 {
@@ -149,5 +151,55 @@ class HasManyOfDescendantsTest extends TestCase
         $posts = User::find(4)->posts()->withTrashedDescendants()->get();
 
         $this->assertEquals([70, 90], $posts->pluck('id')->all());
+    }
+
+    public function testWithIntermediateScope()
+    {
+        $posts = User::find(2)->posts()->withIntermediateScope('test', new TestScope())->get();
+
+        $this->assertEquals([50], $posts->pluck('id')->all());
+    }
+
+    public function testWithoutIntermediateScope()
+    {
+        $posts = User::find(2)->posts()
+            ->withIntermediateScope('test', new TestScope())
+            ->withoutIntermediateScope('test')
+            ->get();
+
+        $this->assertEquals([50, 80], $posts->pluck('id')->all());
+    }
+
+    public function testWithoutIntermediateScopeWithObject()
+    {
+        $posts = User::find(4)->posts()->withoutIntermediateScope(new SoftDeletingScope())->get();
+
+        $this->assertEquals([70, 90], $posts->pluck('id')->all());
+    }
+
+    public function testWithoutIntermediateScopes()
+    {
+        $posts = User::find(2)->posts()
+            ->withIntermediateScope('test', new TestScope())
+            ->withoutIntermediateScopes()
+            ->get();
+
+        $this->assertEquals([50, 80], $posts->pluck('id')->all());
+    }
+
+    public function testIntermediateScopes()
+    {
+        $relationship = User::find(2)->posts()->withIntermediateScope('test', new TestScope());
+
+        $this->assertArrayHasKey('test', $relationship->intermediateScopes());
+    }
+
+    public function testRemovedIntermediateScopes()
+    {
+        $relationship = User::find(2)->posts()
+            ->withIntermediateScope('test', new TestScope())
+            ->withoutIntermediateScope('test');
+
+        $this->assertSame(['test'], $relationship->removedIntermediateScopes());
     }
 }
