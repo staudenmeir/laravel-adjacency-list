@@ -16,13 +16,13 @@ $data = [
                 file_get_contents('coverage.xml')
             )
         ),
-    ]
+    ],
 ];
 
 $options = [
     'http' => [
-        'method'  => 'POST',
-        'header'  => 'Content-Type: application/json',
+        'method' => 'POST',
+        'header' => 'Content-Type: application/json',
         'content' => json_encode($data),
     ],
 ];
