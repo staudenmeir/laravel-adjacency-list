@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class RootAncestor extends HasOne
 {
     use IsAncestorRelation {
-        __construct as __constructParent;
-        addConstraints as addConstraintsParent;
+        __construct as __constructTrait;
+        addConstraints as addConstraintsTrait;
     }
     /**
      * Create a new root ancestor relationship instance.
@@ -23,7 +23,7 @@ class RootAncestor extends HasOne
      */
     public function __construct(Builder $query, Model $parent, $foreignKey, $localKey)
     {
-        $this->__constructParent($query, $parent, $foreignKey, $localKey, false);
+        $this->__constructTrait($query, $parent, $foreignKey, $localKey, false);
     }
 
     /**
@@ -33,7 +33,7 @@ class RootAncestor extends HasOne
      */
     public function addConstraints()
     {
-        $this->addConstraintsParent();
+        $this->addConstraintsTrait();
 
         $this->query->isRoot();
     }
