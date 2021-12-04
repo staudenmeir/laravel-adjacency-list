@@ -31,11 +31,6 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
 - [Getting Started](#getting-started)
 - [Included Relationships](#included-relationships)
-- [Custom Relationships](#custom-relationships)
-  - [HasManyOfDescendants](#hasmanyofdescendants)
-  - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
-  - [MorphToManyOfDescendants](#morphtomanyofdescendants)
-  - [Intermediate Scopes](#intermediate-scopes)
 - [Trees](#trees)
 - [Filters](#filters)
 - [Order](#order)
@@ -43,6 +38,11 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 - [Path](#path)
 - [Custom Paths](#custom-paths)
 - [Nested Results](#nested-results)
+- [Custom Relationships](#custom-relationships)
+  - [HasManyOfDescendants](#hasmanyofdescendants)
+  - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
+  - [MorphToManyOfDescendants](#morphtomanyofdescendants)
+  - [Intermediate Scopes](#intermediate-scopes)
 
 ### Getting Started
 
@@ -124,172 +124,6 @@ $total = User::find($id)->descendants()->count();
 User::find($id)->descendants()->update(['active' => false]);
 
 User::find($id)->siblings()->delete();
-```
-
-### Custom Relationships
-
-You can also define custom relationships to retrieve related models recursively.
-
-#### HasManyOfDescendants
-
-Consider a `HasMany` relationship between `User` and `Post`:
-
- ```php
- class User extends Model
- {
-     public function posts()
-     {
-         return $this->hasMany(Post::class);
-     }
- }
- ```
-
-Define a `HasManyOfDescendants` relationship to get all posts of a user and its descendants:
-
-```php
-class User extends Model
-{
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
-    public function recursivePosts()
-    {
-        return $this->hasManyOfDescendantsAndSelf(Post::class);
-    }
-}
-
-$recursivePosts = User::find($id)->recursivePosts;
-
-$users = User::withCount('recursivePosts')->get();
-```
-
-Use `hasManyOfDescendants()` to only get the descendants' posts:
-
-```php
-class User extends Model
-{
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
-    public function descendantPosts()
-    {
-        return $this->hasManyOfDescendants(Post::class);
-    }
-}
-```
-
-#### BelongsToManyOfDescendants
-
-Consider a `BelongsToMany` relationship between `User` and `Role`:
-
- ```php
- class User extends Model
- {
-     public function roles()
-     {
-         return $this->belongsToMany(Role::class);
-     }
- }
- ```
-
-Define a `BelongsToManyOfDescendants` relationship to get all roles of a user and its descendants:
-
-```php
-class User extends Model
-{
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
-    public function recursiveRoles()
-    {
-        return $this->belongsToManyOfDescendantsAndSelf(Role::class);
-    }
-}
-
-$recursiveRoles = User::find($id)->recursiveRoles;
-
-$users = User::withCount('recursiveRoles')->get();
-```
-
-Use `belongsToManyOfDescendants()` to only get the descendants' roles:
-
-```php
-class User extends Model
-{
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
-    public function descendantRoles()
-    {
-        return $this->belongsToManyOfDescendants(Role::class);
-    }
-}
-```
-
-#### MorphToManyOfDescendants
-
-Consider a `MorphToMany` relationship between `User` and `Tag`:
-
- ```php
- class User extends Model
- {
-     public function tags()
-     {
-         return $this->morphToMany(Tag::class, 'taggable');
-     }
- }
- ```
-
-Define a `MorphToManyOfDescendants` relationship to get all tags of a user and its descendants:
-
-```php
-class User extends Model
-{
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
-    public function recursiveTags()
-    {
-        return $this->morphToManyOfDescendantsAndSelf(Tag::class, 'taggable');
-    }
-}
-
-$recursiveTags = User::find($id)->recursiveTags;
-
-$users = User::withCount('recursiveTags')->get();
-```
-
-Use `morphToManyOfDescendants()` to only get the descendants' tags:
-
-```php
-class User extends Model
-{
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
-    public function descendantTags()
-    {
-        return $this->morphToManyOfDescendants(Tag::class, 'taggable');
-    }
-}
-```
-
-#### Intermediate Scopes
-
-You can adjust the descendants query (e.g. child users) by adding or removing intermediate scopes:
-
-```php
-User::find($id)->recursivePosts()->withTrashedDescendants()->get();
-
-User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveScope())->get();
-
-User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
-```
-
-#### Usage outside of Laravel
-
-If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you
-need to add support for common table expressions to the related model:
-
-```php
-class Post extends Model
-{
-    use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
-}
 ```
 
 ### Trees
@@ -491,6 +325,172 @@ This recursively sets `children` relationships:
     ]
   }
 ]
+```
+
+### Custom Relationships
+
+You can also define custom relationships to retrieve related models recursively.
+
+#### HasManyOfDescendants
+
+Consider a `HasMany` relationship between `User` and `Post`:
+
+ ```php
+ class User extends Model
+ {
+     public function posts()
+     {
+         return $this->hasMany(Post::class);
+     }
+ }
+ ```
+
+Define a `HasManyOfDescendants` relationship to get all posts of a user and its descendants:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function recursivePosts()
+    {
+        return $this->hasManyOfDescendantsAndSelf(Post::class);
+    }
+}
+
+$recursivePosts = User::find($id)->recursivePosts;
+
+$users = User::withCount('recursivePosts')->get();
+```
+
+Use `hasManyOfDescendants()` to only get the descendants' posts:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantPosts()
+    {
+        return $this->hasManyOfDescendants(Post::class);
+    }
+}
+```
+
+#### BelongsToManyOfDescendants
+
+Consider a `BelongsToMany` relationship between `User` and `Role`:
+
+ ```php
+ class User extends Model
+ {
+     public function roles()
+     {
+         return $this->belongsToMany(Role::class);
+     }
+ }
+ ```
+
+Define a `BelongsToManyOfDescendants` relationship to get all roles of a user and its descendants:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function recursiveRoles()
+    {
+        return $this->belongsToManyOfDescendantsAndSelf(Role::class);
+    }
+}
+
+$recursiveRoles = User::find($id)->recursiveRoles;
+
+$users = User::withCount('recursiveRoles')->get();
+```
+
+Use `belongsToManyOfDescendants()` to only get the descendants' roles:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantRoles()
+    {
+        return $this->belongsToManyOfDescendants(Role::class);
+    }
+}
+```
+
+#### MorphToManyOfDescendants
+
+Consider a `MorphToMany` relationship between `User` and `Tag`:
+
+ ```php
+ class User extends Model
+ {
+     public function tags()
+     {
+         return $this->morphToMany(Tag::class, 'taggable');
+     }
+ }
+ ```
+
+Define a `MorphToManyOfDescendants` relationship to get all tags of a user and its descendants:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function recursiveTags()
+    {
+        return $this->morphToManyOfDescendantsAndSelf(Tag::class, 'taggable');
+    }
+}
+
+$recursiveTags = User::find($id)->recursiveTags;
+
+$users = User::withCount('recursiveTags')->get();
+```
+
+Use `morphToManyOfDescendants()` to only get the descendants' tags:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantTags()
+    {
+        return $this->morphToManyOfDescendants(Tag::class, 'taggable');
+    }
+}
+```
+
+#### Intermediate Scopes
+
+You can adjust the descendants query (e.g. child users) by adding or removing intermediate scopes:
+
+```php
+User::find($id)->recursivePosts()->withTrashedDescendants()->get();
+
+User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveScope())->get();
+
+User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
+```
+
+#### Usage outside of Laravel
+
+If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you
+need to add support for common table expressions to the related model:
+
+```php
+class Post extends Model
+{
+    use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
+}
 ```
 
 ## Contributing
