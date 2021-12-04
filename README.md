@@ -42,6 +42,7 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
   - [HasManyOfDescendants](#hasmanyofdescendants)
   - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
   - [MorphToManyOfDescendants](#morphtomanyofdescendants)
+  - [MorphedByManyOfDescendants](#morphedbymanyofdescendants)
   - [Intermediate Scopes](#intermediate-scopes)
 
 ### Getting Started
@@ -465,6 +466,52 @@ class User extends Model
     public function descendantTags()
     {
         return $this->morphToManyOfDescendants(Tag::class, 'taggable');
+    }
+}
+```
+
+#### MorphedByManyOfDescendants
+
+Consider a `MorphedByMany` relationship between `Category` and `Post`:
+
+ ```php
+ class Category extends Model
+ {
+     public function posts()
+     {
+         return $this->morphedByMany(Post::class, 'categorizable');
+     }
+ }
+ ```
+
+Define a `MorphedByManyOfDescendants` relationship to get all posts of a category and its descendants:
+
+```php
+class Category extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function recursivePosts()
+    {
+        return $this->morphedByManyOfDescendantsAndSelf(Post::class, 'categorizable');
+    }
+}
+
+$recursivePosts = Category::find($id)->recursivePosts;
+
+$categories = Category::withCount('recursivePosts')->get();
+```
+
+Use `morphedByManyOfDescendants()` to only get the descendants' posts:
+
+```php
+class Category extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantPosts()
+    {
+        return $this->morphedByManyOfDescendants(Post::class, 'categorizable');
     }
 }
 ```

@@ -203,6 +203,7 @@ trait HasOfDescendantsRelationships
      * @param string|null $relatedPivotKey
      * @param string|null $parentKey
      * @param string|null $relatedKey
+     * @param bool $inverse
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
      */
     public function morphToManyOfDescendants(
@@ -212,7 +213,8 @@ trait HasOfDescendantsRelationships
         $foreignPivotKey = null,
         $relatedPivotKey = null,
         $parentKey = null,
-        $relatedKey = null
+        $relatedKey = null,
+        $inverse = false
     ) {
         $instance = $this->newRelatedInstance($related);
 
@@ -237,6 +239,7 @@ trait HasOfDescendantsRelationships
             $relatedPivotKey,
             $parentKey ?: $this->getKeyName(),
             $relatedKey ?: $instance->getKeyName(),
+            $inverse,
             false
         );
     }
@@ -251,6 +254,7 @@ trait HasOfDescendantsRelationships
      * @param string|null $relatedPivotKey
      * @param string|null $parentKey
      * @param string|null $relatedKey
+     * @param bool $inverse
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
      */
     public function morphToManyOfDescendantsAndSelf(
@@ -260,7 +264,8 @@ trait HasOfDescendantsRelationships
         $foreignPivotKey = null,
         $relatedPivotKey = null,
         $parentKey = null,
-        $relatedKey = null
+        $relatedKey = null,
+        $inverse = false
     ) {
         $instance = $this->newRelatedInstance($related);
 
@@ -285,6 +290,7 @@ trait HasOfDescendantsRelationships
             $relatedPivotKey,
             $parentKey ?: $this->getKeyName(),
             $relatedKey ?: $instance->getKeyName(),
+            $inverse,
             true
         );
     }
@@ -300,6 +306,7 @@ trait HasOfDescendantsRelationships
      * @param string $relatedPivotKey
      * @param string $parentKey
      * @param string $relatedKey
+     * @param bool $inverse
      * @param bool $andSelf
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
      */
@@ -312,6 +319,7 @@ trait HasOfDescendantsRelationships
         $relatedPivotKey,
         $parentKey,
         $relatedKey,
+        $inverse,
         $andSelf
     ) {
         return new MorphToManyOfDescendants(
@@ -323,7 +331,82 @@ trait HasOfDescendantsRelationships
             $relatedPivotKey,
             $parentKey,
             $relatedKey,
+            $inverse,
             $andSelf
+        );
+    }
+
+    /**
+     * Define a polymorphic, inverse many-to-many relationship of the model's descendants.
+     *
+     * @param string $related
+     * @param string $name
+     * @param string|null $table
+     * @param string|null $foreignPivotKey
+     * @param string|null $relatedPivotKey
+     * @param string|null $parentKey
+     * @param string|null $relatedKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
+     */
+    public function morphedByManyOfDescendants(
+        $related,
+        $name,
+        $table = null,
+        $foreignPivotKey = null,
+        $relatedPivotKey = null,
+        $parentKey = null,
+        $relatedKey = null
+    ) {
+        $foreignPivotKey = $foreignPivotKey ?: $this->getForeignKey();
+
+        $relatedPivotKey = $relatedPivotKey ?: $name.'_id';
+
+        return $this->morphToManyOfDescendants(
+            $related,
+            $name,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey,
+            $relatedKey,
+            true
+        );
+    }
+
+    /**
+     * Define a polymorphic, inverse many-to-many relationship of the model's descendants and itself.
+     *
+     * @param string $related
+     * @param string $name
+     * @param string|null $table
+     * @param string|null $foreignPivotKey
+     * @param string|null $relatedPivotKey
+     * @param string|null $parentKey
+     * @param string|null $relatedKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
+     */
+    public function morphedByManyOfDescendantsAndSelf(
+        $related,
+        $name,
+        $table = null,
+        $foreignPivotKey = null,
+        $relatedPivotKey = null,
+        $parentKey = null,
+        $relatedKey = null
+    ) {
+        $foreignPivotKey = $foreignPivotKey ?: $this->getForeignKey();
+
+        $relatedPivotKey = $relatedPivotKey ?: $name.'_id';
+
+        return $this->morphToManyOfDescendantsAndSelf(
+            $related,
+            $name,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey,
+            $relatedKey,
+            true
         );
     }
 }

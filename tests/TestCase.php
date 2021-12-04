@@ -11,6 +11,7 @@ use Tests\Models\Post;
 use Tests\Models\Role;
 use Tests\Models\Tag;
 use Tests\Models\User;
+use Tests\Models\Video;
 
 abstract class TestCase extends Base
 {
@@ -93,6 +94,17 @@ abstract class TestCase extends Base
         DB::schema()->create('taggables', function (Blueprint $table) {
             $table->unsignedInteger('tag_id');
             $table->morphs('taggable');
+        });
+
+        DB::schema()->create('videos', function (Blueprint $table) {
+            $table->unsignedInteger('id');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        DB::schema()->create('authorables', function (Blueprint $table) {
+            $table->unsignedInteger('user_id');
+            $table->morphs('authorable');
         });
     }
 
@@ -189,6 +201,37 @@ abstract class TestCase extends Base
                 ['tag_id' => 112, 'taggable_type' => User::class, 'taggable_id' => 12],
                 ['tag_id' => 122, 'taggable_type' => User::class, 'taggable_id' => 12],
                 ['tag_id' => 12, 'taggable_type' => Post::class, 'taggable_id' => 5],
+            ]
+        );
+
+        Video::create(['id' => 13, 'deleted_at' => null]);
+        Video::create(['id' => 23, 'deleted_at' => null]);
+        Video::create(['id' => 33, 'deleted_at' => null]);
+        Video::create(['id' => 43, 'deleted_at' => null]);
+        Video::create(['id' => 53, 'deleted_at' => null]);
+        Video::create(['id' => 63, 'deleted_at' => null]);
+        Video::create(['id' => 73, 'deleted_at' => null]);
+        Video::create(['id' => 83, 'deleted_at' => null]);
+        Video::create(['id' => 93, 'deleted_at' => null]);
+        Video::create(['id' => 103, 'deleted_at' => null]);
+        Video::create(['id' => 113, 'deleted_at' => null]);
+        Video::create(['id' => 123, 'deleted_at' => Carbon::now()]);
+
+        DB::table('authorables')->insert(
+            [
+                ['user_id' => 1, 'authorable_type' => Video::class, 'authorable_id' => 13],
+                ['user_id' => 2, 'authorable_type' => Video::class, 'authorable_id' => 23],
+                ['user_id' => 3, 'authorable_type' => Video::class, 'authorable_id' => 33],
+                ['user_id' => 4, 'authorable_type' => Video::class, 'authorable_id' => 43],
+                ['user_id' => 5, 'authorable_type' => Video::class, 'authorable_id' => 53],
+                ['user_id' => 6, 'authorable_type' => Video::class, 'authorable_id' => 63],
+                ['user_id' => 7, 'authorable_type' => Video::class, 'authorable_id' => 73],
+                ['user_id' => 8, 'authorable_type' => Video::class, 'authorable_id' => 83],
+                ['user_id' => 10, 'authorable_type' => Video::class, 'authorable_id' => 93],
+                ['user_id' => 12, 'authorable_type' => Video::class, 'authorable_id' => 103],
+                ['user_id' => 12, 'authorable_type' => Video::class, 'authorable_id' => 113],
+                ['user_id' => 12, 'authorable_type' => Video::class, 'authorable_id' => 123],
+                ['user_id' => 5, 'authorable_type' => Post::class, 'authorable_id' => 13],
             ]
         );
 

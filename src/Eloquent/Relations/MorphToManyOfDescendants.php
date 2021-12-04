@@ -22,16 +22,26 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
     protected $morphClass;
 
     /**
+     * Indicates if we are connecting the inverse of the relation.
+     *
+     * This primarily affects the morphClass constraint.
+     *
+     * @var bool
+     */
+    protected $inverse;
+
+    /**
      * Create a new morph to many of descendants relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Illuminate\Database\Eloquent\Model $parent
-     * @param string  $name
-     * @param string  $table
-     * @param string  $foreignPivotKey
-     * @param string  $relatedPivotKey
-     * @param string  $parentKey
-     * @param string  $relatedKey
+     * @param string $name
+     * @param string $table
+     * @param string $foreignPivotKey
+     * @param string $relatedPivotKey
+     * @param string $parentKey
+     * @param string $relatedKey
+     * @param bool $inverse
      * @param bool $andSelf
      */
     public function __construct(
@@ -43,10 +53,12 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         $relatedPivotKey,
         $parentKey,
         $relatedKey,
+        $inverse,
         $andSelf
     ) {
+        $this->inverse = $inverse;
         $this->morphType = $name.'_type';
-        $this->morphClass = $parent->getMorphClass();
+        $this->morphClass = $inverse ? $query->getModel()->getMorphClass() : $parent->getMorphClass();
 
         parent::__construct(
             $query,

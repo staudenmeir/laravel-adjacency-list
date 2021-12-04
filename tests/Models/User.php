@@ -56,4 +56,14 @@ class User extends Model
     {
         return $this->morphToManyOfDescendantsAndSelf(Tag::class, 'taggable');
     }
+
+    public function videos()
+    {
+        return $this->morphedByManyOfDescendants(Video::class, 'authorable');
+    }
+
+    public function videosAndSelf()
+    {
+        return $this->morphedByManyOfDescendantsAndSelf(Video::class, 'authorable');
+    }
 }
