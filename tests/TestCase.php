@@ -9,6 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use PHPUnit\Framework\TestCase as Base;
 use Tests\Models\Post;
 use Tests\Models\Role;
+use Tests\Models\Tag;
 use Tests\Models\User;
 
 abstract class TestCase extends Base
@@ -82,6 +83,17 @@ abstract class TestCase extends Base
                 $table->unsignedBigInteger('user_id');
             }
         );
+
+        DB::schema()->create('tags', function (Blueprint $table) {
+            $table->unsignedInteger('id');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        DB::schema()->create('taggables', function (Blueprint $table) {
+            $table->unsignedInteger('tag_id');
+            $table->morphs('taggable');
+        });
     }
 
     /**
@@ -146,6 +158,37 @@ abstract class TestCase extends Base
                 ['role_id' => 101, 'user_id' => 12],
                 ['role_id' => 111, 'user_id' => 12],
                 ['role_id' => 121, 'user_id' => 12],
+            ]
+        );
+
+        Tag::create(['id' => 12, 'deleted_at' => null]);
+        Tag::create(['id' => 22, 'deleted_at' => null]);
+        Tag::create(['id' => 32, 'deleted_at' => null]);
+        Tag::create(['id' => 42, 'deleted_at' => null]);
+        Tag::create(['id' => 52, 'deleted_at' => null]);
+        Tag::create(['id' => 62, 'deleted_at' => null]);
+        Tag::create(['id' => 72, 'deleted_at' => null]);
+        Tag::create(['id' => 82, 'deleted_at' => null]);
+        Tag::create(['id' => 92, 'deleted_at' => null]);
+        Tag::create(['id' => 102, 'deleted_at' => null]);
+        Tag::create(['id' => 112, 'deleted_at' => null]);
+        Tag::create(['id' => 122, 'deleted_at' => Carbon::now()]);
+
+        DB::table('taggables')->insert(
+            [
+                ['tag_id' => 12, 'taggable_type' => User::class, 'taggable_id' => 1],
+                ['tag_id' => 22, 'taggable_type' => User::class, 'taggable_id' => 2],
+                ['tag_id' => 32, 'taggable_type' => User::class, 'taggable_id' => 3],
+                ['tag_id' => 42, 'taggable_type' => User::class, 'taggable_id' => 4],
+                ['tag_id' => 52, 'taggable_type' => User::class, 'taggable_id' => 5],
+                ['tag_id' => 62, 'taggable_type' => User::class, 'taggable_id' => 6],
+                ['tag_id' => 72, 'taggable_type' => User::class, 'taggable_id' => 7],
+                ['tag_id' => 82, 'taggable_type' => User::class, 'taggable_id' => 8],
+                ['tag_id' => 92, 'taggable_type' => User::class, 'taggable_id' => 10],
+                ['tag_id' => 102, 'taggable_type' => User::class, 'taggable_id' => 12],
+                ['tag_id' => 112, 'taggable_type' => User::class, 'taggable_id' => 12],
+                ['tag_id' => 122, 'taggable_type' => User::class, 'taggable_id' => 12],
+                ['tag_id' => 12, 'taggable_type' => Post::class, 'taggable_id' => 5],
             ]
         );
 

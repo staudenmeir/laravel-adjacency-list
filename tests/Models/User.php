@@ -46,4 +46,14 @@ class User extends Model
     {
         return $this->belongsToManyOfDescendantsAndSelf(Role::class);
     }
+
+    public function tags()
+    {
+        return $this->morphToManyOfDescendants(Tag::class, 'taggable');
+    }
+
+    public function tagsAndSelf()
+    {
+        return $this->morphToManyOfDescendantsAndSelf(Tag::class, 'taggable');
+    }
 }

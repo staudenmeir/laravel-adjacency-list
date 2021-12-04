@@ -10,6 +10,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendan
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings;
 use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
@@ -521,6 +522,140 @@ trait HasRecursiveRelationships
         return new BelongsToManyOfDescendants(
             $query,
             $parent,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey,
+            $relatedKey,
+            $andSelf
+        );
+    }
+
+    /**
+     * Define a polymorphic many-to-many relationship of the model's descendants.
+     *
+     * @param string $related
+     * @param string $name
+     * @param string|null $table
+     * @param string|null $foreignPivotKey
+     * @param string|null $relatedPivotKey
+     * @param string|null $parentKey
+     * @param string|null $relatedKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
+     */
+    public function morphToManyOfDescendants(
+        $related,
+        $name,
+        $table = null,
+        $foreignPivotKey = null,
+        $relatedPivotKey = null,
+        $parentKey = null,
+        $relatedKey = null
+    ) {
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignPivotKey = $foreignPivotKey ?: $name.'_id';
+
+        $relatedPivotKey = $relatedPivotKey ?: $instance->getForeignKey();
+
+        if (! $table) {
+            $words = preg_split('/(_)/u', $name, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+            $lastWord = array_pop($words);
+
+            $table = implode('', $words).Str::plural($lastWord);
+        }
+
+        return $this->newMorphToManyOfDescendants(
+            $instance->newQuery(),
+            $this,
+            $name,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey ?: $this->getKeyName(),
+            $relatedKey ?: $instance->getKeyName(),
+            false
+        );
+    }
+
+    /**
+     * Define a polymorphic many-to-many relationship of the model's descendants and itself.
+     *
+     * @param string $related
+     * @param string $name
+     * @param string|null $table
+     * @param string|null $foreignPivotKey
+     * @param string|null $relatedPivotKey
+     * @param string|null $parentKey
+     * @param string|null $relatedKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
+     */
+    public function morphToManyOfDescendantsAndSelf(
+        $related,
+        $name,
+        $table = null,
+        $foreignPivotKey = null,
+        $relatedPivotKey = null,
+        $parentKey = null,
+        $relatedKey = null
+    ) {
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignPivotKey = $foreignPivotKey ?: $name.'_id';
+
+        $relatedPivotKey = $relatedPivotKey ?: $instance->getForeignKey();
+
+        if (! $table) {
+            $words = preg_split('/(_)/u', $name, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+            $lastWord = array_pop($words);
+
+            $table = implode('', $words).Str::plural($lastWord);
+        }
+
+        return $this->newMorphToManyOfDescendants(
+            $instance->newQuery(),
+            $this,
+            $name,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey ?: $this->getKeyName(),
+            $relatedKey ?: $instance->getKeyName(),
+            true
+        );
+    }
+
+    /**
+     * Instantiate a new MorphToManyOfDescendants relationship.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param string $name
+     * @param string $table
+     * @param string $foreignPivotKey
+     * @param string $relatedPivotKey
+     * @param string $parentKey
+     * @param string $relatedKey
+     * @param bool $andSelf
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
+     */
+    protected function newMorphToManyOfDescendants(
+        Builder $query,
+        Model $parent,
+        $name,
+        $table,
+        $foreignPivotKey,
+        $relatedPivotKey,
+        $parentKey,
+        $relatedKey,
+        $andSelf
+    ) {
+        return new MorphToManyOfDescendants(
+            $query,
+            $parent,
+            $name,
             $table,
             $foreignPivotKey,
             $relatedPivotKey,

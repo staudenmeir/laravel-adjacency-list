@@ -34,6 +34,7 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 - [Custom Relationships](#custom-relationships)
   - [HasManyOfDescendants](#hasmanyofdescendants)
   - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
+  - [MorphToManyOfDescendants](#morphtomanyofdescendants)
   - [Intermediate Scopes](#intermediate-scopes)
 - [Trees](#trees)
 - [Filters](#filters)
@@ -217,6 +218,52 @@ class User extends Model
     public function descendantRoles()
     {
         return $this->belongsToManyOfDescendants('App\Role');
+    }
+}
+```
+
+#### MorphToManyOfDescendants
+
+Consider a `MorphToMany` relationship between `User` and `Tag`:
+
+ ```php
+ class User extends Model
+ {
+     public function tags()
+     {
+         return $this->morphToMany('App\Tag', 'taggable');
+     }
+ }
+ ```
+
+Define a `MorphToManyOfDescendants` relationship to get all tags of a user and its descendants:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function recursiveTags()
+    {
+        return $this->morphToManyOfDescendantsAndSelf('App\Tag', 'taggable');
+    }
+}
+
+$recursiveTags = User::find($id)->recursiveTags;
+
+$users = User::withCount('recursiveTags')->get();
+```
+
+Use `morphToManyOfDescendants()` to only get the descendants' tags:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantTags()
+    {
+        return $this->morphToManyOfDescendants('App\Tag', 'taggable');
     }
 }
 ```
