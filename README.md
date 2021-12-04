@@ -139,7 +139,7 @@ Consider a `HasMany` relationship between `User` and `Post`:
  {
      public function posts()
      {
-         return $this->hasMany('App\Post');
+         return $this->hasMany(Post::class);
      }
  }
  ```
@@ -153,7 +153,7 @@ class User extends Model
 
     public function recursivePosts()
     {
-        return $this->hasManyOfDescendantsAndSelf('App\Post');
+        return $this->hasManyOfDescendantsAndSelf(Post::class);
     }
 }
 
@@ -171,7 +171,7 @@ class User extends Model
 
     public function descendantPosts()
     {
-        return $this->hasManyOfDescendants('App\Post');
+        return $this->hasManyOfDescendants(Post::class);
     }
 }
 ```
@@ -185,7 +185,7 @@ Consider a `BelongsToMany` relationship between `User` and `Role`:
  {
      public function roles()
      {
-         return $this->belongsToMany('App\Role');
+         return $this->belongsToMany(Role::class);
      }
  }
  ```
@@ -199,7 +199,7 @@ class User extends Model
 
     public function recursiveRoles()
     {
-        return $this->belongsToManyOfDescendantsAndSelf('App\Role');
+        return $this->belongsToManyOfDescendantsAndSelf(Role::class);
     }
 }
 
@@ -217,7 +217,7 @@ class User extends Model
 
     public function descendantRoles()
     {
-        return $this->belongsToManyOfDescendants('App\Role');
+        return $this->belongsToManyOfDescendants(Role::class);
     }
 }
 ```
@@ -231,7 +231,7 @@ Consider a `MorphToMany` relationship between `User` and `Tag`:
  {
      public function tags()
      {
-         return $this->morphToMany('App\Tag', 'taggable');
+         return $this->morphToMany(Tag::class, 'taggable');
      }
  }
  ```
@@ -245,7 +245,7 @@ class User extends Model
 
     public function recursiveTags()
     {
-        return $this->morphToManyOfDescendantsAndSelf('App\Tag', 'taggable');
+        return $this->morphToManyOfDescendantsAndSelf(Tag::class, 'taggable');
     }
 }
 
@@ -263,7 +263,7 @@ class User extends Model
 
     public function descendantTags()
     {
-        return $this->morphToManyOfDescendants('App\Tag', 'taggable');
+        return $this->morphToManyOfDescendants(Tag::class, 'taggable');
     }
 }
 ```
