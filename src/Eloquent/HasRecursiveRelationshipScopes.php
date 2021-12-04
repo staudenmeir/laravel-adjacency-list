@@ -247,6 +247,26 @@ trait HasRecursiveRelationshipScopes
             );
         }
 
+        $this->addRecursiveQueryJoinsAndConstraints($query, $direction, $name, $joinColumns);
+
+        if (!is_null($maxDepth)) {
+            $query->where($this->getDepthName(), '<', $maxDepth);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Add join and where clauses to the recursive query for a relationship expression.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $direction
+     * @param string $name
+     * @param array $joinColumns
+     * @return void
+     */
+    protected function addRecursiveQueryJoinsAndConstraints(Builder $query, $direction, $name, array $joinColumns)
+    {
         if ($direction === 'both') {
             $query->join($name, function (JoinClause $join) use ($joinColumns) {
                 $join->on($joinColumns['asc'][0], '=', $joinColumns['asc'][1])
@@ -269,11 +289,5 @@ trait HasRecursiveRelationshipScopes
         } else {
             $query->join($name, $joinColumns[$direction][0], '=', $joinColumns[$direction][1]);
         }
-
-        if (!is_null($maxDepth)) {
-            $query->where($this->getDepthName(), '<', $maxDepth);
-        }
-
-        return $query;
     }
 }

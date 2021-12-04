@@ -4,6 +4,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
@@ -107,25 +108,18 @@ trait IsOfDescendantsRelation
     {
         $dictionary = [];
 
+        $paths = explode(
+            $this->getPathListSeparator(),
+            $results[0]->{$this->pathListAlias}
+        );
+
         $foreignKeyName = $this->getEagerLoadingForeignKeyName();
         $accessor = $this->getEagerLoadingAccessor();
-
         $pathSeparator = $this->parent->getPathSeparator();
-        $pathListSeparator = $this->getPathListSeparator();
 
         foreach ($results as $result) {
-            $paths = explode($pathListSeparator, $result->{$this->pathListAlias});
-
-            $foreignKey = (string) ($accessor ? $result->$accessor : $result)->$foreignKeyName;
-
             foreach ($paths as $path) {
-                $isDescendant = Str::endsWith($path, $pathSeparator.$foreignKey);
-
-                if ($this->andSelf) {
-                    if (!$isDescendant && $path !== $foreignKey) {
-                        continue;
-                    }
-                } elseif (!$isDescendant) {
+                if (!$this->pathMatches($result, $foreignKeyName, $accessor, $pathSeparator, $path)) {
                     continue;
                 }
 
@@ -154,6 +148,33 @@ trait IsOfDescendantsRelation
         }
 
         return $dictionary;
+    }
+
+    /**
+     * Determine whether a path belongs to a result.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $result
+     * @param string $foreignKeyName
+     * @param string $accessor
+     * @param string $pathSeparator
+     * @param string $path
+     * @return bool
+     */
+    protected function pathMatches(Model $result, $foreignKeyName, $accessor, $pathSeparator, $path)
+    {
+        $foreignKey = (string) ($accessor ? $result->$accessor : $result)->$foreignKeyName;
+
+        $isDescendant = Str::endsWith($path, $pathSeparator.$foreignKey);
+
+        if ($this->andSelf) {
+            if ($isDescendant || $path === $foreignKey) {
+                return true;
+            }
+        } elseif ($isDescendant) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
