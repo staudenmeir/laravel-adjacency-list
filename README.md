@@ -32,6 +32,9 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 - [Getting Started](#getting-started)
 - [Included Relationships](#included-relationships)
 - [Custom Relationships](#custom-relationships)
+  - [HasManyOfDescendants](#hasmanyofdescendants)
+  - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
+  - [Intermediate Scopes](#intermediate-scopes)
 - [Trees](#trees)
 - [Filters](#filters)
 - [Order](#order)
@@ -172,13 +175,49 @@ class User extends Model
 }
 ```
 
-If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you
-need to add support for common table expressions to the related model:
+#### BelongsToManyOfDescendants
+
+Consider a `BelongsToMany` relationship between `User` and `Role`:
+
+ ```php
+ class User extends Model
+ {
+     public function roles()
+     {
+         return $this->belongsToMany('App\Role');
+     }
+ }
+ ```
+
+Define a `BelongsToManyOfDescendants` relationship to get all roles of a user and its descendants:
 
 ```php
-class Post extends Model
+class User extends Model
 {
-    use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function recursiveRoles()
+    {
+        return $this->belongsToManyOfDescendantsAndSelf('App\Role');
+    }
+}
+
+$recursiveRoles = User::find($id)->recursiveRoles;
+
+$users = User::withCount('recursiveRoles')->get();
+```
+
+Use `belongsToManyOfDescendants()` to only get the descendants' roles:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantRoles()
+    {
+        return $this->belongsToManyOfDescendants('App\Role');
+    }
 }
 ```
 
@@ -192,6 +231,18 @@ User::find($id)->recursivePosts()->withTrashedDescendants()->get();
 User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveScope())->get();
 
 User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
+```
+
+#### Usage outside of Laravel
+
+If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you
+need to add support for common table expressions to the related model:
+
+```php
+class Post extends Model
+{
+    use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
+}
 ```
 
 ### Trees

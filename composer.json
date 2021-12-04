@@ -11,7 +11,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "illuminate/database": "^8.0",
-        "staudenmeir/laravel-cte": "^1.4"
+        "staudenmeir/laravel-cte": "^1.5.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3"

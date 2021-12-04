@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use PHPUnit\Framework\TestCase as Base;
 use Tests\Models\Post;
+use Tests\Models\Role;
 use Tests\Models\User;
 
 abstract class TestCase extends Base
@@ -16,7 +17,7 @@ abstract class TestCase extends Base
     {
         parent::setUp();
 
-        $config = require __DIR__.'/config/database.php';
+        $config = require __DIR__ . '/config/database.php';
 
         $db = new DB();
         $db->addConnection($config[getenv('DATABASE') ?: 'sqlite']);
@@ -28,6 +29,13 @@ abstract class TestCase extends Base
         $this->seed();
     }
 
+    protected function tearDown(): void
+    {
+        DB::connection()->disconnect();
+
+        parent::tearDown();
+    }
+
     /**
      * Migrate the database.
      *
@@ -37,20 +45,43 @@ abstract class TestCase extends Base
     {
         DB::schema()->dropAllTables();
 
-        DB::schema()->create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('slug')->unique();
-            $table->unsignedInteger('parent_id')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        DB::schema()->create(
+            'users',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('slug')->unique();
+                $table->unsignedInteger('parent_id')->nullable();
+                $table->timestamps();
+                $table->softDeletes();
+            }
+        );
 
-        DB::schema()->create('posts', function (Blueprint $table) {
-            $table->unsignedInteger('id');
-            $table->unsignedInteger('user_id');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        DB::schema()->create(
+            'posts',
+            function (Blueprint $table) {
+                $table->unsignedInteger('id');
+                $table->unsignedInteger('user_id');
+                $table->timestamps();
+                $table->softDeletes();
+            }
+        );
+
+        DB::schema()->create(
+            'roles',
+            function (Blueprint $table) {
+                $table->unsignedInteger('id');
+                $table->timestamps();
+                $table->softDeletes();
+            }
+        );
+
+        DB::schema()->create(
+            'role_user',
+            function (Blueprint $table) {
+                $table->unsignedBigInteger('role_id');
+                $table->unsignedBigInteger('user_id');
+            }
+        );
     }
 
     /**
@@ -87,6 +118,36 @@ abstract class TestCase extends Base
         Post::create(['id' => 100, 'user_id' => 12, 'deleted_at' => null]);
         Post::create(['id' => 110, 'user_id' => 12, 'deleted_at' => null]);
         Post::create(['id' => 120, 'user_id' => 12, 'deleted_at' => Carbon::now()]);
+
+        Role::create(['id' => 11, 'deleted_at' => null]);
+        Role::create(['id' => 21, 'deleted_at' => null]);
+        Role::create(['id' => 31, 'deleted_at' => null]);
+        Role::create(['id' => 41, 'deleted_at' => null]);
+        Role::create(['id' => 51, 'deleted_at' => null]);
+        Role::create(['id' => 61, 'deleted_at' => null]);
+        Role::create(['id' => 71, 'deleted_at' => null]);
+        Role::create(['id' => 81, 'deleted_at' => null]);
+        Role::create(['id' => 91, 'deleted_at' => null]);
+        Role::create(['id' => 101, 'deleted_at' => null]);
+        Role::create(['id' => 111, 'deleted_at' => null]);
+        Role::create(['id' => 121, 'deleted_at' => Carbon::now()]);
+
+        DB::table('role_user')->insert(
+            [
+                ['role_id' => 11, 'user_id' => 1],
+                ['role_id' => 21, 'user_id' => 2],
+                ['role_id' => 31, 'user_id' => 3],
+                ['role_id' => 41, 'user_id' => 4],
+                ['role_id' => 51, 'user_id' => 5],
+                ['role_id' => 61, 'user_id' => 6],
+                ['role_id' => 71, 'user_id' => 7],
+                ['role_id' => 81, 'user_id' => 8],
+                ['role_id' => 91, 'user_id' => 10],
+                ['role_id' => 101, 'user_id' => 12],
+                ['role_id' => 111, 'user_id' => 12],
+                ['role_id' => 121, 'user_id' => 12],
+            ]
+        );
 
         Model::reguard();
     }

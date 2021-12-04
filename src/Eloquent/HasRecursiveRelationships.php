@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
@@ -410,6 +411,123 @@ trait HasRecursiveRelationships
     protected function newHasManyOfDescendants(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
         return new HasManyOfDescendants($query, $parent, $foreignKey, $localKey, $andSelf);
+    }
+
+    /**
+     * Define a many-to-many relationship of the model's descendants.
+     *
+     * @param string $related
+     * @param string|null $table
+     * @param string|null $foreignPivotKey
+     * @param string|null $relatedPivotKey
+     * @param string|null $parentKey
+     * @param string|null $relatedKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants
+     */
+    public function belongsToManyOfDescendants(
+        $related,
+        $table = null,
+        $foreignPivotKey = null,
+        $relatedPivotKey = null,
+        $parentKey = null,
+        $relatedKey = null
+    ) {
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignPivotKey = $foreignPivotKey ?: $this->getForeignKey();
+
+        $relatedPivotKey = $relatedPivotKey ?: $instance->getForeignKey();
+
+        if (is_null($table)) {
+            $table = $this->joiningTable($related, $instance);
+        }
+
+        return $this->newBelongsToManyOfDescendants(
+            $instance->newQuery(),
+            $this,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey ?: $this->getKeyName(),
+            $relatedKey ?: $instance->getKeyName(),
+            false
+        );
+    }
+
+    /**
+     * Define a many-to-many relationship of the model's descendants and itself.
+     *
+     * @param string $related
+     * @param string|null $table
+     * @param string|null $foreignPivotKey
+     * @param string|null $relatedPivotKey
+     * @param string|null $parentKey
+     * @param string|null $relatedKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants
+     */
+    public function belongsToManyOfDescendantsAndSelf(
+        $related,
+        $table = null,
+        $foreignPivotKey = null,
+        $relatedPivotKey = null,
+        $parentKey = null,
+        $relatedKey = null
+    ) {
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignPivotKey = $foreignPivotKey ?: $this->getForeignKey();
+
+        $relatedPivotKey = $relatedPivotKey ?: $instance->getForeignKey();
+
+        if (is_null($table)) {
+            $table = $this->joiningTable($related, $instance);
+        }
+
+        return $this->newBelongsToManyOfDescendants(
+            $instance->newQuery(),
+            $this,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey ?: $this->getKeyName(),
+            $relatedKey ?: $instance->getKeyName(),
+            true
+        );
+    }
+
+    /**
+     * Instantiate a new BelongsToManyOfDescendants relationship.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param string $table
+     * @param string $foreignPivotKey
+     * @param string $relatedPivotKey
+     * @param string $parentKey
+     * @param string $relatedKey
+     * @param bool $andSelf
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants
+     */
+    protected function newBelongsToManyOfDescendants(
+        Builder $query,
+        Model $parent,
+        $table,
+        $foreignPivotKey,
+        $relatedPivotKey,
+        $parentKey,
+        $relatedKey,
+        $andSelf
+    ) {
+        return new BelongsToManyOfDescendants(
+            $query,
+            $parent,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey,
+            $relatedKey,
+            $andSelf
+        );
     }
 
     /**

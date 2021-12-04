@@ -36,4 +36,14 @@ class User extends Model
     {
         return $this->hasManyOfDescendantsAndSelf(Post::class);
     }
+
+    public function roles()
+    {
+        return $this->belongsToManyOfDescendants(Role::class);
+    }
+
+    public function rolesAndSelf()
+    {
+        return $this->belongsToManyOfDescendantsAndSelf(Role::class);
+    }
 }
