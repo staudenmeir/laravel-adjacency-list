@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Descendants extends HasMany
 {
     use IsRecursiveRelation {
-        buildDictionary as buildDictionaryTrait;
+        buildDictionary as baseBuildDictionary;
     }
 
     /**
@@ -89,7 +89,7 @@ class Descendants extends HasMany
     protected function buildDictionary(Collection $results)
     {
         if ($this->andSelf) {
-            return $this->buildDictionaryTrait($results);
+            return $this->baseBuildDictionary($results);
         }
 
         $dictionary = $results->keyBy($this->localKey);

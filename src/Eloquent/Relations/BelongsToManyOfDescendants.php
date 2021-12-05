@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class BelongsToManyOfDescendants extends BelongsToMany
 {
     use IsOfDescendantsRelation {
-        addConstraints as addConstraintsTrait;
-        getRelationExistenceQuery as getRelationExistenceQueryTrait;
+        addConstraints as baseAdddConstraints;
+        getRelationExistenceQuery as baseGetRelationExistenceQuery;
     }
 
     /**
@@ -49,7 +49,7 @@ class BelongsToManyOfDescendants extends BelongsToMany
     {
         $this->performJoin();
 
-        $this->addConstraintsTrait();
+        $this->baseAdddConstraints();
     }
 
     /**
@@ -111,7 +111,7 @@ class BelongsToManyOfDescendants extends BelongsToMany
     {
         $this->performJoin($query);
 
-        return $this->getRelationExistenceQueryTrait($query, $parentQuery, $columns);
+        return $this->baseGetRelationExistenceQuery($query, $parentQuery, $columns);
     }
 
     /**
