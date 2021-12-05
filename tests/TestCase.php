@@ -85,27 +85,39 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create('tags', function (Blueprint $table) {
-            $table->unsignedInteger('id');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        DB::schema()->create(
+            'tags',
+            function (Blueprint $table) {
+                $table->unsignedInteger('id');
+                $table->timestamps();
+                $table->softDeletes();
+            }
+        );
 
-        DB::schema()->create('taggables', function (Blueprint $table) {
-            $table->unsignedInteger('tag_id');
-            $table->morphs('taggable');
-        });
+        DB::schema()->create(
+            'taggables',
+            function (Blueprint $table) {
+                $table->unsignedInteger('tag_id');
+                $table->morphs('taggable');
+            }
+        );
 
-        DB::schema()->create('videos', function (Blueprint $table) {
-            $table->unsignedInteger('id');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        DB::schema()->create(
+            'videos',
+            function (Blueprint $table) {
+                $table->unsignedInteger('id');
+                $table->timestamps();
+                $table->softDeletes();
+            }
+        );
 
-        DB::schema()->create('authorables', function (Blueprint $table) {
-            $table->unsignedInteger('user_id');
-            $table->morphs('authorable');
-        });
+        DB::schema()->create(
+            'authorables',
+            function (Blueprint $table) {
+                $table->unsignedInteger('user_id');
+                $table->morphs('authorable');
+            }
+        );
     }
 
     /**
