@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants;
 use Tests\Models\Tag;
 use Tests\Models\User;
-use Tests\Scopes\TestScope;
+use Tests\Scopes\DepthScope;
 
 class MorphToManyOfDescendantsTest extends TestCase
 {
@@ -148,7 +148,7 @@ class MorphToManyOfDescendantsTest extends TestCase
 
     public function testWithIntermediateScope()
     {
-        $tags = User::find(2)->tags()->withIntermediateScope('test', new TestScope())->get();
+        $tags = User::find(2)->tags()->withIntermediateScope('depth', new DepthScope())->get();
 
         $this->assertEquals([52], $tags->pluck('id')->all());
     }
@@ -156,8 +156,8 @@ class MorphToManyOfDescendantsTest extends TestCase
     public function testWithoutIntermediateScope()
     {
         $tags = User::find(2)->tags()
-            ->withIntermediateScope('test', new TestScope())
-            ->withoutIntermediateScope('test')
+            ->withIntermediateScope('depth', new DepthScope())
+            ->withoutIntermediateScope('depth')
             ->get();
 
         $this->assertEquals([52, 82], $tags->pluck('id')->all());
@@ -173,7 +173,7 @@ class MorphToManyOfDescendantsTest extends TestCase
     public function testWithoutIntermediateScopes()
     {
         $tags = User::find(2)->tags()
-            ->withIntermediateScope('test', new TestScope())
+            ->withIntermediateScope('depth', new DepthScope())
             ->withoutIntermediateScopes()
             ->get();
 
@@ -182,17 +182,17 @@ class MorphToManyOfDescendantsTest extends TestCase
 
     public function testIntermediateScopes()
     {
-        $relationship = User::find(2)->tags()->withIntermediateScope('test', new TestScope());
+        $relationship = User::find(2)->tags()->withIntermediateScope('depth', new DepthScope());
 
-        $this->assertArrayHasKey('test', $relationship->intermediateScopes());
+        $this->assertArrayHasKey('depth', $relationship->intermediateScopes());
     }
 
     public function testRemovedIntermediateScopes()
     {
         $relationship = User::find(2)->tags()
-            ->withIntermediateScope('test', new TestScope())
-            ->withoutIntermediateScope('test');
+            ->withIntermediateScope('depth', new DepthScope())
+            ->withoutIntermediateScope('depth');
 
-        $this->assertSame(['test'], $relationship->removedIntermediateScopes());
+        $this->assertSame(['depth'], $relationship->removedIntermediateScopes());
     }
 }

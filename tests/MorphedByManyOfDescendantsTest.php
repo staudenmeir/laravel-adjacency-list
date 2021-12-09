@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants;
 use Tests\Models\Video;
 use Tests\Models\User;
-use Tests\Scopes\TestScope;
+use Tests\Scopes\DepthScope;
 
 class MorphedByManyOfDescendantsTest extends TestCase
 {
@@ -148,7 +148,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testWithIntermediateScope()
     {
-        $videos = User::find(2)->videos()->withIntermediateScope('test', new TestScope())->get();
+        $videos = User::find(2)->videos()->withIntermediateScope('depth', new DepthScope())->get();
 
         $this->assertEquals([53], $videos->pluck('id')->all());
     }
@@ -156,8 +156,8 @@ class MorphedByManyOfDescendantsTest extends TestCase
     public function testWithoutIntermediateScope()
     {
         $videos = User::find(2)->videos()
-            ->withIntermediateScope('test', new TestScope())
-            ->withoutIntermediateScope('test')
+            ->withIntermediateScope('depth', new DepthScope())
+            ->withoutIntermediateScope('depth')
             ->get();
 
         $this->assertEquals([53, 83], $videos->pluck('id')->all());
@@ -173,7 +173,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
     public function testWithoutIntermediateScopes()
     {
         $videos = User::find(2)->videos()
-            ->withIntermediateScope('test', new TestScope())
+            ->withIntermediateScope('depth', new DepthScope())
             ->withoutIntermediateScopes()
             ->get();
 
@@ -182,17 +182,17 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testIntermediateScopes()
     {
-        $relationship = User::find(2)->videos()->withIntermediateScope('test', new TestScope());
+        $relationship = User::find(2)->videos()->withIntermediateScope('depth', new DepthScope());
 
-        $this->assertArrayHasKey('test', $relationship->intermediateScopes());
+        $this->assertArrayHasKey('depth', $relationship->intermediateScopes());
     }
 
     public function testRemovedIntermediateScopes()
     {
         $relationship = User::find(2)->videos()
-            ->withIntermediateScope('test', new TestScope())
-            ->withoutIntermediateScope('test');
+            ->withIntermediateScope('depth', new DepthScope())
+            ->withoutIntermediateScope('depth');
 
-        $this->assertSame(['test'], $relationship->removedIntermediateScopes());
+        $this->assertSame(['depth'], $relationship->removedIntermediateScopes());
     }
 }

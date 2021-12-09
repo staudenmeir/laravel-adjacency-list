@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants;
 use Tests\Models\Role;
 use Tests\Models\User;
-use Tests\Scopes\TestScope;
+use Tests\Scopes\DepthScope;
 
 class BelongsToManyOfDescendantsTest extends TestCase
 {
@@ -148,7 +148,7 @@ class BelongsToManyOfDescendantsTest extends TestCase
 
     public function testWithIntermediateScope()
     {
-        $roles = User::find(2)->roles()->withIntermediateScope('test', new TestScope())->get();
+        $roles = User::find(2)->roles()->withIntermediateScope('depth', new DepthScope())->get();
 
         $this->assertEquals([51], $roles->pluck('id')->all());
     }
@@ -156,8 +156,8 @@ class BelongsToManyOfDescendantsTest extends TestCase
     public function testWithoutIntermediateScope()
     {
         $roles = User::find(2)->roles()
-            ->withIntermediateScope('test', new TestScope())
-            ->withoutIntermediateScope('test')
+            ->withIntermediateScope('depth', new DepthScope())
+            ->withoutIntermediateScope('depth')
             ->get();
 
         $this->assertEquals([51, 81], $roles->pluck('id')->all());
@@ -173,7 +173,7 @@ class BelongsToManyOfDescendantsTest extends TestCase
     public function testWithoutIntermediateScopes()
     {
         $roles = User::find(2)->roles()
-            ->withIntermediateScope('test', new TestScope())
+            ->withIntermediateScope('depth', new DepthScope())
             ->withoutIntermediateScopes()
             ->get();
 
@@ -182,17 +182,17 @@ class BelongsToManyOfDescendantsTest extends TestCase
 
     public function testIntermediateScopes()
     {
-        $relationship = User::find(2)->roles()->withIntermediateScope('test', new TestScope());
+        $relationship = User::find(2)->roles()->withIntermediateScope('depth', new DepthScope());
 
-        $this->assertArrayHasKey('test', $relationship->intermediateScopes());
+        $this->assertArrayHasKey('depth', $relationship->intermediateScopes());
     }
 
     public function testRemovedIntermediateScopes()
     {
         $relationship = User::find(2)->roles()
-            ->withIntermediateScope('test', new TestScope())
-            ->withoutIntermediateScope('test');
+            ->withIntermediateScope('depth', new DepthScope())
+            ->withoutIntermediateScope('depth');
 
-        $this->assertSame(['test'], $relationship->removedIntermediateScopes());
+        $this->assertSame(['depth'], $relationship->removedIntermediateScopes());
     }
 }

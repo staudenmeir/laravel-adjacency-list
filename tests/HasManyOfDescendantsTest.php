@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Tests\Models\Post;
 use Tests\Models\User;
-use Tests\Scopes\TestScope;
+use Tests\Scopes\DepthScope;
 
 class HasManyOfDescendantsTest extends TestCase
 {
@@ -155,7 +155,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testWithIntermediateScope()
     {
-        $posts = User::find(2)->posts()->withIntermediateScope('test', new TestScope())->get();
+        $posts = User::find(2)->posts()->withIntermediateScope('depth', new DepthScope())->get();
 
         $this->assertEquals([50], $posts->pluck('id')->all());
     }
@@ -163,8 +163,8 @@ class HasManyOfDescendantsTest extends TestCase
     public function testWithoutIntermediateScope()
     {
         $posts = User::find(2)->posts()
-            ->withIntermediateScope('test', new TestScope())
-            ->withoutIntermediateScope('test')
+            ->withIntermediateScope('depth', new DepthScope())
+            ->withoutIntermediateScope('depth')
             ->get();
 
         $this->assertEquals([50, 80], $posts->pluck('id')->all());
@@ -180,7 +180,7 @@ class HasManyOfDescendantsTest extends TestCase
     public function testWithoutIntermediateScopes()
     {
         $posts = User::find(2)->posts()
-            ->withIntermediateScope('test', new TestScope())
+            ->withIntermediateScope('depth', new DepthScope())
             ->withoutIntermediateScopes()
             ->get();
 
@@ -189,17 +189,17 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testIntermediateScopes()
     {
-        $relationship = User::find(2)->posts()->withIntermediateScope('test', new TestScope());
+        $relationship = User::find(2)->posts()->withIntermediateScope('depth', new DepthScope());
 
-        $this->assertArrayHasKey('test', $relationship->intermediateScopes());
+        $this->assertArrayHasKey('depth', $relationship->intermediateScopes());
     }
 
     public function testRemovedIntermediateScopes()
     {
         $relationship = User::find(2)->posts()
-            ->withIntermediateScope('test', new TestScope())
-            ->withoutIntermediateScope('test');
+            ->withIntermediateScope('depth', new DepthScope())
+            ->withoutIntermediateScope('depth');
 
-        $this->assertSame(['test'], $relationship->removedIntermediateScopes());
+        $this->assertSame(['depth'], $relationship->removedIntermediateScopes());
     }
 }

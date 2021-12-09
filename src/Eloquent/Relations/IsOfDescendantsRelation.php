@@ -251,7 +251,14 @@ trait IsOfDescendantsRelation
     protected function getInitialQuery(ExpressionGrammar $grammar, callable $constraint, $alias, $selectPath)
     {
         $model = new $this->parent();
-        $query = $model->newModelQuery();
+
+        $initialDepth = $this->andSelf ? 0 : 1;
+
+        $depth = $grammar->wrap($model->getDepthName());
+
+        $query = $model->newModelQuery()
+            ->select('*')
+            ->selectRaw("$initialDepth as $depth");
 
         if ($alias) {
             $query->from($query->getQuery()->from, $alias);
@@ -265,7 +272,7 @@ trait IsOfDescendantsRelation
                 $model->getPathName()
             );
 
-            $query->select('*')->selectRaw($initialPath);
+            $query->selectRaw($initialPath);
         }
 
         return $query;
@@ -281,10 +288,17 @@ trait IsOfDescendantsRelation
     protected function getRecursiveQuery(ExpressionGrammar $grammar, $selectPath)
     {
         $model = new $this->parent();
+
         $name = $model->getExpressionName();
+
+        $depth = $grammar->wrap($model->getDepthName());
+
+        $recursiveDepth = "$depth + 1";
+
         $query = $model->newModelQuery();
 
         $query->select($query->getQuery()->from.'.*')
+            ->selectRaw("$recursiveDepth as $depth")
             ->join(
                 $name,
                 $name.'.'.$model->getLocalKeyName(),
