@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Database\Eloquent\Builder;
+use Tests\Models\Category;
 use Tests\Models\User;
 
 class EloquentTest extends TestCase
@@ -129,5 +130,25 @@ class EloquentTest extends TestCase
         $users = User::tree()->depthFirst()->get();
 
         $this->assertEquals([1, 2, 5, 8, 3, 6, 9, 4, 7, 11, 12], $users->pluck('id')->all());
+    }
+
+    public function testScopeDepthFirstWithNaturalSorting()
+    {
+        if (in_array($this->database, ['sqlite', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        User::forceCreate(['id' => 70, 'slug' => 'user-70', 'parent_id' => 5, 'deleted_at' => null]);
+
+        $users = User::tree()->depthFirst()->get();
+
+        $this->assertEquals([1, 2, 5, 8, 70, 3, 6, 9, 4, 7, 11, 12], $users->pluck('id')->all());
+    }
+
+    public function testScopeDepthFirstWithStringKey()
+    {
+        $categories = Category::tree()->depthFirst()->get();
+
+        $this->assertEquals(['a', 'b', 'c', 'd'], $categories->pluck('id')->all());
     }
 }

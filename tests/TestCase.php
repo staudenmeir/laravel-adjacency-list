@@ -7,6 +7,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use PHPUnit\Framework\TestCase as Base;
+use Tests\Models\Category;
 use Tests\Models\Post;
 use Tests\Models\Role;
 use Tests\Models\Tag;
@@ -120,6 +121,15 @@ abstract class TestCase extends Base
             function (Blueprint $table) {
                 $table->unsignedInteger('user_id');
                 $table->morphs('authorable');
+            }
+        );
+
+        DB::schema()->create(
+            'categories',
+            function (Blueprint $table) {
+                $table->string('id');
+                $table->string('parent_id')->nullable();
+                $table->timestamps();
             }
         );
     }
@@ -250,6 +260,11 @@ abstract class TestCase extends Base
                 ['user_id' => 5, 'authorable_type' => Post::class, 'authorable_id' => 13],
             ]
         );
+
+        Category::create(['id' => 'a', 'parent_id' => null]);
+        Category::create(['id' => 'd', 'parent_id' => 'a']);
+        Category::create(['id' => 'c', 'parent_id' => 'a']);
+        Category::create(['id' => 'b', 'parent_id' => 'a']);
 
         Model::reguard();
     }

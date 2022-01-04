@@ -43,4 +43,11 @@ interface ExpressionGrammar
      * @return \Illuminate\Database\Query\Builder
      */
     public function selectPathList(Builder $query, $expression, $column, $pathSeparator, $listSeparator);
+
+    /**
+     * Compile an "order by path" clause.
+     *
+     * @return string
+     */
+    public function compileOrderByPath();
 }

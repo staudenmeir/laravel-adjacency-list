@@ -7,6 +7,8 @@ use Illuminate\Database\Query\Grammars\SQLiteGrammar as Base;
 
 class SQLiteGrammar extends Base implements ExpressionGrammar
 {
+    use OrdersByPath;
+
     /**
      * Compile an initial path.
      *

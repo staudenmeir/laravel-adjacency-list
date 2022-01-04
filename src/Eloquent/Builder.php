@@ -4,7 +4,10 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder as Base;
 use Illuminate\Database\PostgresConnection;
+use Illuminate\Support\Str;
+use PDO;
 use RuntimeException;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MariaDbGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\PostgresGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SQLiteGrammar;
@@ -79,13 +82,25 @@ class Builder extends Base
 
         switch ($driver) {
             case 'mysql':
-                return $this->query->getConnection()->withTablePrefix(new MySqlGrammar());
+                $version = $this->query->getConnection()->getReadPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
+
+                $grammar = Str::contains($version, 'MariaDB')
+                    ? new MariaDbGrammar($this->model)
+                    : new MySqlGrammar($this->model);
+
+                return $this->query->getConnection()->withTablePrefix($grammar);
             case 'pgsql':
-                return $this->query->getConnection()->withTablePrefix(new PostgresGrammar());
+                return $this->query->getConnection()->withTablePrefix(
+                    new PostgresGrammar($this->model)
+                );
             case 'sqlite':
-                return $this->query->getConnection()->withTablePrefix(new SQLiteGrammar());
+                return $this->query->getConnection()->withTablePrefix(
+                    new SQLiteGrammar($this->model)
+                );
             case 'sqlsrv':
-                return $this->query->getConnection()->withTablePrefix(new SqlServerGrammar());
+                return $this->query->getConnection()->withTablePrefix(
+                    new SqlServerGrammar($this->model)
+                );
         }
 
         throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore

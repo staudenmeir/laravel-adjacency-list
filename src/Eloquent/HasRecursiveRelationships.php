@@ -372,6 +372,19 @@ trait HasRecursiveRelationships
     }
 
     /**
+     * Determine if an attribute is an integer.
+     *
+     * @param string $attribute
+     * @return bool
+     */
+    public function isIntegerAttribute($attribute)
+    {
+        $casts = $this->getCasts();
+
+        return isset($casts[$attribute]) && in_array($casts[$attribute], ['int', 'integer']);
+    }
+
+    /**
      * Create a new Eloquent query builder for the model.
      *
      * @param \Illuminate\Database\Query\Builder $query

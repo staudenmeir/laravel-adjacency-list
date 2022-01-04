@@ -123,7 +123,9 @@ trait HasRecursiveRelationshipScopes
      */
     public function scopeDepthFirst(Builder $query)
     {
-        return $query->orderBy($this->getPathName());
+        $sql = $query->getExpressionGrammar()->compileOrderByPath();
+
+        return $query->orderByRaw($sql);
     }
 
     /**

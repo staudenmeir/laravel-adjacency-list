@@ -7,6 +7,8 @@ use Illuminate\Database\Query\Grammars\SqlServerGrammar as Base;
 
 class SqlServerGrammar extends Base implements ExpressionGrammar
 {
+    use OrdersByPath;
+
     /**
      * Compile an initial path.
      *
