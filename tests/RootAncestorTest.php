@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Database\Capsule\Manager as DB;
 use Tests\Models\User;
 
 class RootAncestorTest extends TestCase
@@ -40,7 +39,7 @@ class RootAncestorTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -51,7 +50,7 @@ class RootAncestorTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -62,6 +61,10 @@ class RootAncestorTest extends TestCase
 
     public function testUpdate()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         $affected = User::find(8)->rootAncestor()->update(['parent_id' => 12]);
 
         $this->assertEquals(1, $affected);

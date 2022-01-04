@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Database\Capsule\Manager as DB;
 use Tests\Models\User;
 
 class AncestorsTest extends TestCase
@@ -86,7 +85,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -97,7 +96,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -108,7 +107,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -119,7 +118,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -130,6 +129,10 @@ class AncestorsTest extends TestCase
 
     public function testUpdate()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         $affected = User::find(8)->ancestors()->update(['parent_id' => 12]);
 
         $this->assertEquals(3, $affected);

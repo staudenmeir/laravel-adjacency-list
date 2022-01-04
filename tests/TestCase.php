@@ -15,14 +15,18 @@ use Tests\Models\Video;
 
 abstract class TestCase extends Base
 {
+    protected $database;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $config = require __DIR__ . '/config/database.php';
+        $this->database = getenv('DATABASE') ?: 'sqlite';
+
+        $config = require __DIR__.'/config/database.php';
 
         $db = new DB();
-        $db->addConnection($config[getenv('DATABASE') ?: 'sqlite']);
+        $db->addConnection($config[$this->database]);
         $db->setAsGlobal();
         $db->bootEloquent();
 

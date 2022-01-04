@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Tests\Models\Post;
@@ -86,7 +85,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -97,7 +96,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -108,7 +107,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -119,7 +118,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -130,6 +129,10 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testUpdate()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         $affected = User::find(1)->posts()->update(['user_id' => 11]);
 
         $this->assertEquals(7, $affected);
@@ -139,6 +142,10 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testUpdateAndSelf()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         $affected = User::find(1)->postsAndSelf()->update(['user_id' => 11]);
 
         $this->assertEquals(8, $affected);

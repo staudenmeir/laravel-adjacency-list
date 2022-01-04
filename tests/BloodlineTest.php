@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Database\Capsule\Manager as DB;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
 use Tests\Models\User;
 
@@ -54,7 +53,7 @@ class BloodlineTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -65,7 +64,7 @@ class BloodlineTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -76,6 +75,10 @@ class BloodlineTest extends TestCase
 
     public function testUpdate()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         $affected = User::find(5)->bloodline()->delete();
 
         $this->assertEquals(4, $affected);

@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants;
 use Tests\Models\Tag;
@@ -79,7 +78,7 @@ class MorphToManyOfDescendantsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -90,7 +89,7 @@ class MorphToManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -101,7 +100,7 @@ class MorphToManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -112,7 +111,7 @@ class MorphToManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (DB::connection()->getDriverName() === 'sqlsrv') {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -123,6 +122,10 @@ class MorphToManyOfDescendantsTest extends TestCase
 
     public function testDelete()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         $affected = User::find(1)->tags()->delete();
 
         $this->assertEquals(7, $affected);
@@ -132,6 +135,10 @@ class MorphToManyOfDescendantsTest extends TestCase
 
     public function testDeleteAndSelf()
     {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
         $affected = User::find(1)->tagsAndSelf()->delete();
 
         $this->assertEquals(8, $affected);
