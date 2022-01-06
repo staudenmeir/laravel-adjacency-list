@@ -58,6 +58,7 @@ abstract class TestCase extends Base
                 $table->increments('id');
                 $table->string('slug')->unique();
                 $table->unsignedInteger('parent_id')->nullable();
+                $table->unsignedBigInteger('followers')->default(1);
                 $table->timestamps();
                 $table->softDeletes();
             }

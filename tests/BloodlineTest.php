@@ -73,17 +73,31 @@ class BloodlineTest extends TestCase
         $this->assertEquals([4, 7, 11, 12], $users->pluck('id')->all());
     }
 
-    public function testUpdate()
+    public function testIncrement()
     {
         if ($this->database === 'mariadb') {
             $this->markTestSkipped();
         }
 
-        $affected = User::find(5)->bloodline()->delete();
+        $affected = User::find(5)->bloodline()->increment('followers');
 
         $this->assertEquals(4, $affected);
-        $this->assertNotNull(User::withTrashed()->find(1)->deleted_at);
-        $this->assertNotNull(User::withTrashed()->find(8)->deleted_at);
-        $this->assertNull(User::find(3)->deleted_at);
+        $this->assertEquals(2, User::find(1)->followers);
+        $this->assertEquals(2, User::find(8)->followers);
+        $this->assertEquals(1, User::find(3)->followers);
+    }
+
+    public function testDecrement()
+    {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
+        $affected = User::find(5)->bloodline()->decrement('followers');
+
+        $this->assertEquals(4, $affected);
+        $this->assertEquals(0, User::find(1)->followers);
+        $this->assertEquals(0, User::find(8)->followers);
+        $this->assertEquals(1, User::find(3)->followers);
     }
 }

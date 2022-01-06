@@ -133,10 +133,10 @@ class AncestorsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $affected = User::find(8)->ancestors()->update(['parent_id' => 12]);
+        $affected = User::find(8)->ancestors()->update(['followers' => 2]);
 
         $this->assertEquals(3, $affected);
-        $this->assertEquals(12, User::find(2)->parent_id);
-        $this->assertEquals(1, User::find(3)->parent_id);
+        $this->assertEquals(2, User::find(2)->followers);
+        $this->assertEquals(1, User::find(3)->followers);
     }
 }

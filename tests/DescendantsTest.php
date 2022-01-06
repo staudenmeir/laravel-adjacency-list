@@ -129,16 +129,29 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 3], $users->pluck('id')->all());
     }
 
-    public function testUpdate()
+    public function testDelete()
     {
         if ($this->database === 'mariadb') {
             $this->markTestSkipped();
         }
 
-        $affected = User::find(1)->descendants()->update(['parent_id' => 12]);
+        $affected = User::find(2)->descendants()->delete();
 
-        $this->assertEquals(8, $affected);
-        $this->assertEquals(12, User::find(8)->parent_id);
-        $this->assertEquals(11, User::find(12)->parent_id);
+        $this->assertEquals(2, $affected);
+        $this->assertNotNull(User::withTrashed()->find(5)->deleted_at);
+        $this->assertNull(User::find(3)->deleted_at);
+    }
+
+    public function testForceDelete()
+    {
+        if ($this->database === 'mariadb') {
+            $this->markTestSkipped();
+        }
+
+        $affected = User::find(2)->descendants()->forceDelete();
+
+        $this->assertEquals(2, $affected);
+        $this->assertNull(User::withTrashed()->find(5));
+        $this->assertNull(User::find(3)->deleted_at);
     }
 }
