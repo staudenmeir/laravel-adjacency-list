@@ -22,6 +22,26 @@ trait HasRecursiveRelationships
     public static $recursiveQueryDecoratingFunction;
 
     /**
+     * Allows to make a query with decorating function
+     *
+     * @param callable $decoratingFunction
+     * @param callable $callback
+     * @return mixed
+     */
+    public static function withRecursiveQueryDecoratingFunction(callable $decoratingFunction, callable $callback)
+    {
+        $previous = static::$recursiveQueryDecoratingFunction;
+
+        static::$recursiveQueryDecoratingFunction = $decoratingFunction;
+
+        $result = $callback();
+
+        static::$recursiveQueryDecoratingFunction = $previous;
+
+        return $result;
+    }
+
+    /**
      * Set function for decorating recursive query
      *
      * @param callable $function

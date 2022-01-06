@@ -143,6 +143,28 @@ class DescendantsTest extends TestCase
         $this->assertEquals(11, User::find(12)->parent_id);
     }
 
+    public function testWithDecoratingFunctionForRecursiveQuery()
+    {
+        /** @var User $user */
+        $user = User::first();
+
+        $users = $user->descendantsAndSelf()->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->sort()->all());
+
+        $users = User::withRecursiveQueryDecoratingFunction(function (Builder $query) {
+            $query->where('users.parent_id', '<=', 3);
+        }, function () use ($user) {
+           return $user->descendantsAndSelf()->get();
+        });
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6], $users->pluck('id')->sort()->all());
+
+        $users = $user->descendantsAndSelf()->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->sort()->all());
+    }
+
     public function testDecoratingFunctionForRecursiveQuery()
     {
         /** @var User $user */
