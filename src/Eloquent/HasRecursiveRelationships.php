@@ -18,6 +18,28 @@ trait HasRecursiveRelationships
     use HasRecursiveRelationshipScopes;
     use QueriesExpressions;
 
+    /** @var null|callable */
+    public static $recursiveQueryDecoratingFunction;
+
+    /**
+     * Set function for decorating recursive query
+     *
+     * @param callable $function
+     * @return void
+     */
+    public function setRecursiveQueryDecoratingFunction(callable $function) {
+        static::$recursiveQueryDecoratingFunction = $function;
+    }
+
+    /**
+     * Unset function for decorating recursive query
+     *
+     * @return void
+     */
+    public function unsetRecursiveQueryDecoratingFunction() {
+        static::$recursiveQueryDecoratingFunction = null;
+    }
+
     /**
      * Get the name of the parent key column.
      *
