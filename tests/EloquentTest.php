@@ -151,4 +151,36 @@ class EloquentTest extends TestCase
 
         $this->assertEquals(['a', 'b', 'c', 'd'], $categories->pluck('id')->all());
     }
+
+    public function testSetRecursiveQueryConstraint()
+    {
+        User::setRecursiveQueryConstraint(function (Builder $query) {
+            $query->where('users.parent_id', '<', 4);
+        });
+
+        $users = User::tree()->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 11], $users->pluck('id')->all());
+
+        User::unsetRecursiveQueryConstraint();
+
+        $users = User::tree()->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12], $users->pluck('id')->all());
+    }
+
+    public function testWithRecursiveQueryConstraint()
+    {
+        $users = User::withRecursiveQueryConstraint(function (Builder $query) {
+            $query->where('users.parent_id', '<', 4);
+        }, function () {
+            return User::tree()->orderBy('id')->get();
+        });
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 11], $users->pluck('id')->all());
+
+        $users = User::tree()->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12], $users->pluck('id')->all());
+    }
 }

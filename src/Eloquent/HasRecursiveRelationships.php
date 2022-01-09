@@ -18,47 +18,12 @@ trait HasRecursiveRelationships
     use HasRecursiveRelationshipScopes;
     use QueriesExpressions;
 
-    /** @var null|callable */
-    public static $recursiveQueryDecoratingFunction;
-
     /**
-     * Allows to make a query with decorating function
+     * The additional constraint for the recursive query.
      *
-     * @param callable $decoratingFunction
-     * @param callable $callback
-     * @return mixed
+     * @var callable|null
      */
-    public static function withRecursiveQueryDecoratingFunction(callable $decoratingFunction, callable $callback)
-    {
-        $previous = static::$recursiveQueryDecoratingFunction;
-
-        static::$recursiveQueryDecoratingFunction = $decoratingFunction;
-
-        $result = $callback();
-
-        static::$recursiveQueryDecoratingFunction = $previous;
-
-        return $result;
-    }
-
-    /**
-     * Set function for decorating recursive query
-     *
-     * @param callable $function
-     * @return void
-     */
-    public function setRecursiveQueryDecoratingFunction(callable $function) {
-        static::$recursiveQueryDecoratingFunction = $function;
-    }
-
-    /**
-     * Unset function for decorating recursive query
-     *
-     * @return void
-     */
-    public function unsetRecursiveQueryDecoratingFunction() {
-        static::$recursiveQueryDecoratingFunction = null;
-    }
+    public static $recursiveQueryConstraint;
 
     /**
      * Get the name of the parent key column.
@@ -446,5 +411,46 @@ trait HasRecursiveRelationships
     public function newCollection(array $models = [])
     {
         return new Collection($models);
+    }
+
+    /**
+     * Set an additional constraint for the recursive query.
+     *
+     * @param callable $constraint
+     * @return void
+     */
+    public static function setRecursiveQueryConstraint(callable $constraint)
+    {
+        static::$recursiveQueryConstraint = $constraint;
+    }
+
+    /**
+     * Unset the additional constraint for the recursive query.
+     *
+     * @return void
+     */
+    public static function unsetRecursiveQueryConstraint()
+    {
+        static::$recursiveQueryConstraint = null;
+    }
+
+    /**
+     * Execute a query with an additional constraint for the recursive query.
+     *
+     * @param callable $constraint
+     * @param callable $query
+     * @return mixed
+     */
+    public static function withRecursiveQueryConstraint(callable $constraint, callable $query)
+    {
+        $previous = static::$recursiveQueryConstraint;
+
+        static::$recursiveQueryConstraint = $constraint;
+
+        $result = $query();
+
+        static::$recursiveQueryConstraint = $previous;
+
+        return $result;
     }
 }
