@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Database\Eloquent\Builder;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Tests\Models\User;
 
@@ -153,5 +154,51 @@ class DescendantsTest extends TestCase
         $this->assertEquals(2, $affected);
         $this->assertNull(User::withTrashed()->find(5));
         $this->assertNull(User::find(3)->deleted_at);
+    }
+
+    public function testWithDecoratingFunctionForRecursiveQuery()
+    {
+        /** @var User $user */
+        $user = User::first();
+
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->all());
+
+        $users = User::withRecursiveQueryDecoratingFunction(function (Builder $query) {
+            $query->where('users.parent_id', '<=', 3);
+        }, function () use ($user) {
+           return $user->descendantsAndSelf()->orderBy('id')->get();
+        });
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6], $users->pluck('id')->all());
+
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->all());
+    }
+
+    public function testDecoratingFunctionForRecursiveQuery()
+    {
+        /** @var User $user */
+        $user = User::first();
+
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->all());
+
+        $user->setRecursiveQueryDecoratingFunction(function (Builder $query) {
+            $query->where('users.parent_id', '<=', 3);
+        });
+
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6], $users->pluck('id')->all());
+
+        $user->unsetRecursiveQueryDecoratingFunction();
+
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
+
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->all());
     }
 }

@@ -255,6 +255,8 @@ trait HasRecursiveRelationshipScopes
             $query->where($this->getDepthName(), '<', $maxDepth);
         }
 
+        $this->callRecursiveQueryDecoratingFunction($query);
+
         return $query;
     }
 
@@ -291,5 +293,20 @@ trait HasRecursiveRelationshipScopes
         } else {
             $query->join($name, $joinColumns[$direction][0], '=', $joinColumns[$direction][1]);
         }
+    }
+
+    /**
+     * Call decorating function for recursive builder if set
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function callRecursiveQueryDecoratingFunction(Builder $query) {
+        if (is_callable(static::$recursiveQueryDecoratingFunction)) {
+            (static::$recursiveQueryDecoratingFunction)($query);
+            static::$recursiveQueryDecoratingFunction = null;
+        }
+
+        return $query;
     }
 }
