@@ -38,6 +38,7 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 - [Path](#path)
 - [Custom Paths](#custom-paths)
 - [Nested Results](#nested-results)
+- [Recursive Query Constraints](#recursive-query-constraints)
 - [Custom Relationships](#custom-relationships)
   - [HasManyOfDescendants](#hasmanyofdescendants)
   - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
@@ -327,6 +328,19 @@ This recursively sets `children` relationships:
   }
 ]
 ```
+
+### Recursive Query Constraints
+
+You can add custom constraints to the CTE's recursive query. Consider a query where you want to traverse a tree while
+skipping inactive users and their subtrees:
+
+ ```php
+$tree = User::withRecursiveQueryConstraint(function (Builder $query) {
+    $query->where('users.active', true);
+}, function () {
+    return User::tree()->get();
+});
+ ```
 
 ### Custom Relationships
 
