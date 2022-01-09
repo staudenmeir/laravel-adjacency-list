@@ -148,21 +148,21 @@ class DescendantsTest extends TestCase
         /** @var User $user */
         $user = User::first();
 
-        $users = $user->descendantsAndSelf()->get();
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->sort()->all());
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->all());
 
         $users = User::withRecursiveQueryDecoratingFunction(function (Builder $query) {
             $query->where('users.parent_id', '<=', 3);
         }, function () use ($user) {
-           return $user->descendantsAndSelf()->get();
+           return $user->descendantsAndSelf()->orderBy('id')->get();
         });
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6], $users->pluck('id')->sort()->all());
+        $this->assertEquals([1, 2, 3, 4, 5, 6], $users->pluck('id')->all());
 
-        $users = $user->descendantsAndSelf()->get();
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->sort()->all());
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->all());
     }
 
     public function testDecoratingFunctionForRecursiveQuery()
@@ -170,22 +170,22 @@ class DescendantsTest extends TestCase
         /** @var User $user */
         $user = User::first();
 
-        $users = $user->descendantsAndSelf()->get();
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->sort()->all());
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->all());
 
         $user->setRecursiveQueryDecoratingFunction(function (Builder $query) {
             $query->where('users.parent_id', '<=', 3);
         });
 
-        $users = $user->descendantsAndSelf()->get();
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6], $users->pluck('id')->sort()->all());
+        $this->assertEquals([1, 2, 3, 4, 5, 6], $users->pluck('id')->all());
 
         $user->unsetRecursiveQueryDecoratingFunction();
 
-        $users = $user->descendantsAndSelf()->get();
+        $users = $user->descendantsAndSelf()->orderBy('id')->get();
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->sort()->all());
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], $users->pluck('id')->all());
     }
 }
