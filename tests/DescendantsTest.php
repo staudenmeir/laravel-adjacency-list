@@ -130,6 +130,28 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 3], $users->pluck('id')->all());
     }
 
+    public function testWithSumForSelfRelation()
+    {
+        if (!method_exists(Builder::class, 'withSum') || in_array($this->database, ['mariadb', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        $user = User::withSum('descendants', 'id')->find(2);
+
+        $this->assertEquals(13, $user->descendants_sum_id);
+    }
+
+    public function testWithSumForSelfRelationAndSelf()
+    {
+        if (!method_exists(Builder::class, 'withSum') || in_array($this->database, ['mariadb', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        $user = User::withSum('descendantsAndSelf', 'id')->find(2);
+
+        $this->assertEquals(15, $user->descendants_and_self_sum_id);
+    }
+
     public function testUpdate()
     {
         if ($this->database === 'mariadb') {

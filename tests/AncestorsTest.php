@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Database\Eloquent\Builder;
 use Tests\Models\User;
 
 class AncestorsTest extends TestCase
@@ -125,6 +126,28 @@ class AncestorsTest extends TestCase
         $users = User::has('ancestorsAndSelf', '>', 2)->get();
 
         $this->assertEquals([5, 6, 7, 8, 9], $users->pluck('id')->all());
+    }
+
+    public function testWithSumForSelfRelation()
+    {
+        if (!method_exists(Builder::class, 'withSum') || in_array($this->database, ['mariadb', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        $user = User::withSum('ancestors', 'id')->find(8);
+
+        $this->assertEquals(8, $user->ancestors_sum_id);
+    }
+
+    public function testWithSumForSelfRelationAndSelf()
+    {
+        if (!method_exists(Builder::class, 'withSum') || in_array($this->database, ['mariadb', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        $user = User::withSum('ancestorsAndSelf', 'id')->find(8);
+
+        $this->assertEquals(16, $user->ancestors_and_self_sum_id);
     }
 
     public function testUpdate()
