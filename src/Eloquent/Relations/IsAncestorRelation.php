@@ -4,6 +4,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Expression;
 
 trait IsAncestorRelation
 {
@@ -129,6 +130,10 @@ trait IsAncestorRelation
      */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
+        if ($columns instanceof Expression) {
+            $columns = $this->replaceTableHash($query, $columns);
+        }
+
         $table = $this->getRelationCountHash();
 
         $from = $query->getModel()->getTable().' as '.$table;

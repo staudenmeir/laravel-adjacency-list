@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Database\Eloquent\Builder;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Tests\Models\User;
 
@@ -128,6 +127,28 @@ class DescendantsTest extends TestCase
         $users = User::has('descendantsAndSelf', '>', 2)->get();
 
         $this->assertEquals([1, 2, 3], $users->pluck('id')->all());
+    }
+
+    public function testWithSumForSelfRelation()
+    {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        $user = User::withSum('descendants', 'followers')->find(2);
+
+        $this->assertEquals(2, $user->descendants_sum_followers);
+    }
+
+    public function testWithSumForSelfRelationAndSelf()
+    {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        $user = User::withSum('descendantsAndSelf', 'followers')->find(2);
+
+        $this->assertEquals(3, $user->descendants_and_self_sum_followers);
     }
 
     public function testDelete()

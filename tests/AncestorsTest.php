@@ -127,6 +127,28 @@ class AncestorsTest extends TestCase
         $this->assertEquals([5, 6, 7, 8, 9], $users->pluck('id')->all());
     }
 
+    public function testWithSumForSelfRelation()
+    {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        $user = User::withSum('ancestors', 'followers')->find(8);
+
+        $this->assertEquals(3, $user->ancestors_sum_followers);
+    }
+
+    public function testWithSumForSelfRelationAndSelf()
+    {
+        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+            $this->markTestSkipped();
+        }
+
+        $user = User::withSum('ancestorsAndSelf', 'followers')->find(8);
+
+        $this->assertEquals(4, $user->ancestors_and_self_sum_followers);
+    }
+
     public function testUpdate()
     {
         if ($this->database === 'mariadb') {

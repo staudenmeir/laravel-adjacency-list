@@ -5,6 +5,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Expression;
 
 trait IsRecursiveRelation
 {
@@ -132,5 +133,27 @@ trait IsRecursiveRelation
         $keys = $this->query->getQuery()->newQuery()->from($expression)->select($this->localKey);
 
         return $this->query->whereIn($this->getQualifiedLocalKeyName(), $keys)->$method(...$parameters);
+    }
+
+    /**
+     * Replace table hash with expression name in self-relation aggregate queries.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Query\Expression $expression
+     * @return \Illuminate\Database\Query\Expression
+     */
+    protected function replaceTableHash(Builder $query, Expression $expression)
+    {
+        return new Expression(
+            str_replace(
+                $query->getGrammar()->wrap(
+                    $this->getRelationCountHash(false)
+                ),
+                $query->getGrammar()->wrap(
+                    $query->getModel()->getExpressionName()
+                ),
+                $expression->getValue(),
+            )
+        );
     }
 }
