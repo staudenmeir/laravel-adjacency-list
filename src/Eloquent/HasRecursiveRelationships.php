@@ -16,6 +16,7 @@ trait HasRecursiveRelationships
 {
     use HasOfDescendantsRelationships;
     use HasRecursiveRelationshipScopes;
+    use Predicates;
     use QueriesExpressions;
 
     /**
