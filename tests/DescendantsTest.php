@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests;
 
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
-use Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
 
 class DescendantsTest extends TestCase
 {

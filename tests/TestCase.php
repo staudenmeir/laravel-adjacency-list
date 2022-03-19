@@ -1,18 +1,18 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests;
 
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use PHPUnit\Framework\TestCase as Base;
-use Tests\Models\Category;
-use Tests\Models\Post;
-use Tests\Models\Role;
-use Tests\Models\Tag;
-use Tests\Models\User;
-use Tests\Models\Video;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\Category;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\Post;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\Role;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\Tag;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\Video;
 
 abstract class TestCase extends Base
 {

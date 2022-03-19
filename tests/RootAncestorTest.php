@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests;
 
-use Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
 
 class RootAncestorTest extends TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
-use Tests\Models\Category;
-use Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\Category;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
 
 class EloquentTest extends TestCase
 {

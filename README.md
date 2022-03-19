@@ -52,7 +52,7 @@ Consider the following table schema for hierarchical data:
 
 ```php
 Schema::create('users', function (Blueprint $table) {
-    $table->bigIncrements('id');
+    $table->id();
     $table->unsignedBigInteger('parent_id')->nullable();
 });
 ```

@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests;
 
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants;
-use Tests\Models\Video;
-use Tests\Models\User;
-use Tests\Scopes\DepthScope;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\Video;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Scopes\DepthScope;
 
 class MorphedByManyOfDescendantsTest extends TestCase
 {

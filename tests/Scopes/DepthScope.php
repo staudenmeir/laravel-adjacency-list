@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Scopes;
+namespace Staudenmeir\LaravelAdjacencyList\Tests\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

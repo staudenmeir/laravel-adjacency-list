@@ -11,7 +11,7 @@
          verbose="true"
 >
     <testsuites>
-        <testsuite name="AdjacencyList Test Suite">
+        <testsuite name="LaravelAdjacencyList Test Suite">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>

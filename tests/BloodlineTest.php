@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests;
 
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
-use Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
 
 class BloodlineTest extends TestCase
 {

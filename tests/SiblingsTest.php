@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
-use Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
 
 class SiblingsTest extends TestCase
 {

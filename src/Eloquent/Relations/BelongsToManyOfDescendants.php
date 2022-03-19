@@ -5,6 +5,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsOfDescendantsRelation;
 
 class BelongsToManyOfDescendants extends BelongsToMany
 {

@@ -23,7 +23,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Staudenmeir\\LaravelAdjacencyList\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",
