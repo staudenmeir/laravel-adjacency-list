@@ -9,14 +9,14 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 class User extends Model
 {
     use HasRecursiveRelationships {
-        getCustomPaths as getCustomPathsParent;
+        getCustomPaths as parentGetCustomPaths;
     }
     use SoftDeletes;
 
     public function getCustomPaths()
     {
         return array_merge(
-            $this->getCustomPathsParent(),
+            $this->parentGetCustomPaths(),
             [
                 [
                     'name' => 'slug_path',
