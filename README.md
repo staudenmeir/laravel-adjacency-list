@@ -544,13 +544,13 @@ User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveSco
 User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
 ```
 
-#### Package Conflicts
+### Package Conflicts
 
 - `staudenmeir/eloquent-eager-limit`: Replace both packages
   with [staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list](https://github.com/staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list)
   to use them on the same model.
 
-#### Usage outside of Laravel
+### Usage outside of Laravel
 
 If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you
 need to add support for common table expressions to the related model:
