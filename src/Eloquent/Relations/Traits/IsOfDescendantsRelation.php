@@ -119,25 +119,11 @@ trait IsOfDescendantsRelation
 
         foreach ($results as $result) {
             foreach ($paths as $path) {
-                if (!$this->pathMatches($result, $foreignKeyName, $accessor, $pathSeparator, $path)) {
+                if (!$this->pathBelongsToResult($result, $foreignKeyName, $accessor, $pathSeparator, $path)) {
                     continue;
                 }
 
-                $keys = explode($pathSeparator, $path);
-
-                if (!$this->andSelf) {
-                    array_pop($keys);
-                }
-
-                foreach ($keys as $key) {
-                    if (!isset($dictionary[$key])) {
-                        $dictionary[$key] = new Collection();
-                    }
-
-                    if (!$dictionary[$key]->contains($result)) {
-                        $dictionary[$key][] = $result;
-                    }
-                }
+                $dictionary = $this->addResultToDictionary($dictionary, $result, $pathSeparator, $path);
             }
 
             unset($result->{$this->pathListAlias});
@@ -160,7 +146,7 @@ trait IsOfDescendantsRelation
      * @param string $path
      * @return bool
      */
-    protected function pathMatches(Model $result, $foreignKeyName, $accessor, $pathSeparator, $path)
+    protected function pathBelongsToResult(Model $result, $foreignKeyName, $accessor, $pathSeparator, $path)
     {
         $foreignKey = (string) ($accessor ? $result->$accessor : $result)->$foreignKeyName;
 
@@ -175,6 +161,36 @@ trait IsOfDescendantsRelation
         }
 
         return false;
+    }
+
+    /**
+     * Add a result to the dictionary.
+     *
+     * @param array $dictionary
+     * @param \Illuminate\Database\Eloquent\Model $result
+     * @param string $pathSeparator
+     * @param string $path
+     * @return array
+     */
+    protected function addResultToDictionary(array $dictionary, Model $result, $pathSeparator, $path)
+    {
+        $keys = explode($pathSeparator, $path);
+
+        if (!$this->andSelf) {
+            array_pop($keys);
+        }
+
+        foreach ($keys as $key) {
+            if (!isset($dictionary[$key])) {
+                $dictionary[$key] = new Collection();
+            }
+
+            if (!$dictionary[$key]->contains($result)) {
+                $dictionary[$key][] = $result;
+            }
+        }
+
+        return $dictionary;
     }
 
     /**
