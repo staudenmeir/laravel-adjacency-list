@@ -40,11 +40,13 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 - [Nested Results](#nested-results)
 - [Recursive Query Constraints](#recursive-query-constraints)
 - [Custom Relationships](#custom-relationships)
-  - [HasManyOfDescendants](#hasmanyofdescendants)
-  - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
-  - [MorphToManyOfDescendants](#morphtomanyofdescendants)
-  - [MorphedByManyOfDescendants](#morphedbymanyofdescendants)
-  - [Intermediate Scopes](#intermediate-scopes)
+    - [HasManyOfDescendants](#hasmanyofdescendants)
+    - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
+    - [MorphToManyOfDescendants](#morphtomanyofdescendants)
+    - [MorphedByManyOfDescendants](#morphedbymanyofdescendants)
+    - [Intermediate Scopes](#intermediate-scopes)
+- [Package Conflicts](#package-conflicts)
+- [Usage outside of Laravel](#usage-outside-of-laravel)
 
 ### Getting Started
 
@@ -541,6 +543,12 @@ User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveSco
 
 User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
 ```
+
+#### Package Conflicts
+
+- `staudenmeir/eloquent-eager-limit`: Replace both packages
+  with [staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list](https://github.com/staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list)
+  to use them on the same model.
 
 #### Usage outside of Laravel
 
