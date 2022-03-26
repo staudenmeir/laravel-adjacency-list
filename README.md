@@ -549,6 +549,9 @@ User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
 - `staudenmeir/eloquent-eager-limit`: Replace both packages
   with [staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list](https://github.com/staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list)
   to use them on the same model.
+- `staudenmeir/eloquent-param-limit-fix`: Replace both packages
+  with [staudenmeir/eloquent-param-limit-fix-x-laravel-adjacency-list](https://github.com/staudenmeir/eloquent-param-limit-fix-x-laravel-adjacency-list)
+  to use them on the same model.
 
 ### Usage outside of Laravel
 
