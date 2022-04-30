@@ -5,17 +5,17 @@ on: [push, pull_request]
 jobs:
   tests:
     runs-on: ubuntu-latest
-      
+
     strategy:
       matrix:
         php: [7.4, 7.3, 7.2]
         database: [mysql, pgsql, sqlite, sqlsrv]
         release: [stable, lowest]
-        include: 
+        include:
           - php: 7.4
-            release: stable 
+            release: stable
             coverage: xdebug
-    
+
     services:
       mysql:
         image: mysql:latest
@@ -71,7 +71,5 @@ jobs:
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
           PGSQL_PORT: ${{ job.services.pgsql.ports[5432] }}
           SQLSRV_PORT: ${{ job.services.sqlsrv.ports[1433] }}
-      - run: |
-          wget -q https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+      - run: php tests/coverage/scrutinizer.php
         if: matrix.coverage == 'xdebug'
