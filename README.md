@@ -45,8 +45,8 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
     - [MorphToManyOfDescendants](#morphtomanyofdescendants)
     - [MorphedByManyOfDescendants](#morphedbymanyofdescendants)
     - [Intermediate Scopes](#intermediate-scopes)
+    - [Usage outside of Laravel](#usage-outside-of-laravel)
 - [Package Conflicts](#package-conflicts)
-- [Usage outside of Laravel](#usage-outside-of-laravel)
 
 ### Getting Started
 
@@ -541,19 +541,17 @@ User::find($id)->recursivePosts()->withTrashedDescendants()->get();
 
 User::find($id)->recursivePosts()->withIntermediateScope('active', new ActiveScope())->get();
 
+User::find($id)->recursivePosts()->withIntermediateScope(
+    'depth',
+    function ($query) {
+        $query->whereDepth('<=', 10);
+    }
+)->get();
+
 User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
 ```
 
-### Package Conflicts
-
-- `staudenmeir/eloquent-eager-limit`: Replace both packages
-  with [staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list](https://github.com/staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list)
-  to use them on the same model.
-- `staudenmeir/eloquent-param-limit-fix`: Replace both packages
-  with [staudenmeir/eloquent-param-limit-fix-x-laravel-adjacency-list](https://github.com/staudenmeir/eloquent-param-limit-fix-x-laravel-adjacency-list)
-  to use them on the same model.
-
-### Usage outside of Laravel
+#### Usage outside of Laravel
 
 If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you
 need to add support for common table expressions to the related model:
@@ -564,6 +562,15 @@ class Post extends Model
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 }
 ```
+
+### Package Conflicts
+
+- `staudenmeir/eloquent-eager-limit`: Replace both packages
+  with [staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list](https://github.com/staudenmeir/eloquent-eager-limit-x-laravel-adjacency-list)
+  to use them on the same model.
+- `staudenmeir/eloquent-param-limit-fix`: Replace both packages
+  with [staudenmeir/eloquent-param-limit-fix-x-laravel-adjacency-list](https://github.com/staudenmeir/eloquent-param-limit-fix-x-laravel-adjacency-list)
+  to use them on the same model.
 
 ## Contributing
 
