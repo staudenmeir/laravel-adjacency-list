@@ -61,10 +61,10 @@ jobs:
           - 1433
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 2
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/composer/files
           key: php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
