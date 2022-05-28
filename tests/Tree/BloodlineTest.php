@@ -1,6 +1,6 @@
 <?php
 
-namespace Staudenmeir\LaravelAdjacencyList\Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
 use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;

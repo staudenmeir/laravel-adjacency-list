@@ -1,6 +1,6 @@
 <?php
 
-namespace Staudenmeir\LaravelAdjacencyList\Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
@@ -24,6 +24,10 @@ class DescendantsTest extends TestCase
         $this->assertEquals([2, 5, 8], $descendantsAndSelf->pluck('id')->all());
         $this->assertEquals([0, 1, 2], $descendantsAndSelf->pluck('depth')->all());
         $this->assertEquals(['2', '2.5', '2.5.8'], $descendantsAndSelf->pluck('path')->all());
+        $this->assertEquals(
+            ['user-2', 'user-2/user-5', 'user-2/user-5/user-8'],
+            $descendantsAndSelf->pluck('slug_path')->all()
+        );
     }
 
     public function testLazyLoadingWithoutParentKey()

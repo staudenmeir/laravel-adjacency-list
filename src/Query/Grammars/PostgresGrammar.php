@@ -34,10 +34,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
      */
     public function compileRecursivePath($column, $alias)
     {
-        $segments = explode('.', $column);
-        $attribute = end($segments);
-
-        if ($this->model->isIntegerAttribute($attribute)) {
+        if ($this->model->isIntegerAttribute($column)) {
             return $this->wrap($alias).' || '.$this->wrap($column);
         }
 

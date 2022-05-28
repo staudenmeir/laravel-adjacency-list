@@ -1,6 +1,6 @@
 <?php
 
-namespace Staudenmeir\LaravelAdjacencyList\Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Illuminate\Database\Eloquent\Builder;
 use Staudenmeir\LaravelAdjacencyList\Tests\Models\Category;

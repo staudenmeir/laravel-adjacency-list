@@ -1,6 +1,6 @@
 <?php
 
-namespace Staudenmeir\LaravelAdjacencyList\Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Staudenmeir\LaravelAdjacencyList\Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
 
@@ -30,6 +30,10 @@ class AncestorsTest extends TestCase
         $this->assertEquals([8, 5, 2, 1], $ancestorsAndSelf->pluck('id')->all());
         $this->assertEquals([0, -1, -2, -3], $ancestorsAndSelf->pluck('depth')->all());
         $this->assertEquals(['8', '8.5', '8.5.2', '8.5.2.1'], $ancestorsAndSelf->pluck('path')->all());
+        $this->assertEquals(
+            ['user-8', 'user-8/user-5', 'user-8/user-5/user-2', 'user-8/user-5/user-2/user-1'],
+            $ancestorsAndSelf->pluck('slug_path')->all()
+        );
     }
 
     public function testLazyLoadingAndSelfWithRoot()

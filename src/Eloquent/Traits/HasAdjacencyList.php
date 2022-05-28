@@ -385,6 +385,9 @@ trait HasAdjacencyList
      */
     public function isIntegerAttribute($attribute)
     {
+        $segments = explode('.', $attribute);
+        $attribute = end($segments);
+
         $casts = $this->getCasts();
 
         return isset($casts[$attribute]) && in_array($casts[$attribute], ['int', 'integer']);

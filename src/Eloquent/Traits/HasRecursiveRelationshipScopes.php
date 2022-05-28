@@ -94,7 +94,7 @@ trait HasRecursiveRelationshipScopes
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param mixed $operator
-     * @param mixed $value
+     * @param mixed|null $value
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWhereDepth(Builder $query, $operator, $value = null)

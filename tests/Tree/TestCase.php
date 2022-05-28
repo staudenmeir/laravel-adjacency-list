@@ -1,6 +1,6 @@
 <?php
 
-namespace Staudenmeir\LaravelAdjacencyList\Tests;
+namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -16,7 +16,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Models\Video;
 
 abstract class TestCase extends Base
 {
-    protected $database;
+    protected string $database;
 
     protected function setUp(): void
     {
@@ -24,7 +24,7 @@ abstract class TestCase extends Base
 
         $this->database = getenv('DATABASE') ?: 'sqlite';
 
-        $config = require __DIR__.'/config/database.php';
+        $config = require __DIR__.'/../config/database.php';
 
         $db = new DB();
         $db->addConnection($config[$this->database]);
@@ -43,12 +43,7 @@ abstract class TestCase extends Base
         parent::tearDown();
     }
 
-    /**
-     * Migrate the database.
-     *
-     * @return void
-     */
-    protected function migrate()
+    protected function migrate(): void
     {
         DB::schema()->dropAllTables();
 
@@ -135,12 +130,7 @@ abstract class TestCase extends Base
         );
     }
 
-    /**
-     * Seed the database.
-     *
-     * @return void
-     */
-    protected function seed()
+    protected function seed(): void
     {
         Model::unguard();
 
