@@ -92,4 +92,47 @@ regexp_replace(
 ) asc
 SQL;
     }
+
+    /**
+     * Compile a pivot column null value.
+     *
+     * @param string $type
+     * @return string
+     */
+    public function compilePivotColumnNullValue(string $type): string
+    {
+        $cast = match ($type) {
+            'bigint', 'boolean', 'integer', 'smallint' => 'signed',
+            'string' => 'char(65535)',
+            default => $type,
+        };
+
+        return "cast(null as $cast)";
+    }
+
+    /**
+     * Compile a cycle detection clause.
+     *
+     * @param string $localKey
+     * @param string $path
+     * @return string
+     */
+    public function compileCycleDetection(string $localKey, string $path): string
+    {
+        $localKey = $this->wrap($localKey);
+        $path = $this->wrap($path);
+
+        return "instr($path, concat($localKey, ?)) = 1 || instr($path, concat(?, $localKey, ?)) > 1";
+    }
+
+    /**
+     * Get the cycle detection bindings.
+     *
+     * @param string $pathSeparator
+     * @return array
+     */
+    public function getCycleDetectionBindings(string $pathSeparator): array
+    {
+        return [$pathSeparator, $pathSeparator, $pathSeparator];
+    }
 }

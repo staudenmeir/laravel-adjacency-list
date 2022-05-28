@@ -29,28 +29,36 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
 ## Usage
 
-- [Getting Started](#getting-started)
-- [Included Relationships](#included-relationships)
-- [Trees](#trees)
-- [Filters](#filters)
-- [Order](#order)
-- [Depth](#depth)
-- [Path](#path)
-- [Custom Paths](#custom-paths)
-- [Nested Results](#nested-results)
-- [Recursive Query Constraints](#recursive-query-constraints)
-- [Custom Relationships](#custom-relationships)
-    - [HasManyOfDescendants](#hasmanyofdescendants)
-    - [BelongsToManyOfDescendants](#belongstomanyofdescendants)
-    - [MorphToManyOfDescendants](#morphtomanyofdescendants)
-    - [MorphedByManyOfDescendants](#morphedbymanyofdescendants)
-    - [Intermediate Scopes](#intermediate-scopes)
-    - [Usage outside of Laravel](#usage-outside-of-laravel)
+- [Trees](#trees-one-parent-per-node-one-to-many)
+    - [Getting Started](#getting-started)
+    - [Included Relationships](#included-relationships)
+    - [Trees](#trees)
+    - [Filters](#filters)
+    - [Order](#order)
+    - [Depth](#depth)
+    - [Path](#path)
+    - [Custom Paths](#custom-paths)
+    - [Nested Results](#nested-results)
+    - [Recursive Query Constraints](#recursive-query-constraints)
+    - [Custom Relationships](#custom-relationships)
+- [Graphs](#graphs-multiple-parents-per-node-many-to-many)
+    - [Getting Started](#getting-started)
+    - [Included Relationships](#included-relationships)
+    - [Pivot Columns](#pivot-columns)
+    - [Cycle Detection](#cycle-detection)
+    - [Subgraphs](#subgraphs)
+    - [Order](#order)
+    - [Depth](#depth)
+    - [Path](#path)
+    - [Custom Paths](#custom-paths)
+    - [Recursive Query Constraints](#recursive-query-constraints)
 - [Package Conflicts](#package-conflicts)
 
-### Getting Started
+### Trees: One Parent per Node (One-to-Many)
 
-Consider the following table schema for hierarchical data:
+#### Getting Started
+
+Consider the following table schema for hierarchical data in trees:
 
 ```php
 Schema::create('users', function (Blueprint $table) {
@@ -97,7 +105,7 @@ class User extends Model
 }
 ```
 
-### Included Relationships
+#### Included Relationships
 
 The trait provides various relationships:
 
@@ -120,7 +128,7 @@ $ancestors = User::find($id)->ancestors;
 $users = User::with('descendants')->get();
 
 $users = User::whereHas('siblings', function ($query) {
-    $query->where('name', '=', 'John');
+    $query->where('name', 'John');
 })->get();
 
 $total = User::find($id)->descendants()->count();
@@ -130,7 +138,7 @@ User::find($id)->descendants()->update(['active' => false]);
 User::find($id)->siblings()->delete();
 ```
 
-### Trees
+#### Trees
 
 The trait provides the `tree()` query scope to get all models, beginning at the root(s):
 
@@ -149,7 +157,7 @@ $constraint = function ($query) {
 $tree = User::treeOf($constraint)->get();
 ```
 
-### Filters
+#### Filters
 
 The trait provides query scopes to filter models by their position in the tree:
 
@@ -168,7 +176,7 @@ $leaves = User::isLeaf()->get();
 $roots = User::isRoot()->get();
 ```
 
-### Order
+#### Order
 
 The trait provides query scopes to order models breadth-first or depth-first:
 
@@ -181,7 +189,7 @@ $tree = User::tree()->breadthFirst()->get();
 $descendants = User::find($id)->descendants()->depthFirst()->get();
 ```
 
-### Depth
+#### Depth
 
 The results of ancestor, bloodline, descendant and tree queries include an additional `depth` column.
 
@@ -210,7 +218,7 @@ class User extends Model
 }
 ```
 
-#### Depth Constraints
+##### Depth Constraints
 
 You can use the `whereDepth()` query scope to filter models by their relative depth:
 
@@ -230,7 +238,7 @@ $tree = User::tree(3)->get();
 $tree = User::treeOf($constraint, 3)->get();
 ```
 
-### Path
+#### Path
 
 The results of ancestor, bloodline, descendant and tree queries include an additional `path` column.
 
@@ -263,7 +271,7 @@ class User extends Model
 }
 ```
 
-### Custom Paths
+#### Custom Paths
 
 You can add custom path columns to the query results:
 
@@ -291,7 +299,7 @@ echo $descendantsAndSelf[1]->slug_path; // user-1/user-2
 echo $descendantsAndSelf[2]->slug_path; // user-1/user-2/user-3
 ```
 
-### Nested Results
+#### Nested Results
 
 Use the `toTree()` method on the result collection to generate a nested tree:
 
@@ -331,7 +339,7 @@ This recursively sets `children` relationships:
 ]
 ```
 
-### Recursive Query Constraints
+#### Recursive Query Constraints
 
 You can add custom constraints to the CTE's recursive query. Consider a query where you want to traverse a tree while
 skipping inactive users and their subtrees:
@@ -344,11 +352,18 @@ $tree = User::withRecursiveQueryConstraint(function (Builder $query) {
 });
  ```
 
-### Custom Relationships
+#### Custom Relationships
 
 You can also define custom relationships to retrieve related models recursively.
 
-#### HasManyOfDescendants
+- [HasManyOfDescendants](#hasmanyofdescendants)
+- [BelongsToManyOfDescendants](#belongstomanyofdescendants)
+- [MorphToManyOfDescendants](#morphtomanyofdescendants)
+- [MorphedByManyOfDescendants](#morphedbymanyofdescendants)
+- [Intermediate Scopes](#intermediate-scopes)
+- [Usage outside of Laravel](#usage-outside-of-laravel)
+
+##### HasManyOfDescendants
 
 Consider a `HasMany` relationship between `User` and `Post`:
 
@@ -394,7 +409,7 @@ class User extends Model
 }
 ```
 
-#### BelongsToManyOfDescendants
+##### BelongsToManyOfDescendants
 
 Consider a `BelongsToMany` relationship between `User` and `Role`:
 
@@ -440,7 +455,7 @@ class User extends Model
 }
 ```
 
-#### MorphToManyOfDescendants
+##### MorphToManyOfDescendants
 
 Consider a `MorphToMany` relationship between `User` and `Tag`:
 
@@ -486,7 +501,7 @@ class User extends Model
 }
 ```
 
-#### MorphedByManyOfDescendants
+##### MorphedByManyOfDescendants
 
 Consider a `MorphedByMany` relationship between `Category` and `Post`:
 
@@ -532,7 +547,7 @@ class Category extends Model
 }
 ```
 
-#### Intermediate Scopes
+##### Intermediate Scopes
 
 You can adjust the descendants query (e.g. child users) by adding or removing intermediate scopes:
 
@@ -551,7 +566,7 @@ User::find($id)->recursivePosts()->withIntermediateScope(
 User::find($id)->recursivePosts()->withoutIntermediateScope('active')->get();
 ```
 
-#### Usage outside of Laravel
+##### Usage outside of Laravel
 
 If you are using the package outside of Laravel or have disabled package discovery for `staudenmeir/laravel-cte`, you
 need to add support for common table expressions to the related model:
@@ -562,6 +577,297 @@ class Post extends Model
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 }
 ```
+
+### Graphs: Multiple Parents per Node (Many-to-Many)
+
+You can also use the package to traverse graphs with multiple parents per node that are defined in a pivot table. Use
+cases might be a bill of materials (BOM) or a family tree.
+
+Supports Laravel 9+.
+
+#### Getting Started
+
+Consider the following table schema for storing directed graphs as nodes and edges:
+
+```php
+Schema::create('nodes', function (Blueprint $table) {
+    $table->id();
+});
+
+Schema::create('edges', function (Blueprint $table) {
+    $table->unsignedBigInteger('source_id');
+    $table->unsignedBigInteger('target_id');
+    $table->string('label');
+    $table->unsignedBigInteger('weight');
+});
+```
+
+Use the `HasGraphRelationships` trait in your model to work with graph relationships and specify the name of the pivot
+table:
+
+```php
+class Node extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
+
+    public function getPivotTableName(): string
+    {
+        return 'edges';
+    }
+}
+```
+
+By default, the trait expects a parent key named `parent_id` and child key named `child_id` in the pivot table. You can
+customize them by overriding `getParentKeyName()` and `getChildKeyName()`:
+
+```php
+class Node extends Model
+{
+    public function getParentKeyName()
+    {
+        return 'source_id';
+    }
+  
+    public function getChildKeyName()
+    {
+        return 'target_id';
+    }
+}
+```
+
+By default, the trait uses the model's primary key as the local key. You can customize it by
+overriding `getLocalKeyName()`:
+
+```php
+class Node extends Model
+{
+    public function getLocalKeyName()
+    {
+        return 'id';
+    }
+}
+```
+
+#### Included Relationships
+
+The trait provides various relationships:
+
+- `ancestors()`: The node's recursive parents.
+- `ancestorsAndSelf()`: The node's recursive parents and itself.
+- `children()`: The node's direct children.
+- `childrenAndSelf()`: The node's direct children and itself.
+- `descendants()`: The node's recursive children.
+- `descendantsAndSelf()`: The node's recursive children and itself.
+- `parents()`: The node's direct parents.
+- `parentsAndSelf()`: The node's direct parents and itself.
+
+```php
+$ancestors = Node::find($id)->ancestors;
+
+$nodes = Node::with('descendants')->get();
+
+$nodes = Node::has('children')->get();
+
+$total = Node::find($id)->descendants()->count();
+
+Node::find($id)->descendants()->update(['active' => false]);
+
+Node::find($id)->parents()->delete();
+```
+
+### Pivot Columns
+
+Similar to `BelongsToMany` relationships, you can retrieve additional columns from the pivot table besides the parent
+and child key:
+
+```php
+class Node extends Model
+{
+    public function getPivotColumns(): array
+    {
+        return ['label', 'weight'];
+    }
+}
+
+$nodes = Node::find($id)->descendants;
+
+foreach ($nodes as $node) {
+    dump(
+        $node->pivot->label,
+        $node->pivot->weight
+    );
+}
+```
+
+#### Cycle Detection
+
+If your graph contains cycles, you need to enable cycle detection to prevent infinite loops:
+
+```php
+class Node extends Model
+{
+    public function enableCycleDetection(): bool
+    {
+        return true;
+    }
+}
+```
+
+You can also retrieve the start of a cycle, i.e. the first duplicate node. With this option, the query results include
+an `is_cycle` column that indicates whether the node is part of a cycle:
+
+```php
+class Node extends Model
+{
+    public function enableCycleDetection(): bool
+    {
+        return true;
+    }
+
+    public function includeCycleStart(): bool
+    {
+        return true;
+    }
+}
+
+$nodes = Node::find($id)->descendants;
+
+foreach ($nodes as $node) {
+    dump($node->is_cycle);
+}
+```
+
+#### Subgraphs
+
+The trait provides the `subgraph()` query scope to get the subgraph of a custom constraint:
+
+```php
+$constraint = function ($query) {
+    $query->whereIn('id', $ids);
+};
+
+$subgraph = Node::subgraph($constraint)->get();
+```
+
+#### Order
+
+The trait provides query scopes to order nodes breadth-first or depth-first:
+
+- `breadthFirst()`: Get siblings before children.
+- `depthFirst()`: Get children before siblings.
+
+```php
+$descendants = Node::find($id)->descendants()->breadthFirst()->get();
+
+$descendants = Node::find($id)->descendants()->depthFirst()->get();
+```
+
+#### Depth
+
+The results of ancestor, descendant and subgraph queries include an additional `depth` column.
+
+It contains the node's depth *relative* to the query's parent. The depth is positive for descendants and negative for
+ancestors:
+
+```php
+$descendantsAndSelf = Node::find($id)->descendantsAndSelf()->depthFirst()->get();
+
+echo $descendantsAndSelf[0]->depth; // 0
+echo $descendantsAndSelf[1]->depth; // 1
+echo $descendantsAndSelf[2]->depth; // 2
+```
+
+You can customize the column name by overriding `getDepthName()`:
+
+```php
+class Node extends Model
+{
+    public function getDepthName()
+    {
+        return 'depth';
+    }
+}
+```
+
+##### Depth Constraints
+
+You can use the `whereDepth()` query scope to filter nodes by their relative depth:
+
+```php
+$descendants = Node::find($id)->descendants()->whereDepth(2)->get();
+
+$descendants = Node::find($id)->descendants()->whereDepth('<', 3)->get();
+```
+
+#### Path
+
+The results of ancestor, descendant and subgraph queries include an additional `path` column.
+
+It contains the dot-separated path of local keys from the query's parent to the node:
+
+```php
+$descendantsAndSelf = Node::find(1)->descendantsAndSelf()->depthFirst()->get();
+
+echo $descendantsAndSelf[0]->path; // 1
+echo $descendantsAndSelf[1]->path; // 1.2
+echo $descendantsAndSelf[2]->path; // 1.2.3
+```
+
+You can customize the column name and the separator by overriding the respective methods:
+
+```php
+class Node extends Model
+{
+    public function getPathName()
+    {
+        return 'path';
+    }
+
+    public function getPathSeparator()
+    {
+        return '.';
+    }
+}
+```
+
+#### Custom Paths
+
+You can add custom path columns to the query results:
+
+```php
+class Node extends Model
+{
+    public function getCustomPaths()
+    {
+        return [
+            [
+                'name' => 'slug_path',
+                'column' => 'slug',
+                'separator' => '/',
+            ],
+        ];
+    }
+}
+
+$descendantsAndSelf = Node::find(1)->descendantsAndSelf;
+
+echo $descendantsAndSelf[0]->slug_path; // node-1
+echo $descendantsAndSelf[1]->slug_path; // node-1/node-2
+echo $descendantsAndSelf[2]->slug_path; // node-1/node-2/node-3
+```
+
+#### Recursive Query Constraints
+
+You can add custom constraints to the CTE's recursive query. Consider a query where you want to traverse a node's
+descendants while skipping inactive nodes and their subgraphs:
+
+ ```php
+$descendants = Node::withRecursiveQueryConstraint(function (Builder $query) {
+    $query->where('nodes.active', true);
+}, function () {
+    return Node::find($id)->descendants;
+});
+ ```
 
 ### Package Conflicts
 

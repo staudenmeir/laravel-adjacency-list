@@ -50,4 +50,29 @@ interface ExpressionGrammar
      * @return string
      */
     public function compileOrderByPath();
+
+    /**
+     * Compile a pivot column null value.
+     *
+     * @param string $type
+     * @return string
+     */
+    public function compilePivotColumnNullValue(string $type): string;
+
+    /**
+     * Compile a cycle detection clause.
+     *
+     * @param string $localKey
+     * @param string $path
+     * @return string
+     */
+    public function compileCycleDetection(string $localKey, string $path): string;
+
+    /**
+     * Get the cycle detection bindings.
+     *
+     * @param string $pathSeparator
+     * @return array
+     */
+    public function getCycleDetectionBindings(string $pathSeparator): array;
 }

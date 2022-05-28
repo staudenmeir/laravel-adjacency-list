@@ -61,4 +61,41 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
             [$listSeparator]
         )->from($expression);
     }
+
+    /**
+     * Compile a pivot column null value.
+     *
+     * @param string $type
+     * @return string
+     */
+    public function compilePivotColumnNullValue(string $type): string
+    {
+        return 'null';
+    }
+
+    /**
+     * Compile a cycle detection clause.
+     *
+     * @param string $localKey
+     * @param string $path
+     * @return string
+     */
+    public function compileCycleDetection(string $localKey, string $path): string
+    {
+        $localKey = $this->wrap($localKey);
+        $path = $this->wrap($path);
+
+        return "instr($path, $localKey || ?) > 0 OR instr($path, ? || $localKey || ?) > 0";
+    }
+
+    /**
+     * Get the cycle detection bindings.
+     *
+     * @param string $pathSeparator
+     * @return array
+     */
+    public function getCycleDetectionBindings(string $pathSeparator): array
+    {
+        return [$pathSeparator, $pathSeparator, $pathSeparator];
+    }
 }

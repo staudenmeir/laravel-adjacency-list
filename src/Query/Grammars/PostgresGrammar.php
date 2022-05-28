@@ -69,4 +69,47 @@ class PostgresGrammar extends Base implements ExpressionGrammar
             [$pathSeparator, $listSeparator]
         )->from($expression);
     }
+
+    /**
+     * Compile a pivot column null value.
+     *
+     * @param string $type
+     * @return string
+     */
+    public function compilePivotColumnNullValue(string $type): string
+    {
+        $cast = match ($type) {
+            'datetime' => 'timestamp',
+            'string' => 'varchar',
+            default => $type,
+        };
+
+        return "null::$cast";
+    }
+
+    /**
+     * Compile a cycle detection clause.
+     *
+     * @param string $localKey
+     * @param string $path
+     * @return string
+     */
+    public function compileCycleDetection(string $localKey, string $path): string
+    {
+        $localKey = $this->wrap($localKey);
+        $path = $this->wrap($path);
+
+        return "$localKey = any($path)";
+    }
+
+    /**
+     * Get the cycle detection bindings.
+     *
+     * @param string $pathSeparator
+     * @return array
+     */
+    public function getCycleDetectionBindings(string $pathSeparator): array
+    {
+        return [];
+    }
 }
