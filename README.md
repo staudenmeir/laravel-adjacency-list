@@ -29,9 +29,9 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
 ## Usage
 
-The package offers recursive relationships for two types of data structure:
-- [Trees with one parent per node (one-to-many)](#trees-one-parent-per-node-one-to-many)
-- [Graphs with multiple parents per node (many-to-many)](#graphs-multiple-parents-per-node-many-to-many)
+The package offers recursive relationships for traversing two types of data structure:
+- [Trees: One Parent per Node (One-to-Many)](#trees-one-parent-per-node-one-to-many)
+- [Graphs: Multiple Parents per Node (Many-to-Many)](#graphs-multiple-parents-per-node-many-to-many)
 
 ### Trees: One Parent per Node (One-to-Many)
 
