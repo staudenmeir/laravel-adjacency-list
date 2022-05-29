@@ -29,32 +29,23 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
 ## Usage
 
-- [Trees](#trees-one-parent-per-node-one-to-many)
-    - [Getting Started](#getting-started)
-    - [Included Relationships](#included-relationships)
-    - [Trees](#trees)
-    - [Filters](#filters)
-    - [Order](#order)
-    - [Depth](#depth)
-    - [Path](#path)
-    - [Custom Paths](#custom-paths)
-    - [Nested Results](#nested-results)
-    - [Recursive Query Constraints](#recursive-query-constraints)
-    - [Custom Relationships](#custom-relationships)
-- [Graphs](#graphs-multiple-parents-per-node-many-to-many)
-    - [Getting Started](#getting-started)
-    - [Included Relationships](#included-relationships)
-    - [Pivot Columns](#pivot-columns)
-    - [Cycle Detection](#cycle-detection)
-    - [Subgraphs](#subgraphs)
-    - [Order](#order)
-    - [Depth](#depth)
-    - [Path](#path)
-    - [Custom Paths](#custom-paths)
-    - [Recursive Query Constraints](#recursive-query-constraints)
-- [Package Conflicts](#package-conflicts)
+The package offers recursive relationships for two types of data structure:
+- [Trees with one parent per node (one-to-many)](#trees-one-parent-per-node-one-to-many)
+- [Graphs with multiple parents per node (many-to-many)](#graphs-multiple-parents-per-node-many-to-many)
 
 ### Trees: One Parent per Node (One-to-Many)
+
+- [Getting Started](#getting-started)
+- [Included Relationships](#included-relationships)
+- [Trees](#trees)
+- [Filters](#filters)
+- [Order](#order)
+- [Depth](#depth)
+- [Path](#path)
+- [Custom Paths](#custom-paths)
+- [Nested Results](#nested-results)
+- [Recursive Query Constraints](#recursive-query-constraints)
+- [Custom Relationships](#custom-relationships)
 
 #### Getting Started
 
@@ -585,7 +576,18 @@ cases might be a bill of materials (BOM) or a family tree.
 
 Supports Laravel 9+.
 
-#### Getting Started
+- [Getting Started](#graphs-getting-started)
+- [Included Relationships](#graphs-included-relationships)
+- [Pivot Columns](#graphs-pivot-columns)
+- [Cycle Detection](#graphs-cycle-detection)
+- [Subgraphs](#graphs-subgraphs)
+- [Order](#graphs-order)
+- [Depth](#graphs-depth)
+- [Path](#graphs-path)
+- [Custom Paths](#graphs-custom-paths)
+- [Recursive Query Constraints](#graphs-recursive-query-constraints)
+
+#### <a name="graphs-getting-started">A Getting Started</a>
 
 Consider the following table schema for storing directed graphs as nodes and edges:
 
@@ -648,7 +650,7 @@ class Node extends Model
 }
 ```
 
-#### Included Relationships
+#### <a name="graphs-included-relationships">Included Relationships</a>
 
 The trait provides various relationships:
 
@@ -675,7 +677,7 @@ Node::find($id)->descendants()->update(['active' => false]);
 Node::find($id)->parents()->delete();
 ```
 
-### Pivot Columns
+#### <a name="graphs-pivot-columns">Pivot Columns</a>
 
 Similar to `BelongsToMany` relationships, you can retrieve additional columns from the pivot table besides the parent
 and child key:
@@ -699,7 +701,7 @@ foreach ($nodes as $node) {
 }
 ```
 
-#### Cycle Detection
+#### <a name="graphs-cycle-detection">Cycle Detection
 
 If your graph contains cycles, you need to enable cycle detection to prevent infinite loops:
 
@@ -737,7 +739,7 @@ foreach ($nodes as $node) {
 }
 ```
 
-#### Subgraphs
+#### <a name="graphs-subgraphs">Subgraphs</a>
 
 The trait provides the `subgraph()` query scope to get the subgraph of a custom constraint:
 
@@ -749,7 +751,7 @@ $constraint = function ($query) {
 $subgraph = Node::subgraph($constraint)->get();
 ```
 
-#### Order
+#### <a name="graphs-order">Order</a>
 
 The trait provides query scopes to order nodes breadth-first or depth-first:
 
@@ -762,7 +764,7 @@ $descendants = Node::find($id)->descendants()->breadthFirst()->get();
 $descendants = Node::find($id)->descendants()->depthFirst()->get();
 ```
 
-#### Depth
+#### <a name="graphs-depth">Depth</a>
 
 The results of ancestor, descendant and subgraph queries include an additional `depth` column.
 
@@ -799,7 +801,7 @@ $descendants = Node::find($id)->descendants()->whereDepth(2)->get();
 $descendants = Node::find($id)->descendants()->whereDepth('<', 3)->get();
 ```
 
-#### Path
+#### <a name="graphs-path">Path</a>
 
 The results of ancestor, descendant and subgraph queries include an additional `path` column.
 
@@ -830,7 +832,7 @@ class Node extends Model
 }
 ```
 
-#### Custom Paths
+#### <a name="graphs-custom-paths">Custom Paths</a>
 
 You can add custom path columns to the query results:
 
@@ -856,7 +858,7 @@ echo $descendantsAndSelf[1]->slug_path; // node-1/node-2
 echo $descendantsAndSelf[2]->slug_path; // node-1/node-2/node-3
 ```
 
-#### Recursive Query Constraints
+#### <a name="graphs-recursive-query-constraints">Recursive Query Constraints</a>
 
 You can add custom constraints to the CTE's recursive query. Consider a query where you want to traverse a node's
 descendants while skipping inactive nodes and their subgraphs:
