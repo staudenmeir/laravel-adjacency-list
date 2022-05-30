@@ -625,12 +625,12 @@ customize them by overriding `getParentKeyName()` and `getChildKeyName()`:
 ```php
 class Node extends Model
 {
-    public function getParentKeyName()
+    public function getParentKeyName(): string
     {
         return 'source_id';
     }
   
-    public function getChildKeyName()
+    public function getChildKeyName(): string
     {
         return 'target_id';
     }
@@ -643,7 +643,7 @@ overriding `getLocalKeyName()`:
 ```php
 class Node extends Model
 {
-    public function getLocalKeyName()
+    public function getLocalKeyName(): string
     {
         return 'id';
     }
@@ -784,7 +784,7 @@ You can customize the column name by overriding `getDepthName()`:
 ```php
 class Node extends Model
 {
-    public function getDepthName()
+    public function getDepthName(): string
     {
         return 'depth';
     }
@@ -820,12 +820,12 @@ You can customize the column name and the separator by overriding the respective
 ```php
 class Node extends Model
 {
-    public function getPathName()
+    public function getPathName(): string
     {
         return 'path';
     }
 
-    public function getPathSeparator()
+    public function getPathSeparator(): string
     {
         return '.';
     }
@@ -839,7 +839,7 @@ You can add custom path columns to the query results:
 ```php
 class Node extends Model
 {
-    public function getCustomPaths()
+    public function getCustomPaths(): array
     {
         return [
             [
