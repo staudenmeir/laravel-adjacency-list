@@ -9,8 +9,6 @@
 
 This Laravel Eloquent extension provides recursive relationships using common table expressions (CTE).
 
-Supports Laravel 5.5.29+.
-
 ## Compatibility
 
 - MySQL 8.0+
@@ -29,11 +27,17 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
 ## Usage
 
-The package offers recursive relationships for traversing two types of data structure:
+The package offers recursive relationships for traversing two types of data structures:
+
 - [Trees: One Parent per Node (One-to-Many)](#trees-one-parent-per-node-one-to-many)
 - [Graphs: Multiple Parents per Node (Many-to-Many)](#graphs-multiple-parents-per-node-many-to-many)
 
 ### Trees: One Parent per Node (One-to-Many)
+
+Use the package to traverse a tree structure with one parent per node. Use cases might be recursive categories, a page
+hierarchy or nested comments.
+
+Supports Laravel 5.5.29+.
 
 - [Getting Started](#getting-started)
 - [Included Relationships](#included-relationships)
@@ -587,7 +591,7 @@ Supports Laravel 9+.
 - [Custom Paths](#graphs-custom-paths)
 - [Recursive Query Constraints](#graphs-recursive-query-constraints)
 
-#### <a name="graphs-getting-started">A Getting Started</a>
+#### <a name="graphs-getting-started">Getting Started</a>
 
 Consider the following table schema for storing directed graphs as nodes and edges:
 
