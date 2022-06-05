@@ -117,4 +117,22 @@ class EloquentTest extends TestCase
 
         $this->assertEquals([54, 74, 84, 84], $nodes->pluck('id')->all());
     }
+
+    public function testWithMaxDepth()
+    {
+        $nodes = Node::withMaxDepth(2, function () {
+            return Node::find(24)->descendants;
+        });
+
+        $this->assertEquals([54, 74, 84], $nodes->pluck('id')->all());
+    }
+
+    public function testWithMaxDepthWithNegativeDepth()
+    {
+        $nodes = Node::withMaxDepth(-1, function () {
+            return Node::find(54)->ancestors;
+        });
+
+        $this->assertEquals([14, 24, 104], $nodes->pluck('id')->all());
+    }
 }

@@ -755,6 +755,12 @@ $constraint = function ($query) {
 $subgraph = Node::subgraph($constraint)->get();
 ```
 
+You can pass a maximum depth as the second argument
+
+```php
+$subgraph = Node::subgraph($constraint, 5)->get();
+```
+
 #### <a name="graphs-order">Order</a>
 
 The trait provides query scopes to order nodes breadth-first or depth-first:
@@ -803,6 +809,24 @@ You can use the `whereDepth()` query scope to filter nodes by their relative dep
 $descendants = Node::find($id)->descendants()->whereDepth(2)->get();
 
 $descendants = Node::find($id)->descendants()->whereDepth('<', 3)->get();
+```
+
+Queries with `whereDepth()` constraints that limit the maximum depth still build the entire (sub)graph internally.
+Use `withMaxDepth()` to set a maximum depth that improves query performance by only building the requested section of
+the graph:
+
+```php
+$descendants = Node::withMaxDepth(5, function () {
+    return Node::find($id)->descendants;
+});
+```
+
+This also works with negative depths (where it's technically a minimum):
+
+```php
+$ancestors = Node::withMaxDepth(-5, function () {
+    return Node::find($id)->ancestors;
+});
 ```
 
 #### <a name="graphs-path">Path</a>
