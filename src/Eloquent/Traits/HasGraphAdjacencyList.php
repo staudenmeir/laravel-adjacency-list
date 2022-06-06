@@ -5,7 +5,6 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants;
 

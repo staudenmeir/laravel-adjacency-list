@@ -4,7 +4,6 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph;
 
 use Illuminate\Database\Eloquent\Builder;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Node;
-use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
 
 class EloquentTest extends TestCase
 {
