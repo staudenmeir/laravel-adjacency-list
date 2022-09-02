@@ -20,74 +20,62 @@ class RecursiveRelationsHook implements ModelHookInterface
         [
             'name' => 'ancestors',
             'manyRelation' => true,
-            'comment' => 'The model\'s recursive parents.',
-            'relationClass' => Collection::class
+            'comment' => 'The model\'s recursive parents.'
         ],
         [
             'name' => 'ancestorsAndSelf',
             'manyRelation' => true,
-            'comment' => 'The model\'s recursive parents and itself.',
-            'relationClass' => Collection::class
+            'comment' => 'The model\'s recursive parents and itself.'
         ],
         [
             'name' => 'bloodline',
             'manyRelation' => true,
-            'comment' => 'The model\'s ancestors, descendants and itself.',
-            'relationClass' => Collection::class
+            'comment' => 'The model\'s ancestors, descendants and itself.'
         ],
         [
             'name' => 'children',
             'manyRelation' => true,
-            'comment' => 'The model\'s direct children.',
-            'relationClass' => Collection::class
+            'comment' => 'The model\'s direct children.'
         ],
         [
             'name' => 'childrenAndSelf',
             'manyRelation' => true,
-            'comment' => 'The model\'s direct children and itself.',
-            'relationClass' => Collection::class
+            'comment' => 'The model\'s direct children and itself.'
         ],
         [
             'name' => 'descendants',
             'manyRelation' => true,
-            'comment' => 'The model\'s recursive children.',
-            'relationClass' => Collection::class
+            'comment' => 'The model\'s recursive children.'
         ],
         [
             'name' => 'descendantsAndSelf',
             'manyRelation' => true,
-            'comment' => 'The model\'s recursive children and itself.',
-            'relationClass' => Collection::class
+            'comment' => 'The model\'s recursive children and itself.'
         ],
         [
             'name' => 'parent',
             'manyRelation' => false,
-            'comment' => 'The model\'s direct parent.',
-            'relationClass' => null
+            'comment' => 'The model\'s direct parent.'
         ],
         [
             'name' => 'parentAndSelf',
             'manyRelation' => true,
-            'comment' => 'The model\'s direct parent and itself.',
-            'relationClass' => Collection::class
+            'comment' => 'The model\'s direct parent and itself.'
         ],
         [
             'name' => 'rootAncestor',
             'manyRelation' => false,
-            'comment' => 'The model\'s topmost parent.',
-            'relationClass' => null
+            'comment' => 'The model\'s topmost parent.'
         ],
         [
             'name' => 'siblings',
             'manyRelation' => true,
-            'comment' => 'The parent\'s other children.',
-            'relationClass' => Collection::class
+            'comment' => 'The parent\'s other children.'
         ],
         [
             'name' => 'siblingsAndSelf',
             'manyRelation' => true,
-            'comment' => 'All the parent\'s children.',
-            'relationClass' => Collection::class
+            'comment' => 'All the parent\'s children.'
         ]
     ];
 
@@ -101,7 +89,7 @@ class RecursiveRelationsHook implements ModelHookInterface
 
         foreach (self::$relationMap as $relationDefinition) {
             $type = $relationDefinition['manyRelation']
-                ? '\\' . $relationDefinition['relationClass'] . '|' . class_basename($model) . '[]'
+                ? '\\' . Collection::class . '|' . class_basename($model) . '[]'
                 : class_basename($model);
 
             $command->setProperty(
