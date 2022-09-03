@@ -4,9 +4,9 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants;
-use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
-use Staudenmeir\LaravelAdjacencyList\Tests\Models\Video;
 use Staudenmeir\LaravelAdjacencyList\Tests\Scopes\DepthScope;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Video;
 
 class MorphedByManyOfDescendantsTest extends TestCase
 {

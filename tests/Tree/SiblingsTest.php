@@ -3,7 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Illuminate\Database\Eloquent\Builder;
-use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class SiblingsTest extends TestCase
 {

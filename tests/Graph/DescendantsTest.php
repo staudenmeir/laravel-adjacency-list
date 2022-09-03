@@ -12,17 +12,17 @@ class DescendantsTest extends TestCase
 {
     public function testLazyLoading()
     {
-        $descendants = Node::find(24)->descendants;
+        $descendants = Node::find(2)->descendants;
 
-        $this->assertEquals([54, 74, 84, 84], $descendants->pluck('id')->all());
+        $this->assertEquals([5, 7, 8, 8], $descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 2, 3], $descendants->pluck('depth')->all());
-        $this->assertEquals(['54', '54.74', '54.84', '54.74.84'], $descendants->pluck('path')->all());
+        $this->assertEquals(['5', '5.7', '5.8', '5.7.8'], $descendants->pluck('path')->all());
         $this->assertEquals(
-            ['node-54', 'node-54/node-74', 'node-54/node-84', 'node-54/node-74/node-84'],
+            ['node-5', 'node-5/node-7', 'node-5/node-8', 'node-5/node-7/node-8'],
             $descendants->pluck('slug_path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 24, 'child_id' => 54, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
             $descendants[0]->pivot->getAttributes()
         );
     }
@@ -31,9 +31,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $descendants = NodeWithCycleDetection::find(124)->descendants;
+        $descendants = NodeWithCycleDetection::find(12)->descendants;
 
-        $this->assertEquals([134, 144, 124], $descendants->pluck('id')->all());
+        $this->assertEquals([13, 14, 12], $descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3], $descendants->pluck('depth')->all());
     }
 
@@ -41,25 +41,25 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $descendants = NodeWithCycleDetectionAndStart::find(124)->descendants;
+        $descendants = NodeWithCycleDetectionAndStart::find(12)->descendants;
 
-        $this->assertEquals([134, 144, 124, 134], $descendants->pluck('id')->all());
+        $this->assertEquals([13, 14, 12, 13], $descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3, 4], $descendants->pluck('depth')->all());
         $this->assertEquals([0, 0, 0, 1], $descendants->pluck('is_cycle')->all());
     }
 
     public function testLazyLoadingAndSelf()
     {
-        $descendantsAndSelf = Node::find(24)->descendantsAndSelf;
+        $descendantsAndSelf = Node::find(2)->descendantsAndSelf;
 
-        $this->assertEquals([24, 54, 74, 84, 84], $descendantsAndSelf->pluck('id')->all());
+        $this->assertEquals([2, 5, 7, 8, 8], $descendantsAndSelf->pluck('id')->all());
         $this->assertEquals([0, 1, 2, 2, 3], $descendantsAndSelf->pluck('depth')->all());
         $this->assertEquals(
-            ['24', '24.54', '24.54.74', '24.54.84', '24.54.74.84'],
+            ['2', '2.5', '2.5.7', '2.5.8', '2.5.7.8'],
             $descendantsAndSelf->pluck('path')->all()
         );
         $this->assertEquals(
-            ['node-24', 'node-24/node-54', 'node-24/node-54/node-74', 'node-24/node-54/node-84', 'node-24/node-54/node-74/node-84'],
+            ['node-2', 'node-2/node-5', 'node-2/node-5/node-7', 'node-2/node-5/node-8', 'node-2/node-5/node-7/node-8'],
             $descendantsAndSelf->pluck('slug_path')->all()
         );
         $this->assertEquals(
@@ -67,7 +67,7 @@ class DescendantsTest extends TestCase
             $descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 24, 'child_id' => 54, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
             $descendantsAndSelf[1]->pivot->getAttributes()
         );
     }
@@ -76,9 +76,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $descendantsAndSelf = NodeWithCycleDetection::find(124)->descendantsAndSelf;
+        $descendantsAndSelf = NodeWithCycleDetection::find(12)->descendantsAndSelf;
 
-        $this->assertEquals([124, 134, 144], $descendantsAndSelf->pluck('id')->all());
+        $this->assertEquals([12, 13, 14], $descendantsAndSelf->pluck('id')->all());
         $this->assertEquals([0, 1, 2], $descendantsAndSelf->pluck('depth')->all());
     }
 
@@ -86,9 +86,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $descendantsAndSelf = NodeWithCycleDetectionAndStart::find(124)->descendantsAndSelf;
+        $descendantsAndSelf = NodeWithCycleDetectionAndStart::find(12)->descendantsAndSelf;
 
-        $this->assertEquals([124, 134, 144, 124], $descendantsAndSelf->pluck('id')->all());
+        $this->assertEquals([12, 13, 14, 12], $descendantsAndSelf->pluck('id')->all());
         $this->assertEquals([0, 1, 2, 3], $descendantsAndSelf->pluck('depth')->all());
         $this->assertEquals([0, 0, 0, 1], $descendantsAndSelf->pluck('is_cycle')->all());
     }
@@ -100,20 +100,20 @@ class DescendantsTest extends TestCase
         }])->get();
 
         $this->assertEquals(
-            [24, 34, 44, 54, 54, 64, 74, 74, 84, 84, 84, 84],
+            [2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8],
             $nodes[0]->descendants->pluck('id')->all()
         );
         $this->assertEquals(
-            [54, 74, 84, 84],
+            [5, 7, 8, 8],
             $nodes[1]->descendants->pluck('id')->all()
         );
         $this->assertEquals([1, 2, 2, 3], $nodes[1]->descendants->pluck('depth')->all());
         $this->assertEquals(
-            ['54', '54.74', '54.84', '54.74.84'],
+            ['5', '5.7', '5.8', '5.7.8'],
             $nodes[1]->descendants->pluck('path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 24, 'child_id' => 54, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
             $nodes[1]->descendants[0]->pivot->getAttributes()
         );
     }
@@ -122,9 +122,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetection::with('descendants')->findMany([124, 134, 144]);
+        $nodes = NodeWithCycleDetection::with('descendants')->findMany([12, 13, 14]);
 
-        $this->assertEquals([134, 144, 124], $nodes[0]->descendants->pluck('id')->all());
+        $this->assertEquals([13, 14, 12], $nodes[0]->descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3], $nodes[0]->descendants->pluck('depth')->all());
     }
 
@@ -132,9 +132,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetectionAndStart::with('descendants')->findMany([124, 134, 144]);
+        $nodes = NodeWithCycleDetectionAndStart::with('descendants')->findMany([12, 13, 14]);
 
-        $this->assertEquals([134, 144, 124, 134], $nodes[0]->descendants->pluck('id')->all());
+        $this->assertEquals([13, 14, 12, 13], $nodes[0]->descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3, 4], $nodes[0]->descendants->pluck('depth')->all());
         $this->assertEquals([0, 0, 0, 1], $nodes[0]->descendants->pluck('is_cycle')->all());
     }
@@ -146,16 +146,16 @@ class DescendantsTest extends TestCase
         }])->get();
 
         $this->assertEquals(
-            [14, 24, 34, 44, 54, 54, 64, 74, 74, 84, 84, 84, 84],
+            [1, 2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8],
             $nodes[0]->descendantsAndSelf->pluck('id')->all()
         );
         $this->assertEquals(
-            [24, 54, 74, 84, 84],
+            [2, 5, 7, 8, 8],
             $nodes[1]->descendantsAndSelf->pluck('id')->all()
         );
         $this->assertEquals([0, 1, 2, 2, 3], $nodes[1]->descendantsAndSelf->pluck('depth')->all());
         $this->assertEquals(
-            ['24', '24.54', '24.54.74', '24.54.84', '24.54.74.84'],
+            ['2', '2.5', '2.5.7', '2.5.8', '2.5.7.8'],
             $nodes[1]->descendantsAndSelf->pluck('path')->all()
         );
         $this->assertEquals(
@@ -163,7 +163,7 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 24, 'child_id' => 54, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
             $nodes[1]->descendantsAndSelf[1]->pivot->getAttributes()
         );
     }
@@ -172,9 +172,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetection::with('descendantsAndSelf')->findMany([124, 134, 144]);
+        $nodes = NodeWithCycleDetection::with('descendantsAndSelf')->findMany([12, 13, 14]);
 
-        $this->assertEquals([124, 134, 144], $nodes[0]->descendantsAndSelf->pluck('id')->all());
+        $this->assertEquals([12, 13, 14], $nodes[0]->descendantsAndSelf->pluck('id')->all());
         $this->assertEquals([0, 1, 2], $nodes[0]->descendantsAndSelf->pluck('depth')->all());
     }
 
@@ -182,9 +182,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetectionAndStart::with('descendantsAndSelf')->findMany([124, 134, 144]);
+        $nodes = NodeWithCycleDetectionAndStart::with('descendantsAndSelf')->findMany([12, 13, 14]);
 
-        $this->assertEquals([124, 134, 144, 124], $nodes[0]->descendantsAndSelf->pluck('id')->all());
+        $this->assertEquals([12, 13, 14, 12], $nodes[0]->descendantsAndSelf->pluck('id')->all());
         $this->assertEquals([0, 1, 2, 3], $nodes[0]->descendantsAndSelf->pluck('depth')->all());
         $this->assertEquals([0, 0, 0, 1], $nodes[0]->descendantsAndSelf->pluck('is_cycle')->all());
     }
@@ -196,20 +196,20 @@ class DescendantsTest extends TestCase
         }]);
 
         $this->assertEquals(
-            [24, 34, 44, 54, 54, 64, 74, 74, 84, 84, 84, 84],
+            [2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8],
             $nodes[0]->descendants->pluck('id')->all()
         );
         $this->assertEquals(
-            [54, 74, 84, 84],
+            [5, 7, 8, 8],
             $nodes[1]->descendants->pluck('id')->all()
         );
         $this->assertEquals([1, 2, 2, 3], $nodes[1]->descendants->pluck('depth')->all());
         $this->assertEquals(
-            ['54', '54.74', '54.84', '54.74.84'],
+            ['5', '5.7', '5.8', '5.7.8'],
             $nodes[1]->descendants->pluck('path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 24, 'child_id' => 54, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
             $nodes[1]->descendants[0]->pivot->getAttributes()
         );
     }
@@ -221,16 +221,16 @@ class DescendantsTest extends TestCase
         }]);
 
         $this->assertEquals(
-            [14, 24, 34, 44, 54, 54, 64, 74, 74, 84, 84, 84, 84],
+            [1, 2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8],
             $nodes[0]->descendantsAndSelf->pluck('id')->all()
         );
         $this->assertEquals(
-            [24, 54, 74, 84, 84],
+            [2, 5, 7, 8, 8],
             $nodes[1]->descendantsAndSelf->pluck('id')->all()
         );
         $this->assertEquals([0, 1, 2, 2, 3], $nodes[1]->descendantsAndSelf->pluck('depth')->all());
         $this->assertEquals(
-            ['24', '24.54', '24.54.74', '24.54.84', '24.54.74.84'],
+            ['2', '2.5', '2.5.7', '2.5.8', '2.5.7.8'],
             $nodes[1]->descendantsAndSelf->pluck('path')->all()
         );
         $this->assertEquals(
@@ -238,7 +238,7 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 24, 'child_id' => 54, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
             $nodes[1]->descendantsAndSelf[1]->pivot->getAttributes()
         );
     }
@@ -249,9 +249,9 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $ancestors = Node::find(54)->ancestors()->has('descendants', '>', 2)->get();
+        $ancestors = Node::find(5)->ancestors()->has('descendants', '>', 2)->get();
 
-        $this->assertEquals([14, 24, 104, 14, 94], $ancestors->pluck('id')->all());
+        $this->assertEquals([1, 2, 10, 1, 9], $ancestors->pluck('id')->all());
     }
 
     public function testExistenceQueryWithCycleDetection()
@@ -262,9 +262,9 @@ class DescendantsTest extends TestCase
 
         $this->seedCycle();
 
-        $ancestors = NodeWithCycleDetection::find(124)->ancestors()->has('descendants', '>', 2)->get();
+        $ancestors = NodeWithCycleDetection::find(12)->ancestors()->has('descendants', '>', 2)->get();
 
-        $this->assertEquals([144, 134, 124], $ancestors->pluck('id')->all());
+        $this->assertEquals([14, 13, 12], $ancestors->pluck('id')->all());
     }
 
     public function testExistenceQueryWithCycleDetectionAndStart()
@@ -275,9 +275,9 @@ class DescendantsTest extends TestCase
 
         $this->seedCycle();
 
-        $ancestors = NodeWithCycleDetectionAndStart::find(124)->ancestors()->has('descendants', '>', 3)->get();
+        $ancestors = NodeWithCycleDetectionAndStart::find(12)->ancestors()->has('descendants', '>', 3)->get();
 
-        $this->assertEquals([144, 134, 124, 144], $ancestors->pluck('id')->all());
+        $this->assertEquals([14, 13, 12, 14], $ancestors->pluck('id')->all());
     }
 
     public function testExistenceQueryAndSelf()
@@ -286,9 +286,9 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $ancestors = Node::find(54)->ancestors()->has('descendantsAndSelf', '>', 2)->get();
+        $ancestors = Node::find(5)->ancestors()->has('descendantsAndSelf', '>', 2)->get();
 
-        $this->assertEquals([14, 24, 104, 14, 94], $ancestors->pluck('id')->all());
+        $this->assertEquals([1, 2, 10, 1, 9], $ancestors->pluck('id')->all());
     }
 
     public function testExistenceQueryAndSelfWithCycleDetection()
@@ -299,9 +299,9 @@ class DescendantsTest extends TestCase
 
         $this->seedCycle();
 
-        $ancestors = NodeWithCycleDetection::find(124)->ancestors()->has('descendantsAndSelf', '>', 2)->get();
+        $ancestors = NodeWithCycleDetection::find(12)->ancestors()->has('descendantsAndSelf', '>', 2)->get();
 
-        $this->assertEquals([144, 134, 124], $ancestors->pluck('id')->all());
+        $this->assertEquals([14, 13, 12], $ancestors->pluck('id')->all());
     }
 
     public function testExistenceQueryAndSelfWithCycleDetectionAndStart()
@@ -312,9 +312,9 @@ class DescendantsTest extends TestCase
 
         $this->seedCycle();
 
-        $ancestors = NodeWithCycleDetectionAndStart::find(124)->ancestors()->has('descendantsAndSelf', '>', 2)->get();
+        $ancestors = NodeWithCycleDetectionAndStart::find(12)->ancestors()->has('descendantsAndSelf', '>', 2)->get();
 
-        $this->assertEquals([144, 134, 124, 144], $ancestors->pluck('id')->all());
+        $this->assertEquals([14, 13, 12, 14], $ancestors->pluck('id')->all());
     }
 
     public function testExistenceQueryForSelfRelation()
@@ -325,7 +325,7 @@ class DescendantsTest extends TestCase
 
         $nodes = Node::has('descendants')->get();
 
-        $this->assertEquals([14, 24, 34, 54, 74, 94, 104], $nodes->pluck('id')->all());
+        $this->assertEquals([1, 2, 3, 5, 7, 9, 10], $nodes->pluck('id')->all());
     }
 
     public function testExistenceQueryForSelfRelationAndSelf()
@@ -336,7 +336,7 @@ class DescendantsTest extends TestCase
 
         $nodes = Node::has('descendantsAndSelf', '>', 2)->get();
 
-        $this->assertEquals([14, 24, 54, 94, 104], $nodes->pluck('id')->all());
+        $this->assertEquals([1, 2, 5, 9, 10], $nodes->pluck('id')->all());
     }
 
     public function testWithSumForSelfRelation()
@@ -345,7 +345,7 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $user = Node::withSum('descendants', 'pivot_weight')->find(24);
+        $user = Node::withSum('descendants', 'pivot_weight')->find(2);
 
         $this->assertEquals(5 + 7 + 8 + 9, $user->descendants_sum_pivot_weight);
     }
@@ -356,7 +356,7 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $user = Node::withSum('descendantsAndSelf', 'pivot_weight')->find(24);
+        $user = Node::withSum('descendantsAndSelf', 'pivot_weight')->find(2);
 
         $this->assertEquals(5 + 7 + 8 + 9, $user->descendants_and_self_sum_pivot_weight);
     }
@@ -367,10 +367,10 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $affected = Node::find(24)->descendants()->delete();
+        $affected = Node::find(2)->descendants()->delete();
 
         $this->assertEquals(3, $affected);
-        $this->assertNotNull(Node::withTrashed()->find(54)->deleted_at);
-        $this->assertNull(Node::find(14)->deleted_at);
+        $this->assertNotNull(Node::withTrashed()->find(5)->deleted_at);
+        $this->assertNull(Node::find(1)->deleted_at);
     }
 }

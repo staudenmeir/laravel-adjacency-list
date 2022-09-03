@@ -3,7 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
-use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class DescendantsTest extends TestCase
 {

@@ -2,7 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
-use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class CollectionTest extends TestCase
 {

@@ -76,100 +76,100 @@ abstract class TestCase extends Base
 
         Model::unguard();
 
-        Node::create(['id' => 14, 'slug' => 'node-14']);
-        Node::create(['id' => 24, 'slug' => 'node-24']);
-        Node::create(['id' => 34, 'slug' => 'node-34']);
-        Node::create(['id' => 44, 'slug' => 'node-44']);
-        Node::create(['id' => 54, 'slug' => 'node-54']);
-        Node::create(['id' => 64, 'slug' => 'node-64']);
-        Node::create(['id' => 74, 'slug' => 'node-74']);
-        Node::create(['id' => 84, 'slug' => 'node-84']);
-        Node::create(['id' => 94, 'slug' => 'node-94']);
-        Node::create(['id' => 104, 'slug' => 'node-104']);
-        Node::create(['id' => 114, 'slug' => 'node-114', 'deleted_at' => Carbon::now()]);
+        Node::create(['id' => 1, 'slug' => 'node-1']);
+        Node::create(['id' => 2, 'slug' => 'node-2']);
+        Node::create(['id' => 3, 'slug' => 'node-3']);
+        Node::create(['id' => 4, 'slug' => 'node-4']);
+        Node::create(['id' => 5, 'slug' => 'node-5']);
+        Node::create(['id' => 6, 'slug' => 'node-6']);
+        Node::create(['id' => 7, 'slug' => 'node-7']);
+        Node::create(['id' => 8, 'slug' => 'node-8']);
+        Node::create(['id' => 9, 'slug' => 'node-9']);
+        Node::create(['id' => 10, 'slug' => 'node-10']);
+        Node::create(['id' => 11, 'slug' => 'node-11', 'deleted_at' => Carbon::now()]);
 
         DB::table('edges')->insert(
             [
                 [
-                    'parent_id' => 14,
-                    'child_id' => 24,
+                    'parent_id' => 1,
+                    'child_id' => 2,
                     'label' => 'a',
                     'weight' => 1,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 14,
-                    'child_id' => 34,
+                    'parent_id' => 1,
+                    'child_id' => 3,
                     'label' => 'b',
                     'weight' => 2,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 14,
-                    'child_id' => 44,
+                    'parent_id' => 1,
+                    'child_id' => 4,
                     'label' => 'c',
                     'weight' => 3,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 14,
-                    'child_id' => 54,
+                    'parent_id' => 1,
+                    'child_id' => 5,
                     'label' => 'd',
                     'weight' => 4,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 24,
-                    'child_id' => 54,
+                    'parent_id' => 2,
+                    'child_id' => 5,
                     'label' => 'e',
                     'weight' => 5,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 34,
-                    'child_id' => 64,
+                    'parent_id' => 3,
+                    'child_id' => 6,
                     'label' => 'f',
                     'weight' => 6,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 54,
-                    'child_id' => 74,
+                    'parent_id' => 5,
+                    'child_id' => 7,
                     'label' => 'g',
                     'weight' => 7,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 54,
-                    'child_id' => 84,
+                    'parent_id' => 5,
+                    'child_id' => 8,
                     'label' => 'h',
                     'weight' => 8,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 74,
-                    'child_id' => 84,
+                    'parent_id' => 7,
+                    'child_id' => 8,
                     'label' => 'i',
                     'weight' => 9,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 94,
-                    'child_id' => 24,
+                    'parent_id' => 9,
+                    'child_id' => 2,
                     'label' => 'j',
                     'weight' => 10,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 104,
-                    'child_id' => 54,
+                    'parent_id' => 10,
+                    'child_id' => 5,
                     'label' => 'k',
                     'weight' => 11,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 114,
-                    'child_id' => 54,
+                    'parent_id' => 11,
+                    'child_id' => 5,
                     'label' => 'l',
                     'weight' => 12,
                     'created_at' => Carbon::now(),
@@ -184,30 +184,30 @@ abstract class TestCase extends Base
     {
         Model::unguard();
 
-        Node::create(['id' => 124, 'slug' => 'node-124']);
-        Node::create(['id' => 134, 'slug' => 'node-134']);
-        Node::create(['id' => 144, 'slug' => 'node-144']);
+        Node::create(['id' => 12, 'slug' => 'node-12']);
+        Node::create(['id' => 13, 'slug' => 'node-13']);
+        Node::create(['id' => 14, 'slug' => 'node-14']);
 
         DB::table('edges')->insert(
             [
 
                 [
-                    'parent_id' => 124,
-                    'child_id' => 134,
+                    'parent_id' => 12,
+                    'child_id' => 13,
                     'label' => 'm',
                     'weight' => 13,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 134,
-                    'child_id' => 144,
+                    'parent_id' => 13,
+                    'child_id' => 14,
                     'label' => 'n',
                     'weight' => 14,
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'parent_id' => 144,
-                    'child_id' => 124,
+                    'parent_id' => 14,
+                    'child_id' => 12,
                     'label' => 'o',
                     'weight' => 15,
                     'created_at' => Carbon::now(),

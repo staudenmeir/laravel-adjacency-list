@@ -1,6 +1,6 @@
 <?php
 
-namespace Staudenmeir\LaravelAdjacencyList\Tests\Models;
+namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

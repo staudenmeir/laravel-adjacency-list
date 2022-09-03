@@ -3,7 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
-use Staudenmeir\LaravelAdjacencyList\Tests\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class BloodlineTest extends TestCase
 {
