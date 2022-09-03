@@ -16,7 +16,8 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "doctrine/dbal": "^3.3",
-        "barryvdh/laravel-ide-helper": "^2.12"
+        "barryvdh/laravel-ide-helper": "^2.12",
+        "mockery/mockery": "^1.5"
     },
     "suggest": {
         "barryvdh/laravel-ide-helper": "Provide type hints for attributes and relations."
