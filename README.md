@@ -133,6 +133,9 @@ User::find($id)->descendants()->update(['active' => false]);
 User::find($id)->siblings()->delete();
 ```
 
+> **Note:** If using [barryvdh/laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper) this package provides a [model hook](https://github.com/barryvdh/laravel-ide-helper#model-hooks) that will correctly add relations when generating the typehints.
+> To get the correct typehints, in the [ide-helper.php](https://github.com/barryvdh/laravel-ide-helper/blob/master/config/ide-helper.php) config file, add `\Staudenmeir\LaravelAdjacencyList\RecursiveRelationsHook::class` to the `model_hooks` array.
+
 #### Trees
 
 The trait provides the `tree()` query scope to get all models, beginning at the root(s):
