@@ -45,6 +45,34 @@ trait IsRecursiveRelation
     }
 
     /**
+     * Add the recursive expression for an eager load of the relation.
+     *
+     * @param array $models
+     * @param string $column
+     * @return void
+     */
+    protected function addEagerExpression(array $models, string $column): void
+    {
+        $whereIn = $this->whereInMethod($this->parent, $this->parentKey);
+
+        $keys = $this->getKeys($models, $this->parentKey);
+
+        $constraint = function (Builder $query) use ($models, $whereIn, $column, $keys) {
+            $query->$whereIn($column, $keys);
+        };
+
+        $supportsUnion = $this->query->getExpressionGrammar()->supportsUnionInRecursiveExpression();
+
+        $union = $this->andSelf || !$supportsUnion ? 'unionAll' : 'union';
+
+        if (!$supportsUnion) {
+            $this->query->getQuery()->distinct();
+        }
+
+        $this->addExpression($constraint, null, null, $union);
+    }
+
+    /**
      * Build model dictionary.
      *
      * @param \Illuminate\Database\Eloquent\Collection $results

@@ -2,7 +2,6 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph;
 
-use Carbon\Carbon;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Node;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetection;
@@ -22,7 +21,7 @@ class DescendantsTest extends TestCase
             $descendants->pluck('slug_path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
             $descendants[0]->pivot->getAttributes()
         );
     }
@@ -50,6 +49,10 @@ class DescendantsTest extends TestCase
 
     public function testLazyLoadingAndSelf()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $descendantsAndSelf = Node::find(2)->descendantsAndSelf;
 
         $this->assertEquals([2, 5, 7, 8, 8], $descendantsAndSelf->pluck('id')->all());
@@ -67,13 +70,17 @@ class DescendantsTest extends TestCase
             $descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
             $descendantsAndSelf[1]->pivot->getAttributes()
         );
     }
 
     public function testLazyLoadingAndSelfWithCycleDetection()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
         $descendantsAndSelf = NodeWithCycleDetection::find(12)->descendantsAndSelf;
@@ -84,6 +91,10 @@ class DescendantsTest extends TestCase
 
     public function testLazyLoadingAndSelfWithCycleDetectionAndStart()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
         $descendantsAndSelf = NodeWithCycleDetectionAndStart::find(12)->descendantsAndSelf;
@@ -113,7 +124,7 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendants->pluck('path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
             $nodes[1]->descendants[0]->pivot->getAttributes()
         );
     }
@@ -122,7 +133,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetection::with('descendants')->findMany([12, 13, 14]);
+        $nodes = NodeWithCycleDetection::with([
+            'descendants' => fn (Descendants $query) => $query->orderBy('depth'),
+        ])->findMany([12, 13, 14]);
 
         $this->assertEquals([13, 14, 12], $nodes[0]->descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3], $nodes[0]->descendants->pluck('depth')->all());
@@ -132,7 +145,9 @@ class DescendantsTest extends TestCase
     {
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetectionAndStart::with('descendants')->findMany([12, 13, 14]);
+        $nodes = NodeWithCycleDetectionAndStart::with([
+            'descendants' => fn (Descendants $query) => $query->orderBy('depth')
+        ])->findMany([12, 13, 14]);
 
         $this->assertEquals([13, 14, 12, 13], $nodes[0]->descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3, 4], $nodes[0]->descendants->pluck('depth')->all());
@@ -141,6 +156,10 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $nodes = Node::with(['descendantsAndSelf' => function (Descendants $query) {
             $query->orderBy('id')->orderBy('depth');
         }])->get();
@@ -163,13 +182,17 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
             $nodes[1]->descendantsAndSelf[1]->pivot->getAttributes()
         );
     }
 
     public function testEagerLoadingAndSelfWithCycleDetection()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
         $nodes = NodeWithCycleDetection::with('descendantsAndSelf')->findMany([12, 13, 14]);
@@ -180,6 +203,10 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelfWithCycleDetectionAndStart()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
         $nodes = NodeWithCycleDetectionAndStart::with('descendantsAndSelf')->findMany([12, 13, 14]);
@@ -209,13 +236,17 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendants->pluck('path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
             $nodes[1]->descendants[0]->pivot->getAttributes()
         );
     }
 
     public function testLazyEagerLoadingAndSelf()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $nodes = Node::all()->load(['descendantsAndSelf' => function (Descendants $query) {
             $query->orderBy('id')->orderBy('depth');
         }]);
@@ -238,7 +269,7 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
             $nodes[1]->descendantsAndSelf[1]->pivot->getAttributes()
         );
     }

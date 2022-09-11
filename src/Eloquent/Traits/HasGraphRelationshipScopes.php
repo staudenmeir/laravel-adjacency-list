@@ -223,7 +223,9 @@ trait HasGraphRelationshipScopes
     {
         if ($this->enableCycleDetection() && $this->includeCycleStart()) {
             $query->selectRaw(
-                'false as ' . $grammar->wrap($this->getCycleDetectionColumnName())
+                $grammar->compileCycleDetectionInitialSelect(
+                    $this->getCycleDetectionColumnName()
+                )
             );
         }
     }
@@ -369,18 +371,24 @@ trait HasGraphRelationshipScopes
                 $this->getQualifiedLocalKeyName(),
                 $this->getPathName()
             );
+
             $bindings = $grammar->getCycleDetectionBindings(
                 $this->getPathSeparator()
             );
 
-            // TODO[L10]: whereNot()
             if ($this->includeCycleStart()) {
-                $query->selectRaw($sql, $bindings);
+                $cycleDetectionColumn = $this->getCycleDetectionColumnName();
+
+                $query->selectRaw(
+                    $grammar->compileCycleDetectionRecursiveSelect($sql, $cycleDetectionColumn),
+                    $bindings
+                );
 
                 $query->whereRaw(
-                    'not ' . $grammar->wrap($this->getCycleDetectionColumnName())
+                    $grammar->compileCycleDetectionStopConstraint($cycleDetectionColumn)
                 );
             } else {
+                // TODO[L10]: whereNot()
                 $query->whereRaw("not($sql)", $bindings);
             }
         }

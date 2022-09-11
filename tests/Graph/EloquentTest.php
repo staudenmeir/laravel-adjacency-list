@@ -9,6 +9,10 @@ class EloquentTest extends TestCase
 {
     public function testScopeSubgraph()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $constraint = function (Builder $query) {
             $query->whereIn('id', [3, 5]);
         };
@@ -20,6 +24,10 @@ class EloquentTest extends TestCase
 
     public function testScopeSubgraphWithMaxDepth()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $constraint = function (Builder $query) {
             $query->whereIn('id', [3, 5]);
         };
@@ -38,6 +46,10 @@ class EloquentTest extends TestCase
 
     public function testChildrenAndSelf()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $childrenAndSelf = Node::find(1)->childrenAndSelf;
 
         $this->assertEquals([1, 2, 3, 4, 5], $childrenAndSelf->pluck('id')->all());
@@ -52,6 +64,10 @@ class EloquentTest extends TestCase
 
     public function testParentsAndSelf()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $parentsAndSelf = Node::find(5)->parentsAndSelf()->orderByDesc('depth')->orderBy('id')->get();
 
         $this->assertEquals([5, 1, 2, 10], $parentsAndSelf->pluck('id')->all());

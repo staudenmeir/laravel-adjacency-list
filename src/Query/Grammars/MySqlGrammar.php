@@ -135,4 +135,48 @@ SQL;
     {
         return [$pathSeparator, $pathSeparator, $pathSeparator];
     }
+
+    /**
+     * Compile the initial select expression for a cycle detection clause.
+     *
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionInitialSelect(string $column): string
+    {
+        return 'false as ' . $this->wrap($column);
+    }
+
+    /**
+     * Compile the recursive select expression for a cycle detection clause.
+     *
+     * @param string $sql
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionRecursiveSelect(string $sql, string $column): string
+    {
+        return $sql;
+    }
+
+    /**
+     * Compile the stop constraint for a cycle detection clause.
+     *
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionStopConstraint(string $column): string
+    {
+        return 'not ' . $this->wrap($column);
+    }
+
+    /**
+     * Determine whether the database supports the UNION operator in a recursive expression.
+     *
+     * @return bool
+     */
+    public function supportsUnionInRecursiveExpression(): bool
+    {
+        return true;
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph;
 
-use Carbon\Carbon;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Node;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetection;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetectionAndStart;
@@ -21,7 +21,7 @@ class AncestorsTest extends TestCase
             $ancestors->pluck('slug_path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => $this->getFormattedTestNow()],
             $ancestors[0]->pivot->getAttributes()
         );
     }
@@ -49,6 +49,10 @@ class AncestorsTest extends TestCase
 
     public function testLazyLoadingAndSelf()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $ancestorsAndSelf = Node::find(5)->ancestorsAndSelf;
 
         $this->assertEquals([5, 1, 2, 10, 1, 9], $ancestorsAndSelf->pluck('id')->all());
@@ -66,13 +70,17 @@ class AncestorsTest extends TestCase
             $ancestorsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => $this->getFormattedTestNow()],
             $ancestorsAndSelf[1]->pivot->getAttributes()
         );
     }
 
     public function testLazyLoadingAndSelfWithCycleDetection()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
         $ancestorsAndSelf = NodeWithCycleDetection::find(12)->ancestorsAndSelf;
@@ -83,6 +91,10 @@ class AncestorsTest extends TestCase
 
     public function testLazyLoadingAndSelfWithCycleDetectionAndStart()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
         $ancestorsAndSelf = NodeWithCycleDetectionAndStart::find(12)->ancestorsAndSelf;
@@ -94,7 +106,9 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoading()
     {
-        $nodes = Node::with('ancestors')->get();
+        $nodes = Node::with([
+            'ancestors' => fn (Ancestors $query) => $query->orderByDesc('depth')->orderBy('id'),
+        ])->get();
 
         $this->assertEquals([], $nodes[0]->ancestors->pluck('id')->all());
         $this->assertEquals([1, 9], $nodes[1]->ancestors->pluck('id')->all());
@@ -102,7 +116,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([-1, -1, -1, -2, -2], $nodes[4]->ancestors->pluck('depth')->all());
         $this->assertEquals(['1', '2', '10', '2.1', '2.9'], $nodes[4]->ancestors->pluck('path')->all());
         $this->assertEquals(
-            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => $this->getFormattedTestNow()],
             $nodes[4]->ancestors[0]->pivot->getAttributes()
         );
     }
@@ -111,7 +125,9 @@ class AncestorsTest extends TestCase
     {
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetection::with('ancestors')->findMany([12, 13, 14]);
+        $nodes = NodeWithCycleDetection::with([
+            'ancestors' => fn (Ancestors $query) => $query->orderByDesc('depth'),
+        ])->findMany([12, 13, 14]);
 
         $this->assertEquals([14, 13, 12], $nodes[0]->ancestors->pluck('id')->all());
         $this->assertEquals([-1, -2, -3], $nodes[0]->ancestors->pluck('depth')->all());
@@ -121,7 +137,9 @@ class AncestorsTest extends TestCase
     {
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetectionAndStart::with('ancestors')->findMany([12, 13, 14]);
+        $nodes = NodeWithCycleDetectionAndStart::with([
+            'ancestors' => fn (Ancestors $query) => $query->orderByDesc('depth'),
+        ])->findMany([12, 13, 14]);
 
         $this->assertEquals([14, 13, 12, 14], $nodes[0]->ancestors->pluck('id')->all());
         $this->assertEquals([-1, -2, -3, -4], $nodes[0]->ancestors->pluck('depth')->all());
@@ -130,6 +148,10 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $nodes = Node::with('ancestorsAndSelf')->get();
 
         $this->assertEquals([1], $nodes[0]->ancestorsAndSelf->pluck('id')->all());
@@ -144,13 +166,17 @@ class AncestorsTest extends TestCase
             $nodes[4]->ancestorsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => $this->getFormattedTestNow()],
             $nodes[4]->ancestorsAndSelf[1]->pivot->getAttributes()
         );
     }
 
     public function testEagerLoadingAndSelfWithCycleDetection()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
         $nodes = NodeWithCycleDetection::with('ancestorsAndSelf')->findMany([12, 13, 14]);
@@ -161,6 +187,10 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelfWithCycleDetectionAndStart()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
         $nodes = NodeWithCycleDetectionAndStart::with('ancestorsAndSelf')->findMany([12, 13, 14]);
@@ -172,7 +202,9 @@ class AncestorsTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $nodes = Node::all()->load('ancestors');
+        $nodes = Node::all()->load([
+            'ancestors' => fn (Ancestors $query) => $query->orderByDesc('depth')->orderBy('id'),
+        ]);
 
         $this->assertEquals([], $nodes[0]->ancestors->pluck('id')->all());
         $this->assertEquals([1, 9], $nodes[1]->ancestors->pluck('id')->all());
@@ -180,13 +212,17 @@ class AncestorsTest extends TestCase
         $this->assertEquals([-1, -1, -1, -2, -2], $nodes[4]->ancestors->pluck('depth')->all());
         $this->assertEquals(['1', '2', '10', '2.1', '2.9'], $nodes[4]->ancestors->pluck('path')->all());
         $this->assertEquals(
-            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => $this->getFormattedTestNow()],
             $nodes[4]->ancestors[0]->pivot->getAttributes()
         );
     }
 
     public function testLazyEagerLoadingAndSelf()
     {
+        if ($this->database === 'sqlsrv') {
+            $this->markTestSkipped();
+        }
+
         $nodes = Node::all()->load('ancestorsAndSelf');
 
         $this->assertEquals([1], $nodes[0]->ancestorsAndSelf->pluck('id')->all());
@@ -201,7 +237,7 @@ class AncestorsTest extends TestCase
             $nodes[4]->ancestorsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => Carbon::getTestNow()],
+            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => $this->getFormattedTestNow()],
             $nodes[4]->ancestorsAndSelf[1]->pivot->getAttributes()
         );
     }
@@ -216,8 +252,6 @@ class AncestorsTest extends TestCase
 
         $this->assertEquals([5, 5, 7, 8, 7, 8, 8, 8], $descendants->pluck('id')->all());
     }
-
-    //
 
     public function testExistenceQueryAndSelf()
     {

@@ -85,7 +85,7 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
         $localKey = $this->wrap($localKey);
         $path = $this->wrap($path);
 
-        return "instr($path, $localKey || ?) > 0 OR instr($path, ? || $localKey || ?) > 0";
+        return "instr($path, $localKey || ?) > 0 or instr($path, ? || $localKey || ?) > 0";
     }
 
     /**
@@ -97,5 +97,49 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
     public function getCycleDetectionBindings(string $pathSeparator): array
     {
         return [$pathSeparator, $pathSeparator, $pathSeparator];
+    }
+
+    /**
+     * Compile the initial select expression for a cycle detection clause.
+     *
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionInitialSelect(string $column): string
+    {
+        return 'false as ' . $this->wrap($column);
+    }
+
+    /**
+     * Compile the recursive select expression for a cycle detection clause.
+     *
+     * @param string $sql
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionRecursiveSelect(string $sql, string $column): string
+    {
+        return $sql;
+    }
+
+    /**
+     * Compile the stop constraint for a cycle detection clause.
+     *
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionStopConstraint(string $column): string
+    {
+        return 'not ' . $this->wrap($column);
+    }
+
+    /**
+     * Determine whether the database supports the UNION operator in a recursive expression.
+     *
+     * @return bool
+     */
+    public function supportsUnionInRecursiveExpression(): bool
+    {
+        return true;
     }
 }

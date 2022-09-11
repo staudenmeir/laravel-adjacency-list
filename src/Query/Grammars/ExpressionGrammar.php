@@ -75,4 +75,36 @@ interface ExpressionGrammar
      * @return array
      */
     public function getCycleDetectionBindings(string $pathSeparator): array;
+
+    /**
+     * Compile the initial select expression for a cycle detection clause.
+     *
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionInitialSelect(string $column): string;
+
+    /**
+     * Compile the recursive select expression for a cycle detection clause.
+     *
+     * @param string $sql
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionRecursiveSelect(string $sql, string $column): string;
+
+    /**
+     * Compile the stop constraint for a cycle detection clause.
+     *
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionStopConstraint(string $column): string;
+
+    /**
+     * Determine whether the database supports the UNION operator in a recursive expression.
+     *
+     * @return bool
+     */
+    public function supportsUnionInRecursiveExpression(): bool;
 }

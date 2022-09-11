@@ -44,17 +44,9 @@ class Descendants extends BelongsToMany
      */
     public function addEagerConstraints(array $models)
     {
-        $whereIn = $this->whereInMethod($this->parent, $this->parentKey);
-
         $column = $this->andSelf ? $this->getQualifiedParentKeyName() : $this->getQualifiedForeignPivotKeyName();
 
-        $keys = $this->getKeys($models, $this->parentKey);
-
-        $constraint = function (Builder $query) use ($models, $whereIn, $column, $keys) {
-            $query->$whereIn($column, $keys);
-        };
-
-        $this->addExpression($constraint, null, null, $this->andSelf ? 'unionAll' : 'union');
+        $this->addEagerExpression($models, $column);
     }
 
     /**

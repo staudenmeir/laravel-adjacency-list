@@ -71,7 +71,7 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
      */
     public function compilePivotColumnNullValue(string $type): string
     {
-        throw new RuntimeException('Graph relationships are not supported on SQL Server.'); // @codeCoverageIgnore
+        throw new RuntimeException('This graph relationship feature is not supported on SQL Server.'); // @codeCoverageIgnore
     }
 
     /**
@@ -83,7 +83,12 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
      */
     public function compileCycleDetection(string $localKey, string $path): string
     {
-        throw new RuntimeException('Graph relationships are not supported on SQL Server.'); // @codeCoverageIgnore
+        $localKey = $this->wrap($localKey);
+        $path = $this->wrap($path);
+
+        $castLocalKey = "cast($localKey as varchar)";
+
+        return "charindex($castLocalKey + ?, $path) > 0 or charindex(? + $castLocalKey + ?, $path) > 0";
     }
 
     /**
@@ -94,6 +99,50 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
      */
     public function getCycleDetectionBindings(string $pathSeparator): array
     {
-        throw new RuntimeException('Graph relationships are not supported on SQL Server.'); // @codeCoverageIgnore
+        return [$pathSeparator, $pathSeparator, $pathSeparator];
+    }
+
+    /**
+     * Compile the initial select expression for a cycle detection clause.
+     *
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionInitialSelect(string $column): string
+    {
+        return '0 as ' . $this->wrap($column);
+    }
+
+    /**
+     * Compile the recursive select expression for a cycle detection clause.
+     *
+     * @param string $sql
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionRecursiveSelect(string $sql, string $column): string
+    {
+        return "case when $sql then 1 else 0 end as " . $this->wrap($column);
+    }
+
+    /**
+     * Compile the stop constraint for a cycle detection clause.
+     *
+     * @param string $column
+     * @return string
+     */
+    public function compileCycleDetectionStopConstraint(string $column): string
+    {
+        return $this->wrap($column) . ' = 0';
+    }
+
+    /**
+     * Determine whether the database supports the UNION operator in a recursive expression.
+     *
+     * @return bool
+     */
+    public function supportsUnionInRecursiveExpression(): bool
+    {
+        return false;
     }
 }

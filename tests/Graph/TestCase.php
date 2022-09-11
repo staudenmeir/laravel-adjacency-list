@@ -19,10 +19,6 @@ abstract class TestCase extends Base
 
         $this->database = getenv('DATABASE') ?: 'sqlite';
 
-        if ($this->database === 'sqlsrv') {
-            $this->markTestSkipped();
-        }
-
         $config = require __DIR__.'/../config/database.php';
 
         $db = new DB();
@@ -71,22 +67,22 @@ abstract class TestCase extends Base
     protected function seed(): void
     {
         Carbon::setTestNow(
-            Carbon::now()
+            Carbon::now()->roundSecond()
         );
 
         Model::unguard();
 
-        Node::create(['id' => 1, 'slug' => 'node-1']);
-        Node::create(['id' => 2, 'slug' => 'node-2']);
-        Node::create(['id' => 3, 'slug' => 'node-3']);
-        Node::create(['id' => 4, 'slug' => 'node-4']);
-        Node::create(['id' => 5, 'slug' => 'node-5']);
-        Node::create(['id' => 6, 'slug' => 'node-6']);
-        Node::create(['id' => 7, 'slug' => 'node-7']);
-        Node::create(['id' => 8, 'slug' => 'node-8']);
-        Node::create(['id' => 9, 'slug' => 'node-9']);
-        Node::create(['id' => 10, 'slug' => 'node-10']);
-        Node::create(['id' => 11, 'slug' => 'node-11', 'deleted_at' => Carbon::now()]);
+        Node::create(['slug' => 'node-1']);
+        Node::create(['slug' => 'node-2']);
+        Node::create(['slug' => 'node-3']);
+        Node::create(['slug' => 'node-4']);
+        Node::create(['slug' => 'node-5']);
+        Node::create(['slug' => 'node-6']);
+        Node::create(['slug' => 'node-7']);
+        Node::create(['slug' => 'node-8']);
+        Node::create(['slug' => 'node-9']);
+        Node::create(['slug' => 'node-10']);
+        Node::create(['slug' => 'node-11', 'deleted_at' => Carbon::now()]);
 
         DB::table('edges')->insert(
             [
@@ -184,9 +180,9 @@ abstract class TestCase extends Base
     {
         Model::unguard();
 
-        Node::create(['id' => 12, 'slug' => 'node-12']);
-        Node::create(['id' => 13, 'slug' => 'node-13']);
-        Node::create(['id' => 14, 'slug' => 'node-14']);
+        Node::create(['slug' => 'node-12']);
+        Node::create(['slug' => 'node-13']);
+        Node::create(['slug' => 'node-14']);
 
         DB::table('edges')->insert(
             [
@@ -216,5 +212,12 @@ abstract class TestCase extends Base
         );
 
         Model::reguard();
+    }
+
+    protected function getFormattedTestNow(): string
+    {
+        $format = Node::query()->getGrammar()->getDateFormat();
+
+        return Carbon::getTestNow()->format($format);
     }
 }
