@@ -301,6 +301,27 @@ echo $descendantsAndSelf[1]->slug_path; // user-1/user-2
 echo $descendantsAndSelf[2]->slug_path; // user-1/user-2/user-3
 ```
 
+You can also reverse custom paths:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function getCustomPaths()
+    {
+        return [
+            [
+                'name' => 'reverse_slug_path',
+                'column' => 'slug',
+                'separator' => '/',
+                'reverse' => true,
+            ],
+        ];
+    }
+}
+```
+
 #### Nested Results
 
 Use the `toTree()` method on the result collection to generate a nested tree:
@@ -898,6 +919,25 @@ $descendantsAndSelf = Node::find(1)->descendantsAndSelf;
 echo $descendantsAndSelf[0]->slug_path; // node-1
 echo $descendantsAndSelf[1]->slug_path; // node-1/node-2
 echo $descendantsAndSelf[2]->slug_path; // node-1/node-2/node-3
+```
+
+You can also reverse custom paths:
+
+```php
+class Node extends Model
+{
+    public function getCustomPaths(): array
+    {
+        return [
+            [
+                'name' => 'reverse_slug_path',
+                'column' => 'slug',
+                'separator' => '/',
+                'reverse' => true,
+            ],
+        ];
+    }
+}
 ```
 
 #### <a name="graphs-recursive-query-constraints">Recursive Query Constraints</a>
