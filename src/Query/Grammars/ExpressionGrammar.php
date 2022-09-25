@@ -20,9 +20,10 @@ interface ExpressionGrammar
      *
      * @param string $column
      * @param string $alias
+     * @param bool $reverse
      * @return string
      */
-    public function compileRecursivePath($column, $alias);
+    public function compileRecursivePath($column, $alias, bool $reverse = false);
 
     /**
      * Get the recursive path bindings.

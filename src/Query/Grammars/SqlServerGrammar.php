@@ -27,11 +27,19 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
      *
      * @param string $column
      * @param string $alias
+     * @param bool $reverse
      * @return string
      */
-    public function compileRecursivePath($column, $alias)
+    public function compileRecursivePath($column, $alias, bool $reverse = false)
     {
-        return 'cast('.$this->wrap($alias).' + ? + cast('.$this->wrap($column).' as varchar) as varchar) as '.$this->wrap($alias);
+        $wrappedColumn = $this->wrap($column);
+        $wrappedAlias = $this->wrap($alias);
+
+        if ($reverse) {
+            return "cast(cast($wrappedColumn as varchar) + ? + $wrappedAlias as varchar) as $wrappedAlias";
+        }
+
+        return "cast($wrappedAlias + ? + cast($wrappedColumn as varchar) as varchar) as $wrappedAlias";
     }
 
     /**

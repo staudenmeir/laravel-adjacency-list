@@ -23,6 +23,12 @@ class User extends Model
                     'column' => 'slug',
                     'separator' => '/',
                 ],
+                [
+                    'name' => 'reverse_slug_path',
+                    'column' => 'slug',
+                    'separator' => '/',
+                    'reverse' => true,
+                ],
             ]
         );
     }

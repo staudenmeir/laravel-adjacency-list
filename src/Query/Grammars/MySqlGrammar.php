@@ -26,11 +26,15 @@ class MySqlGrammar extends Base implements ExpressionGrammar
      *
      * @param string $column
      * @param string $alias
+     * @param bool $reverse
      * @return string
      */
-    public function compileRecursivePath($column, $alias)
+    public function compileRecursivePath($column, $alias, bool $reverse = false)
     {
-        return 'concat(' . $this->wrap($alias) . ', ?, ' . $this->wrap($column) . ')';
+        $wrappedColumn = $this->wrap($column);
+        $wrappedAlias = $this->wrap($alias);
+
+        return $reverse ? "concat($wrappedColumn, ?, $wrappedAlias)" : "concat($wrappedAlias, ?, $wrappedColumn)";
     }
 
     /**

@@ -21,6 +21,10 @@ class AncestorsTest extends TestCase
             $ancestors->pluck('slug_path')->all()
         );
         $this->assertEquals(
+            ['node-1', 'node-2', 'node-10', 'node-1/node-2', 'node-9/node-2'],
+            $ancestors->pluck('reverse_slug_path')->all()
+        );
+        $this->assertEquals(
             ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => $this->getFormattedTestNow()],
             $ancestors[0]->pivot->getAttributes()
         );

@@ -30,15 +30,19 @@ class PostgresGrammar extends Base implements ExpressionGrammar
      *
      * @param string $column
      * @param string $alias
+     * @param bool $reverse
      * @return string
      */
-    public function compileRecursivePath($column, $alias)
+    public function compileRecursivePath($column, $alias, bool $reverse = false)
     {
-        if ($this->model->isIntegerAttribute($column)) {
-            return $this->wrap($alias).' || '.$this->wrap($column);
+        $wrappedColumn = $this->wrap($column);
+        $wrappedAlias = $this->wrap($alias);
+
+        if (!$this->model->isIntegerAttribute($column)) {
+            $wrappedColumn .= '::varchar';
         }
 
-        return $this->wrap($alias) . ' || ' . $this->wrap($column) . '::varchar';
+        return $reverse ? "$wrappedColumn || $wrappedAlias" : "$wrappedAlias || $wrappedColumn";
     }
 
     /**

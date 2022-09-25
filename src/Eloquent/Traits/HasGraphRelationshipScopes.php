@@ -334,7 +334,8 @@ trait HasGraphRelationshipScopes
             $query->selectRaw(
                 $grammar->compileRecursivePath(
                     $this->qualifyColumn($path['column']),
-                    $path['name']
+                    $path['name'],
+                    $path['reverse'] ?? false
                 ),
                 $grammar->getRecursivePathBindings($path['separator'])
             );

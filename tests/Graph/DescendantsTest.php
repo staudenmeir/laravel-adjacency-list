@@ -21,6 +21,10 @@ class DescendantsTest extends TestCase
             $descendants->pluck('slug_path')->all()
         );
         $this->assertEquals(
+            ['node-5', 'node-7/node-5', 'node-8/node-5', 'node-8/node-7/node-5'],
+            $descendants->pluck('reverse_slug_path')->all()
+        );
+        $this->assertEquals(
             ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
             $descendants[0]->pivot->getAttributes()
         );

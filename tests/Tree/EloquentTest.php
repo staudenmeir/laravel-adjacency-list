@@ -42,8 +42,18 @@ class EloquentTest extends TestCase
 
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12], $users->pluck('id')->all());
         $this->assertEquals([0, 1, 1, 1, 2, 2, 2, 3, 3, 0, 1], $users->pluck('depth')->all());
-        $this->assertEquals(['1', '1.2', '1.3', '1.4', '1.2.5', '1.3.6', '1.4.7', '1.2.5.8', '1.3.6.9', '11', '11.12'], $users->pluck('path')->all());
-        $this->assertEquals(['user-1', 'user-1/user-2', 'user-1/user-3'], $users->pluck('slug_path')->slice(0, 3)->all());
+        $this->assertEquals(
+            ['1', '1.2', '1.3', '1.4', '1.2.5', '1.3.6', '1.4.7', '1.2.5.8', '1.3.6.9', '11', '11.12'],
+            $users->pluck('path')->all()
+        );
+        $this->assertEquals(
+            ['user-1', 'user-1/user-2', 'user-1/user-3'],
+            $users->pluck('slug_path')->slice(0, 3)->all()
+        );
+        $this->assertEquals(
+            ['user-1', 'user-2/user-1', 'user-3/user-1'],
+            $users->pluck('reverse_slug_path')->slice(0, 3)->all()
+        );
         $this->assertEquals('users', $users[0]->getTable());
     }
 
