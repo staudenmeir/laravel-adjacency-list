@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Expression;
+use Staudenmeir\EloquentHasManyDeepContracts\Interfaces\ConcatenableRelation;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\Concatenation\IsConcatenableDescendantsRelation;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelation;
 
-class Descendants extends HasMany
+class Descendants extends HasMany implements ConcatenableRelation
 {
+    use IsConcatenableDescendantsRelation;
     use IsRecursiveRelation {
         buildDictionary as baseBuildDictionary;
     }

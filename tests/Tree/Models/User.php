@@ -4,13 +4,18 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use Staudenmeir\EloquentHasManyDeep\HasTableAlias;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class User extends Model
 {
+    use HasRelationships;
     use HasRecursiveRelationships {
         getCustomPaths as baseGetCustomPaths;
     }
+    use HasTableAlias;
     use SoftDeletes;
 
     public function getCustomPaths()
@@ -30,6 +35,46 @@ class User extends Model
                     'reverse' => true,
                 ],
             ]
+        );
+    }
+
+    public function ancestorPosts(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->ancestors(),
+            (new static())->hasMany(Post::class)
+        );
+    }
+
+    public function ancestorAndSelfPosts(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->ancestorsAndSelf(),
+            (new static())->hasMany(Post::class)
+        );
+    }
+
+    public function bloodlinePosts(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->bloodline(),
+            (new static())->hasMany(Post::class)
+        );
+    }
+
+    public function descendantPosts(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->descendants(),
+            (new static())->hasMany(Post::class)
+        );
+    }
+
+    public function descendantPostsAndSelf(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->descendantsAndSelf(),
+            (new static())->hasMany(Post::class)
         );
     }
 
