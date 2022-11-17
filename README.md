@@ -50,6 +50,7 @@ Supports Laravel 5.5.29+.
 - [Nested Results](#nested-results)
 - [Recursive Query Constraints](#recursive-query-constraints)
 - [Custom Relationships](#custom-relationships)
+- [Concatenation](#concatenation)
 
 #### Getting Started
 
@@ -600,6 +601,50 @@ class Post extends Model
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 }
 ```
+
+#### Concatenation
+
+You can include recursive relationships into deep relationships by concatenating them with other relationships
+using [staudenmeir/eloquent-has-many-deep](https://github.com/staudenmeir/eloquent-has-many-deep). This
+works with `Ancestors`, `Bloodline` and `Descendants` relationships (Laravel 9+).
+
+Consider a `HasMany` relationship between `User` and `Post` and building a deep relationship to get all posts of a
+user's descendants:
+
+`User` → descendants → `User` → has many → `Post`
+
+[Install](https://github.com/staudenmeir/eloquent-has-many-deep/#installation) the additional package, add the
+`HasRelationships` trait to the recursive model
+and [define](https://github.com/staudenmeir/eloquent-has-many-deep/#concatenating-existing-relationships) a
+deep relationship:
+
+```php
+class User extends Model
+{
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantPosts()
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->descendants(),
+            (new static)->posts()
+        );
+    }
+    
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+}
+
+$descendantPosts = User::find($id)->descendantPosts;
+```
+
+At the moment, recursive relationships can only be at the beginning of deep relationships:
+
+- Supported: `User` → descendants → `User` → has many → `Post`
+- Not supported: `Country` → has many → `User` → descendants → `User`
 
 ### Graphs: Multiple Parents per Node (Many-to-Many)
 
