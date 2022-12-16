@@ -42,6 +42,10 @@ class EloquentTest extends TestCase
         $children = Node::find(1)->children;
 
         $this->assertEquals([2, 3, 4, 5], $children->pluck('id')->all());
+        $this->assertEquals(
+            ['parent_id' => 1, 'child_id' => 2, 'label' => 'a', 'weight' => 1, 'created_at' => $this->getFormattedTestNow()],
+            $children[0]->pivot->getAttributes()
+        );
     }
 
     public function testChildrenAndSelf()
@@ -60,6 +64,10 @@ class EloquentTest extends TestCase
         $parents = Node::find(5)->parents;
 
         $this->assertEquals([1, 2, 10], $parents->pluck('id')->all());
+        $this->assertEquals(
+            ['parent_id' => 1, 'child_id' => 5, 'label' => 'd', 'weight' => 4, 'created_at' => $this->getFormattedTestNow()],
+            $parents[0]->pivot->getAttributes()
+        );
     }
 
     public function testParentsAndSelf()

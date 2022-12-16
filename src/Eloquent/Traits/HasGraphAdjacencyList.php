@@ -265,6 +265,8 @@ trait HasGraphAdjacencyList
             $this->getChildKeyName(),
             $this->getLocalKeyName(),
             $this->getLocalKeyName()
+        )->withPivot(
+            $this->getPivotColumns()
         );
     }
 
@@ -365,6 +367,8 @@ trait HasGraphAdjacencyList
             $this->getParentKeyName(),
             $this->getLocalKeyName(),
             $this->getLocalKeyName()
+        )->withPivot(
+            $this->getPivotColumns()
         );
     }
 
