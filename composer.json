@@ -33,11 +33,6 @@
             "Staudenmeir\\LaravelAdjacencyList\\Tests\\": "tests/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.13.x-dev"
-        }
-    },
     "minimum-stability": "dev",
     "prefer-stable" : true
 }
