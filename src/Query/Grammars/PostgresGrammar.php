@@ -18,7 +18,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
      */
     public function compileInitialPath($column, $alias)
     {
-        if ($this->model->isIntegerAttribute($column)) {
+        if (is_string($column) && $this->model->isIntegerAttribute($column)) {
             return 'array['.$this->wrap($column).'] as '.$this->wrap($alias);
         }
 
@@ -38,7 +38,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
         $wrappedColumn = $this->wrap($column);
         $wrappedAlias = $this->wrap($alias);
 
-        if (!$this->model->isIntegerAttribute($column)) {
+        if (is_string($column) && !$this->model->isIntegerAttribute($column)) {
             $wrappedColumn .= '::varchar';
         }
 

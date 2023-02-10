@@ -157,7 +157,7 @@ trait HasGraphRelationshipScopes
         foreach ($this->getCustomPaths() as $path) {
             $query->selectRaw(
                 $grammar->compileInitialPath(
-                    $this->qualifyColumn($path['column']),
+                    is_string($path['column']) ? $this->qualifyColumn($path['column']) : $path['column'],
                     $path['name']
                 )
             );
@@ -333,7 +333,7 @@ trait HasGraphRelationshipScopes
         foreach ($this->getCustomPaths() as $path) {
             $query->selectRaw(
                 $grammar->compileRecursivePath(
-                    $this->qualifyColumn($path['column']),
+                    is_string($path['column']) ? $this->qualifyColumn($path['column']) : $path['column'],
                     $path['name'],
                     $path['reverse'] ?? false
                 ),

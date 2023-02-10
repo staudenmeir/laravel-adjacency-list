@@ -4,6 +4,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Expression;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Staudenmeir\EloquentHasManyDeep\HasTableAlias;
@@ -30,7 +31,7 @@ class User extends Model
                 ],
                 [
                     'name' => 'reverse_slug_path',
-                    'column' => 'slug',
+                    'column' => new Expression('users.slug'),
                     'separator' => '/',
                     'reverse' => true,
                 ],
