@@ -389,7 +389,6 @@ trait HasGraphRelationshipScopes
                     $grammar->compileCycleDetectionStopConstraint($cycleDetectionColumn)
                 );
             } else {
-                // TODO[L10]: whereNot()
                 $query->whereRaw("not($sql)", $bindings);
             }
         }
