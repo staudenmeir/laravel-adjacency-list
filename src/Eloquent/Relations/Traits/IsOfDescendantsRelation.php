@@ -108,6 +108,10 @@ trait IsOfDescendantsRelation
     {
         $dictionary = [];
 
+        if ($results->isEmpty()) {
+            return $dictionary;
+        }
+
         $paths = explode(
             $this->getPathListSeparator(),
             $results[0]->{$this->pathListAlias}
