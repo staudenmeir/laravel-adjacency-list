@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Tests\Scopes\DepthScope;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Role;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class HasManyOfDescendantsTest extends TestCase
@@ -55,6 +56,15 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals([], $users[8]->postsAndSelf->pluck('id')->all());
         $this->assertEquals([100, 110], $users[9]->postsAndSelf->pluck('id')->all());
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->postsAndSelf[0]);
+    }
+
+    public function testNestedEagerLoadingWithEmptyResults()
+    {
+        Post::query()->delete();
+
+        $roles = Role::with('users.posts')->get();
+
+        $this->assertEmpty($roles[0]->users[0]->posts);
     }
 
     public function testLazyEagerLoading()
