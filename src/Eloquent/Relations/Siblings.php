@@ -67,11 +67,15 @@ class Siblings extends HasMany
     {
         $keys = $this->getKeys($models, $this->localKey);
 
-        $this->query->whereIn($this->foreignKey, $keys);
+        $this->query->where(
+            function (Builder $query) use ($keys) {
+                $query->whereIn($this->foreignKey, $keys);
 
-        if (in_array(null, $keys, true)) {
-            $this->query->orWhereNull($this->foreignKey);
-        }
+                if (in_array(null, $keys, true)) {
+                    $query->orWhereNull($this->foreignKey);
+                }
+            }
+        );
     }
 
     /**
