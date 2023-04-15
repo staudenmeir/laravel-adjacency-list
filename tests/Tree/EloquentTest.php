@@ -88,18 +88,18 @@ class EloquentTest extends TestCase
     
     public function testScopeTreeOfWithModel()
     {
-        $constraint = User::find(2);
+        $model = User::find(2);
 
-        $tree = User::treeOf($constraint)->orderBy('id')->get();
+        $tree = User::treeOf($model)->orderBy('id')->get();
 
         $this->assertEquals([2, 5, 8], $tree->pluck('id')->all());
     }
 
     public function testScopeTreeOfWithModelAndMaxDepth()
     {
-        $constraint = User::find(2);
+        $model = User::find(2);
 
-        $tree = User::treeOf($constraint, 1)->orderBy('id')->get();
+        $tree = User::treeOf($model, 1)->orderBy('id')->get();
 
         $this->assertEquals([2, 5], $tree->pluck('id')->all());
     }
