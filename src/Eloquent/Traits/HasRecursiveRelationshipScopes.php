@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
@@ -28,12 +29,18 @@ trait HasRecursiveRelationshipScopes
      * Add a recursive expression for a custom tree to the query.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param callable $constraint
+     * @param callable|\Illuminate\Database|Eloquent\Model $constraint
      * @param int|null $maxDepth
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeTreeOf(Builder $query, callable $constraint, $maxDepth = null)
+    public function scopeTreeOf(Builder $query, callable|Model $constraint, $maxDepth = null)
     {
+        if ($constraint instanceof Model) {
+            $constraint = function($query) use ($constraint) {
+                $query->whereKey($constraint->getKey());
+            };
+        }
+        
         return $query->withRelationshipExpression('desc', $constraint, 0, null, $maxDepth);
     }
 
