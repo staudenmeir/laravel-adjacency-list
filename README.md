@@ -25,6 +25,18 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
     composer require staudenmeir/laravel-adjacency-list:"^^^^1.0"
 
+## Versions
+
+| Laravel | Package |
+|:--------|:--------|
+| 10.x    | 1.13    |
+| 9.x     | 1.12    |
+| 8.x     | 1.9     |
+| 7.x     | 1.5     |
+| 6.x     | 1.3     |
+| 5.8     | 1.1     |
+| 5.5–5.7 | 1.0     |
+
 ## Usage
 
 The package offers recursive relationships for traversing two types of data structures:
