@@ -64,7 +64,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 11, 12], $tree->pluck('id')->all());
     }
 
-    public function testScopeTreeOf()
+    public function testScopeTreeOfWithCallable()
     {
         $constraint = function (Builder $query) {
             $query->whereIn('id', [2, 4]);
@@ -75,7 +75,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([2, 4, 5, 7, 8], $tree->pluck('id')->all());
     }
 
-    public function testScopeTreeOfWithMaxDepth()
+    public function testScopeTreeOfWithCallableAndMaxDepth()
     {
         $constraint = function (Builder $query) {
             $query->whereIn('id', [2, 4]);
@@ -84,6 +84,24 @@ class EloquentTest extends TestCase
         $tree = User::treeOf($constraint, 1)->orderBy('id')->get();
 
         $this->assertEquals([2, 4, 5, 7], $tree->pluck('id')->all());
+    }
+    
+    public function testScopeTreeOfWithModel()
+    {
+        $model = User::find(2);
+
+        $tree = User::treeOf($model)->orderBy('id')->get();
+
+        $this->assertEquals([2, 5, 8], $tree->pluck('id')->all());
+    }
+
+    public function testScopeTreeOfWithModelAndMaxDepth()
+    {
+        $model = User::find(2);
+
+        $tree = User::treeOf($model, 1)->orderBy('id')->get();
+
+        $this->assertEquals([2, 5], $tree->pluck('id')->all());
     }
 
     public function testScopeHasChildren()
