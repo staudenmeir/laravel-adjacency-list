@@ -85,7 +85,7 @@ class EloquentTest extends TestCase
 
         $this->assertEquals([2, 4, 5, 7], $tree->pluck('id')->all());
     }
-    
+
     public function testScopeTreeOfWithModel()
     {
         $model = User::find(2);
