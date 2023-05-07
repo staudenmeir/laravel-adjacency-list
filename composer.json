@@ -15,7 +15,7 @@
         "staudenmeir/eloquent-has-many-deep-contracts": "^1.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.0",
+        "phpunit/phpunit": "^10.1",
         "doctrine/dbal": "^3.5.2",
         "barryvdh/laravel-ide-helper": "^2.13",
         "mockery/mockery": "^1.5.1",
