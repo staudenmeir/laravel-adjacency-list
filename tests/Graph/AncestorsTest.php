@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Node;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetection;
@@ -30,9 +31,7 @@ class AncestorsTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider cycleDetectionClassProvider
-     */
+    #[DataProvider(methodName: 'cycleDetectionClassProvider')]
     public function testLazyLoadingWithCycleDetection(string $class, array $exclusions)
     {
         if (in_array($this->database, $exclusions)) {
@@ -47,9 +46,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([-1, -2, -3], $ancestors->pluck('depth')->all());
     }
 
-    /**
-     * @dataProvider cycleDetectionAndStartClassProvider
-     */
+    #[DataProvider(methodName: 'cycleDetectionAndStartClassProvider')]
     public function testLazyLoadingWithCycleDetectionAndStart(string $class, array $exclusions)
     {
         if (in_array($this->database, $exclusions)) {
@@ -139,9 +136,7 @@ class AncestorsTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider cycleDetectionClassProvider
-     */
+    #[DataProvider(methodName: 'cycleDetectionClassProvider')]
     public function testEagerLoadingWithCycleDetection(string $class, array $exclusions)
     {
         if (in_array($this->database, $exclusions)) {
@@ -158,9 +153,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([-1, -2, -3], $nodes[0]->ancestors->pluck('depth')->all());
     }
 
-    /**
-     * @dataProvider cycleDetectionAndStartClassProvider
-     */
+    #[DataProvider(methodName: 'cycleDetectionAndStartClassProvider')]
     public function testEagerLoadingWithCycleDetectionAndStart(string $class, array $exclusions)
     {
         if (in_array($this->database, $exclusions)) {
