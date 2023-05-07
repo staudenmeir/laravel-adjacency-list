@@ -100,10 +100,14 @@ class PostgresGrammar extends Base implements ExpressionGrammar
      */
     public function compileCycleDetection(string $localKey, string $path): string
     {
-        $localKey = $this->wrap($localKey);
-        $path = $this->wrap($path);
+        $wrappedLocalKey = $this->wrap($localKey);
+        $wrappedPath = $this->wrap($path);
 
-        return "$localKey = any($path)";
+        if ($this->model->isIntegerAttribute($localKey)) {
+            return "$wrappedLocalKey = any($wrappedPath)";
+        }
+
+        return "$wrappedLocalKey::varchar = any($wrappedPath)";
     }
 
     /**

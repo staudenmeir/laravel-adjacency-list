@@ -30,21 +30,35 @@ class DescendantsTest extends TestCase
         );
     }
 
-    public function testLazyLoadingWithCycleDetection()
+    /**
+     * @dataProvider cycleDetectionClassProvider
+     */
+    public function testLazyLoadingWithCycleDetection(string $class, array $exclusions)
     {
+        if (in_array($this->database, $exclusions)) {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
-        $descendants = NodeWithCycleDetection::find(12)->descendants;
+        $descendants = $class::find(12)->descendants;
 
         $this->assertEquals([13, 14, 12], $descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3], $descendants->pluck('depth')->all());
     }
 
-    public function testLazyLoadingWithCycleDetectionAndStart()
+    /**
+     * @dataProvider cycleDetectionAndStartClassProvider
+     */
+    public function testLazyLoadingWithCycleDetectionAndStart(string $class, array $exclusions)
     {
+        if (in_array($this->database, $exclusions)) {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
-        $descendants = NodeWithCycleDetectionAndStart::find(12)->descendants;
+        $descendants = $class::find(12)->descendants;
 
         $this->assertEquals([13, 14, 12, 13], $descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3, 4], $descendants->pluck('depth')->all());
@@ -133,11 +147,18 @@ class DescendantsTest extends TestCase
         );
     }
 
-    public function testEagerLoadingWithCycleDetection()
+    /**
+     * @dataProvider cycleDetectionClassProvider
+     */
+    public function testEagerLoadingWithCycleDetection(string $class, array $exclusions)
     {
+        if (in_array($this->database, $exclusions)) {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetection::with([
+        $nodes = $class::with([
             'descendants' => fn (Descendants $query) => $query->orderBy('depth'),
         ])->findMany([12, 13, 14]);
 
@@ -145,11 +166,18 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 3], $nodes[0]->descendants->pluck('depth')->all());
     }
 
-    public function testEagerLoadingWithCycleDetectionAndStart()
+    /**
+     * @dataProvider cycleDetectionAndStartClassProvider
+     */
+    public function testEagerLoadingWithCycleDetectionAndStart(string $class, array $exclusions)
     {
+        if (in_array($this->database, $exclusions)) {
+            $this->markTestSkipped();
+        }
+
         $this->seedCycle();
 
-        $nodes = NodeWithCycleDetectionAndStart::with([
+        $nodes = $class::with([
             'descendants' => fn (Descendants $query) => $query->orderBy('depth')
         ])->findMany([12, 13, 14]);
 

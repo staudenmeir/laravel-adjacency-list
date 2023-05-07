@@ -15,6 +15,8 @@ class Node extends Model
     }
     use SoftDeletes;
 
+    protected $table = 'nodes';
+
     public function getPivotTableName(): string
     {
         return 'edges';

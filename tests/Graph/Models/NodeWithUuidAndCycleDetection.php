@@ -2,7 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models;
 
-class NodeWithCycleDetection extends Node
+class NodeWithUuidAndCycleDetection extends NodeWithUuid
 {
     public function enableCycleDetection(): bool
     {
