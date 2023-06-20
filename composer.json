@@ -19,7 +19,7 @@
         "doctrine/dbal": "^3.5.2",
         "barryvdh/laravel-ide-helper": "^2.13",
         "mockery/mockery": "^1.5.1",
-        "staudenmeir/eloquent-has-many-deep": "^1.18"
+        "staudenmeir/eloquent-has-many-deep": "^1.18.1"
     },
     "suggest": {
         "barryvdh/laravel-ide-helper": "Provide type hints for attributes and relations."
