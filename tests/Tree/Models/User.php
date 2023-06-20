@@ -5,6 +5,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasOneDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Staudenmeir\EloquentHasManyDeep\HasTableAlias;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
@@ -38,6 +39,14 @@ class User extends Model
         );
     }
 
+    public function ancestorPost(): HasOneDeep
+    {
+        return $this->hasOneDeepFromRelations(
+            $this->ancestors(),
+            (new static())->hasMany(Post::class)
+        );
+    }
+
     public function ancestorPosts(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
@@ -58,6 +67,14 @@ class User extends Model
     {
         return $this->hasManyDeepFromRelations(
             $this->bloodline(),
+            (new static())->hasMany(Post::class)
+        );
+    }
+
+    public function descendantPost(): HasOneDeep
+    {
+        return $this->hasOneDeepFromRelations(
+            $this->descendants(),
             (new static())->hasMany(Post::class)
         );
     }

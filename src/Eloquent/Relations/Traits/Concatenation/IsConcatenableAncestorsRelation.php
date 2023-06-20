@@ -30,10 +30,15 @@ trait IsConcatenableAncestorsRelation
      * @param array $models
      * @param \Illuminate\Database\Eloquent\Collection $results
      * @param string $relation
+     * @param string $type
      * @return array
      */
-    public function matchResultsForDeepRelationship(array $models, Collection $results, string $relation): array
-    {
+    public function matchResultsForDeepRelationship(
+        array $models,
+        Collection $results,
+        string $relation,
+        string $type = 'many'
+    ): array {
         $dictionary = $this->buildDictionaryForDeepRelationship($results);
 
         $attribute = $this->andSelf ? $this->localKey : $this->getForeignKeyName();
@@ -42,7 +47,9 @@ trait IsConcatenableAncestorsRelation
             $key = $model->$attribute;
 
             if (isset($dictionary[$key])) {
-                $value = $this->related->newCollection($dictionary[$key]);
+                $value = $dictionary[$key];
+
+                $value = $type === 'one' ? reset($value) : $this->related->newCollection($value);
 
                 $model->setRelation($relation, $value);
             }

@@ -20,7 +20,7 @@
         "barryvdh/laravel-ide-helper": "^2.12",
         "mockery/mockery": "^1.5",
         "nesbot/carbon": "^2.62.1",
-        "staudenmeir/eloquent-has-many-deep": "^1.17"
+        "staudenmeir/eloquent-has-many-deep": "^1.17.2"
     },
     "suggest": {
         "barryvdh/laravel-ide-helper": "Provide type hints for attributes and relations."
