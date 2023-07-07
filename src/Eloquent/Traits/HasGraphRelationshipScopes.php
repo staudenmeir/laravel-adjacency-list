@@ -201,7 +201,9 @@ trait HasGraphRelationshipScopes
                     $type = $query->getConnection()->getSchemaBuilder()->getColumnType($pivotTable, $column);
                 }
 
-                $null = $grammar->compilePivotColumnNullValue($type);
+                $precision = $query->getConnection()->getDoctrineColumn($pivotTable, $column)->getPrecision();
+                $scale = $query->getConnection()->getDoctrineColumn($pivotTable, $column)->getScale();
+                $null = $grammar->compilePivotColumnNullValue($type, $precision, $scale);
 
                 $query->selectRaw("$null as " . $grammar->wrap("pivot_$column"));
             }
