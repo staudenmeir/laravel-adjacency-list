@@ -66,7 +66,7 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
         )->from($expression);
     }
 
-        /**
+    /**
      * Compile a pivot column null value.
      *
      * @param string $type
