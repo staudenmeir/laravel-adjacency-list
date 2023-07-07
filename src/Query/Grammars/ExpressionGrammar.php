@@ -56,9 +56,11 @@ interface ExpressionGrammar
      * Compile a pivot column null value.
      *
      * @param string $type
+     * @param int $precision
+     * @param int $scale
      * @return string
      */
-    public function compilePivotColumnNullValue(string $type): string;
+    public function compilePivotColumnNullValue(string $type, int $precision, int $scale): string;
 
     /**
      * Compile a cycle detection clause.
