@@ -66,6 +66,7 @@ abstract class TestCase extends Base
                 $table->uuid('child_uuid');
                 $table->string('label');
                 $table->tinyInteger('weight');
+                $table->decimal('value', 8, 3);
                 $table->timestamp('created_at');
             }
         );
@@ -100,6 +101,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'b0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'a',
                     'weight' => 1,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -109,6 +111,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'c0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'b',
                     'weight' => 2,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -118,6 +121,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'd0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'c',
                     'weight' => 3,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -127,6 +131,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'e0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'd',
                     'weight' => 4,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -136,6 +141,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'e0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'e',
                     'weight' => 5,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -145,6 +151,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'f0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'f',
                     'weight' => 6,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -154,6 +161,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'a1f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'g',
                     'weight' => 7,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -163,6 +171,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'b1f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'h',
                     'weight' => 8,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -172,6 +181,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'b1f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'i',
                     'weight' => 9,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -181,6 +191,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'b0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'j',
                     'weight' => 10,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -190,6 +201,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'e0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'k',
                     'weight' => 11,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -199,6 +211,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'e0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'l',
                     'weight' => 12,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
             ]
@@ -225,6 +238,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'a2f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'm',
                     'weight' => 13,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -234,6 +248,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'b2f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'n',
                     'weight' => 14,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
                 [
@@ -243,6 +258,7 @@ abstract class TestCase extends Base
                     'child_uuid' => 'f1f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b',
                     'label' => 'o',
                     'weight' => 15,
+                    'value' => '123.456',
                     'created_at' => Carbon::now(),
                 ],
             ]

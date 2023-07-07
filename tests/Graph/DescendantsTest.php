@@ -26,7 +26,14 @@ class DescendantsTest extends TestCase
             $descendants->pluck('reverse_slug_path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
+            [
+                'parent_id' => 2,
+                'child_id' => 5,
+                'label' => 'e',
+                'weight' => 5,
+                'value' => '123.456',
+                'created_at' => $this->getFormattedTestNow()
+            ],
             $descendants[0]->pivot->getAttributes()
         );
     }
@@ -81,11 +88,25 @@ class DescendantsTest extends TestCase
             $descendantsAndSelf->pluck('slug_path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => null, 'child_id' => null, 'label' => null, 'weight' => null, 'created_at' => null],
+            [
+                'parent_id' => null,
+                'child_id' => null,
+                'label' => null,
+                'weight' => null,
+                'value' => null,
+                'created_at' => null
+            ],
             $descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
+            [
+                'parent_id' => 2,
+                'child_id' => 5,
+                'label' => 'e',
+                'weight' => 5,
+                'value' => '123.456',
+                'created_at' => $this->getFormattedTestNow()
+            ],
             $descendantsAndSelf[1]->pivot->getAttributes()
         );
     }
@@ -139,7 +160,14 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendants->pluck('path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
+            [
+                'parent_id' => 2,
+                'child_id' => 5,
+                'label' => 'e',
+                'weight' => 5,
+                'value' => '123.456',
+                'created_at' => $this->getFormattedTestNow()
+            ],
             $nodes[1]->descendants[0]->pivot->getAttributes()
         );
     }
@@ -203,11 +231,25 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendantsAndSelf->pluck('path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => null, 'child_id' => null, 'label' => null, 'weight' => null, 'created_at' => null],
+            [
+                'parent_id' => null,
+                'child_id' => null,
+                'label' => null,
+                'weight' => null,
+                'value' => null,
+                'created_at' => null
+            ],
             $nodes[1]->descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
+            [
+                'parent_id' => 2,
+                'child_id' => 5,
+                'label' => 'e',
+                'weight' => 5,
+                'value' => '123.456',
+                'created_at' => $this->getFormattedTestNow()
+            ],
             $nodes[1]->descendantsAndSelf[1]->pivot->getAttributes()
         );
     }
@@ -261,7 +303,14 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendants->pluck('path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
+            [
+                'parent_id' => 2,
+                'child_id' => 5,
+                'label' => 'e',
+                'weight' => 5,
+                'value' => '123.456',
+                'created_at' => $this->getFormattedTestNow()
+            ],
             $nodes[1]->descendants[0]->pivot->getAttributes()
         );
     }
@@ -290,11 +339,25 @@ class DescendantsTest extends TestCase
             $nodes[1]->descendantsAndSelf->pluck('path')->all()
         );
         $this->assertEquals(
-            ['parent_id' => null, 'child_id' => null, 'label' => null, 'weight' => null, 'created_at' => null],
+            [
+                'parent_id' => null,
+                'child_id' => null,
+                'label' => null,
+                'weight' => null,
+                'value' => null,
+                'created_at' => null
+            ],
             $nodes[1]->descendantsAndSelf[0]->pivot->getAttributes()
         );
         $this->assertEquals(
-            ['parent_id' => 2, 'child_id' => 5, 'label' => 'e', 'weight' => 5, 'created_at' => $this->getFormattedTestNow()],
+            [
+                'parent_id' => 2,
+                'child_id' => 5,
+                'label' => 'e',
+                'weight' => 5,
+                'value' => '123.456',
+                'created_at' => $this->getFormattedTestNow()
+            ],
             $nodes[1]->descendantsAndSelf[1]->pivot->getAttributes()
         );
     }
