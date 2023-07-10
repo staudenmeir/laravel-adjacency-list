@@ -18,7 +18,7 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
      */
     public function compileInitialPath($column, $alias)
     {
-        return 'cast('.$this->wrap($column).' as text) as '.$this->wrap($alias);
+        return 'cast(' . $this->wrap($column) . ' as text) as ' . $this->wrap($alias);
     }
 
     /**
@@ -61,7 +61,7 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
     public function selectPathList(Builder $query, $expression, $column, $pathSeparator, $listSeparator)
     {
         return $query->selectRaw(
-            'group_concat('.$this->wrap($column).', ?)',
+            'group_concat(' . $this->wrap($column) . ', ?)',
             [$listSeparator]
         )->from($expression);
     }
@@ -70,9 +70,11 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
      * Compile a pivot column null value.
      *
      * @param string $type
+     * @param int $precision
+     * @param int $scale
      * @return string
      */
-    public function compilePivotColumnNullValue(string $type): string
+    public function compilePivotColumnNullValue(string $type, int $precision, int $scale): string
     {
         return 'null';
     }

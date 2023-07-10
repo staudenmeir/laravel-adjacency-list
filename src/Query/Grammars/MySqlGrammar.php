@@ -101,12 +101,15 @@ SQL;
      * Compile a pivot column null value.
      *
      * @param string $type
+     * @param int $precision
+     * @param int $scale
      * @return string
      */
-    public function compilePivotColumnNullValue(string $type): string
+    public function compilePivotColumnNullValue(string $type, int $precision, int $scale): string
     {
         $cast = match ($type) {
             'bigint', 'boolean', 'integer', 'smallint' => 'signed',
+            'decimal' => "decimal($precision, $scale)",
             'string' => 'char(65535)',
             default => $type,
         };

@@ -46,7 +46,7 @@ class Node extends Model
     {
         return array_merge(
             $this->baseGetPivotColumns(),
-            ['label', 'weight', 'created_at']
+            ['label', 'weight', 'value', 'created_at']
         );
     }
 }
