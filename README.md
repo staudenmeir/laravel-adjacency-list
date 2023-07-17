@@ -1,7 +1,6 @@
 # Laravel Adjacency List
 
 [![CI](https://github.com/staudenmeir/laravel-adjacency-list/actions/workflows/ci.yml/badge.svg)](https://github.com/staudenmeir/laravel-adjacency-list/actions/workflows/ci.yml)
-![CI](https://github.com/staudenmeir/laravel-adjacency-list/workflows/CI/badge.svg)
 [![Code Coverage](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/v/stable)](https://packagist.org/packages/staudenmeir/laravel-adjacency-list)
