@@ -53,7 +53,7 @@ class Descendants extends HasMany implements ConcatenableRelation
 
         $keys = $this->getKeys($models, $this->localKey);
 
-        $constraint = function (Builder $query) use ($models, $whereIn, $column, $keys) {
+        $constraint = function (Builder $query) use ($whereIn, $column, $keys) {
             $query->$whereIn($column, $keys);
         };
 

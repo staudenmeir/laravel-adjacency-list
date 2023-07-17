@@ -57,7 +57,7 @@ trait IsRecursiveRelation
 
         $keys = $this->getKeys($models, $this->parentKey);
 
-        $constraint = function (Builder $query) use ($models, $whereIn, $column, $keys) {
+        $constraint = function (Builder $query) use ($whereIn, $column, $keys) {
             $query->$whereIn($column, $keys);
         };
 
