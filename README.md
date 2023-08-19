@@ -172,6 +172,14 @@ $constraint = function ($query) {
 $tree = User::treeOf($constraint)->get();
 ```
 
+You can also pass a maximum depth:
+
+```php
+$tree = User::tree(3)->get();
+
+$tree = User::treeOf($constraint, 3)->get();
+```
+
 #### Filters
 
 The trait provides query scopes to filter models by their position in the tree:
@@ -243,14 +251,22 @@ $descendants = User::find($id)->descendants()->whereDepth(2)->get();
 $descendants = User::find($id)->descendants()->whereDepth('<', 3)->get();
 ```
 
-Queries with `whereDepth()` constraints that limit the maximum depth still build the entire (sub)tree internally. Both
-tree scopes allow you to provide a maximum depth that improves query performance by only building the requested section
-of the tree:
+Queries with `whereDepth()` constraints that limit the maximum depth still build the entire (sub)tree internally.
+Use `withMaxDepth()` to set a maximum depth that improves query performance by only building the requested section of
+the tree:
 
 ```php
-$tree = User::tree(3)->get();
+$descendants = User::withMaxDepth(3, function () {
+    return User::find($id)->descendants;
+});
+```
 
-$tree = User::treeOf($constraint, 3)->get();
+This also works with negative depths (where it's technically a minimum):
+
+```php
+$ancestors = User::withMaxDepth(-3, function () {
+    return User::find($id)->ancestors;
+});
 ```
 
 #### Path
@@ -847,10 +863,10 @@ $constraint = function ($query) {
 $subgraph = Node::subgraph($constraint)->get();
 ```
 
-You can pass a maximum depth as the second argument
+You can pass a maximum depth as the second argument:
 
 ```php
-$subgraph = Node::subgraph($constraint, 5)->get();
+$subgraph = Node::subgraph($constraint, 3)->get();
 ```
 
 #### <a name="graphs-order">Order</a>
@@ -908,7 +924,7 @@ Use `withMaxDepth()` to set a maximum depth that improves query performance by o
 the graph:
 
 ```php
-$descendants = Node::withMaxDepth(5, function () {
+$descendants = Node::withMaxDepth(3, function () {
     return Node::find($id)->descendants;
 });
 ```
@@ -916,7 +932,7 @@ $descendants = Node::withMaxDepth(5, function () {
 This also works with negative depths (where it's technically a minimum):
 
 ```php
-$ancestors = Node::withMaxDepth(-5, function () {
+$ancestors = Node::withMaxDepth(-3, function () {
     return Node::find($id)->ancestors;
 });
 ```

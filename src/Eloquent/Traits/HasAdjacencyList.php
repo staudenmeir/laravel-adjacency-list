@@ -455,4 +455,21 @@ trait HasAdjacencyList
 
         return $result;
     }
+
+    /**
+     * Execute a query with a maximum depth constraint for the recursive query.
+     *
+     * @param int $maxDepth
+     * @param callable $query
+     * @return mixed
+     */
+    public static function withMaxDepth(int $maxDepth, callable $query): mixed
+    {
+        $operator = $maxDepth > 0 ? '<' : '>';
+
+        return static::withRecursiveQueryConstraint(
+            fn (Builder $query) => $query->whereDepth($operator, $maxDepth),
+            $query
+        );
+    }
 }

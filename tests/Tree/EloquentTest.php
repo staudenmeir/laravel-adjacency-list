@@ -211,4 +211,22 @@ class EloquentTest extends TestCase
 
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12], $users->pluck('id')->all());
     }
+
+    public function testWithMaxDepth()
+    {
+        $nodes = User::withMaxDepth(2, function () {
+            return User::find(1)->descendants;
+        });
+
+        $this->assertEquals([2, 3, 4, 5, 6, 7], $nodes->pluck('id')->all());
+    }
+
+    public function testWithMaxDepthWithNegativeDepth()
+    {
+        $nodes = User::withMaxDepth(-1, function () {
+            return User::find(8)->ancestors;
+        });
+
+        $this->assertEquals([5], $nodes->pluck('id')->all());
+    }
 }
