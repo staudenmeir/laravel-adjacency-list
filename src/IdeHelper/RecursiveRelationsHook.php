@@ -130,15 +130,13 @@ class RecursiveRelationsHook implements ModelHookInterface
 
     public function run(ModelsCommand $command, Model $model): void
     {
-        $traits = collect(
-            class_uses_recursive($model)
-        );
+        $traits = class_uses_recursive($model);
 
-        if ($traits->contains(HasRecursiveRelationships::class)) {
+        if (in_array(HasRecursiveRelationships::class, $traits)) {
             $this->setTreeRelationProperties($command, $model);
         }
 
-        if ($traits->contains(HasGraphRelationships::class)) {
+        if (in_array(HasGraphRelationships::class, $traits)) {
             $this->setGraphRelationProperties($command, $model);
         }
     }
@@ -148,8 +146,8 @@ class RecursiveRelationsHook implements ModelHookInterface
     {
         foreach (static::$treeRelationMap as $relationDefinition) {
             $type = $relationDefinition['manyRelation']
-                ? '\\' . Collection::class . '|' . class_basename($model) . '[]'
-                : class_basename($model);
+                ? '\\' . Collection::class . '|\\' . $model::class . '[]'
+                : '\\' . $model::class;
 
             $command->setProperty(
                 $relationDefinition['name'],
@@ -176,7 +174,7 @@ class RecursiveRelationsHook implements ModelHookInterface
     protected function setGraphRelationProperties(ModelsCommand $command, Model $model): void
     {
         foreach (static::$graphRelationMap as $relationDefinition) {
-            $type = '\\' . EloquentCollection::class . '|' . class_basename($model) . '[]';
+            $type = '\\' . EloquentCollection::class . '|\\' . $model::class . '[]';
 
             $command->setProperty(
                 $relationDefinition['name'],
