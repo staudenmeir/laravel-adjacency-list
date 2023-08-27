@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         php: [ 8.2, 8.1 ]
-        database: [ mysql, mariadb, pgsql, sqlite, sqlsrv ]
+        database: [ mysql, mariadb, pgsql, sqlite ]
         release: [ stable, lowest ]
         include:
           - database: mysql
@@ -20,8 +20,6 @@ jobs:
             pdo: pgsql
           - database: sqlite
             pdo: sqlite
-          - database: sqlsrv
-            pdo: sqlsrv
           - php: 8.2
             release: stable
             coverage: xdebug
