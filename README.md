@@ -256,7 +256,7 @@ Use `withMaxDepth()` to set a maximum depth that improves query performance by o
 the tree:
 
 ```php
-$descendants = User::withMaxDepth(3, function () {
+$descendants = User::withMaxDepth(3, function () use ($id) {
     return User::find($id)->descendants;
 });
 ```
@@ -264,7 +264,7 @@ $descendants = User::withMaxDepth(3, function () {
 This also works with negative depths (where it's technically a minimum):
 
 ```php
-$ancestors = User::withMaxDepth(-3, function () {
+$ancestors = User::withMaxDepth(-3, function () use ($id) {
     return User::find($id)->ancestors;
 });
 ```
@@ -924,7 +924,7 @@ Use `withMaxDepth()` to set a maximum depth that improves query performance by o
 the graph:
 
 ```php
-$descendants = Node::withMaxDepth(3, function () {
+$descendants = Node::withMaxDepth(3, function () use ($id) {
     return Node::find($id)->descendants;
 });
 ```
@@ -932,7 +932,7 @@ $descendants = Node::withMaxDepth(3, function () {
 This also works with negative depths (where it's technically a minimum):
 
 ```php
-$ancestors = Node::withMaxDepth(-3, function () {
+$ancestors = Node::withMaxDepth(-3, function () use ($id) {
     return Node::find($id)->ancestors;
 });
 ```
