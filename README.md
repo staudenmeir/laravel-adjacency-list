@@ -404,6 +404,10 @@ $tree = User::withRecursiveQueryConstraint(function (Builder $query) {
 });
  ```
 
+Be aware, in the first function:
+- you can't use `whereHas`  with recursive relationship like `descendants`
+- you should specify qualified column name in `where` conditions
+
 #### Custom Relationships
 
 You can also define custom relationships to retrieve related models recursively.
