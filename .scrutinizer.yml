@@ -3,5 +3,5 @@ build:
     php: 8.2
 tools:
   external_code_coverage:
-    runs: 4
+    runs: 5
     timeout: 600
