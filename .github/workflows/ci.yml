@@ -22,7 +22,7 @@ jobs:
             pdo: sqlite
           - database: sqlsrv
             pdo: sqlsrv
-          - php: 8.2
+          - php: 8.3
             release: stable
             coverage: xdebug
 
