@@ -405,6 +405,7 @@ $tree = User::withRecursiveQueryConstraint(function (Builder $query) {
  ```
 
 Be aware, in the first function:
+TODO
 - you can't use `whereHas` with recursive relationship like `descendants`
 - you should specify qualified column name in `where` conditions
 

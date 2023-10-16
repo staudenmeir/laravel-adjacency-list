@@ -201,6 +201,7 @@ trait HasGraphRelationshipScopes
                     $type = $query->getConnection()->getSchemaBuilder()->getColumnType($pivotTable, $column);
                 }
 
+                // TODO: quality
                 $doctrineColumn = $query->getConnection()->getDoctrineColumn($pivotTable, $column);
 
                 $null = $grammar->compilePivotColumnNullValue(
