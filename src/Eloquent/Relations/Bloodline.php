@@ -5,6 +5,10 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @extends Descendants<TRelatedModel>
+ */
 class Bloodline extends Descendants
 {
     /**

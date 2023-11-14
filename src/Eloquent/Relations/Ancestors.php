@@ -7,6 +7,10 @@ use Staudenmeir\EloquentHasManyDeepContracts\Interfaces\ConcatenableRelation;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\Concatenation\IsConcatenableAncestorsRelation;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsAncestorRelation;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @extends HasMany<TRelatedModel>
+ */
 class Ancestors extends HasMany implements ConcatenableRelation
 {
     use IsAncestorRelation;

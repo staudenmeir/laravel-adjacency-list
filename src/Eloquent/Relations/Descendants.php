@@ -11,6 +11,10 @@ use Staudenmeir\EloquentHasManyDeepContracts\Interfaces\ConcatenableRelation;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\Concatenation\IsConcatenableDescendantsRelation;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelation;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @extends HasMany<TRelatedModel>
+ */
 class Descendants extends HasMany implements ConcatenableRelation
 {
     use IsConcatenableDescendantsRelation;

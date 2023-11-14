@@ -181,7 +181,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's ancestors.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors<static>
      */
     public function ancestors(): Ancestors
     {
@@ -200,7 +200,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's ancestors and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors<static>
      */
     public function ancestorsAndSelf(): Ancestors
     {
@@ -227,7 +227,7 @@ trait HasGraphAdjacencyList
      * @param string $parentKey
      * @param string $relatedKey
      * @param bool $andSelf
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors<static>
      */
     protected function newAncestors(
         Builder $query,
@@ -254,7 +254,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's children.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<static>
      */
     public function children(): BelongsToMany
     {
@@ -273,7 +273,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's children and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants<static>
      */
     public function childrenAndSelf(): Descendants
     {
@@ -283,7 +283,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's descendants.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants<static>
      */
     public function descendants(): Descendants
     {
@@ -302,7 +302,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's descendants and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants<static>
      */
     public function descendantsAndSelf(): Descendants
     {
@@ -329,7 +329,7 @@ trait HasGraphAdjacencyList
      * @param string $parentKey
      * @param string $relatedKey
      * @param bool $andSelf
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants<static>
      */
     protected function newDescendants(
         Builder $query,
@@ -356,7 +356,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's parents.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<static>
      */
     public function parents(): BelongsToMany
     {
@@ -375,7 +375,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's parents and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors<static>
      */
     public function parentsAndSelf(): Ancestors
     {
