@@ -19,7 +19,7 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
      */
     public function compileInitialPath($column, $alias)
     {
-        return 'cast('.$this->wrap($column).' as varchar) as '.$this->wrap($alias);
+        return 'cast('.$this->wrap($column).' as varchar(max)) as '.$this->wrap($alias);
     }
 
     /**
@@ -36,10 +36,10 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
         $wrappedAlias = $this->wrap($alias);
 
         if ($reverse) {
-            return "cast(cast($wrappedColumn as varchar) + ? + $wrappedAlias as varchar) as $wrappedAlias";
+            return "cast(cast($wrappedColumn as varchar(max)) + ? + $wrappedAlias as varchar(max)) as $wrappedAlias";
         }
 
-        return "cast($wrappedAlias + ? + cast($wrappedColumn as varchar) as varchar) as $wrappedAlias";
+        return "cast($wrappedAlias + ? + cast($wrappedColumn as varchar(max)) as varchar(max)) as $wrappedAlias";
     }
 
     /**
@@ -94,7 +94,7 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
         $localKey = $this->wrap($localKey);
         $path = $this->wrap($path);
 
-        $castLocalKey = "cast($localKey as varchar)";
+        $castLocalKey = "cast($localKey as varchar(max))";
 
         return "charindex($castLocalKey + ?, $path) > 0 or charindex(? + $castLocalKey + ?, $path) > 0";
     }
