@@ -4,6 +4,12 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent;
 
 use Illuminate\Database\Eloquent\Collection as Base;
 
+/**
+ * @template TKey of array-key
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ *
+ * @extends \Illuminate\Database\Eloquent\Collection<TKey, TModel>
+ */
 class Collection extends Base
 {
     public function toTree($childrenRelation = 'children')
