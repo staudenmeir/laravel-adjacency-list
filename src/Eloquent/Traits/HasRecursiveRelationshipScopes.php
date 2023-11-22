@@ -60,6 +60,21 @@ trait HasRecursiveRelationshipScopes
     }
 
     /**
+     * Limit the query to models without children.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDoesntHaveChildren(Builder $query)
+    {
+        $keys = (new static())->newQuery()
+            ->select($this->getParentKeyName())
+            ->hasParent();
+
+        return $query->whereNotIn($this->getLocalKeyName(), $keys);
+    }
+
+    /**
      * Limit the query to models with a parent.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query

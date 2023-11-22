@@ -111,6 +111,13 @@ class EloquentTest extends TestCase
         $this->assertEquals([1, 2, 3, 4, 5, 6, 11], $users->pluck('id')->all());
     }
 
+    public function testScopeDoesntHaveChildren()
+    {
+        $users = User::doesntHaveChildren()->get();
+
+        $this->assertEquals([7, 8, 9, 12], $users->pluck('id')->all());
+    }
+
     public function testScopeHasParent()
     {
         $users = User::hasParent()->get();
