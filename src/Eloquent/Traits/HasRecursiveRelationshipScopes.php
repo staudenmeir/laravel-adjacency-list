@@ -67,11 +67,7 @@ trait HasRecursiveRelationshipScopes
      */
     public function scopeDoesntHaveChildren(Builder $query)
     {
-        $keys = (new static())->newQuery()
-            ->select($this->getParentKeyName())
-            ->hasParent();
-
-        return $query->whereNotIn($this->getLocalKeyName(), $keys);
+        return $query->isLeaf();
     }
 
     /**
