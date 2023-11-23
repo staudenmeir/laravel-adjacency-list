@@ -186,7 +186,7 @@ The trait provides query scopes to filter models by their position in the tree:
 
 - `hasChildren()`: Models with children.
 - `hasParent()`: Models with a parent.
-- `isLeaf()`: Models without children.
+- `isLeaf()`/`doesntHaveChildren()`: Models without children.
 - `isRoot()`: Models without a parent.
 
 ```php
@@ -405,6 +405,7 @@ $tree = User::withRecursiveQueryConstraint(function (Builder $query) {
  ```
 
 Be aware, in the first function:
+
 - you can't use `whereHas` with recursive relationship like `descendants`
 - you should specify qualified column name in `where` conditions
 
