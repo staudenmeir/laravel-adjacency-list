@@ -60,6 +60,17 @@ trait HasRecursiveRelationshipScopes
     }
 
     /**
+     * Limit the query to models without children.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDoesntHaveChildren(Builder $query)
+    {
+        return $query->isLeaf();
+    }
+
+    /**
      * Limit the query to models with a parent.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
