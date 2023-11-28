@@ -117,7 +117,7 @@ trait HasAdjacencyList
     /**
      * Get the model's ancestors.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<static>
      */
     public function ancestors()
     {
@@ -133,7 +133,7 @@ trait HasAdjacencyList
     /**
      * Get the model's ancestors and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<static>
      */
     public function ancestorsAndSelf()
     {
@@ -154,7 +154,7 @@ trait HasAdjacencyList
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<static>
      */
     protected function newAncestors(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
@@ -164,7 +164,7 @@ trait HasAdjacencyList
     /**
      * Get the model's bloodline.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline<static>
      */
     public function bloodline()
     {
@@ -183,7 +183,7 @@ trait HasAdjacencyList
      * @param \Illuminate\Database\Eloquent\Model $parent
      * @param string $foreignKey
      * @param string $localKey
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline<static>
      */
     protected function newBloodline(Builder $query, Model $parent, $foreignKey, $localKey)
     {
@@ -193,7 +193,7 @@ trait HasAdjacencyList
     /**
      * Get the model's children.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<static>
      */
     public function children()
     {
@@ -203,7 +203,7 @@ trait HasAdjacencyList
     /**
      * Get the model's children and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<static>
      */
     public function childrenAndSelf()
     {
@@ -213,7 +213,7 @@ trait HasAdjacencyList
     /**
      * Get the model's descendants.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<static>
      */
     public function descendants()
     {
@@ -229,7 +229,7 @@ trait HasAdjacencyList
     /**
      * Get the model's descendants and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<static>
      */
     public function descendantsAndSelf()
     {
@@ -250,7 +250,7 @@ trait HasAdjacencyList
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<static>
      */
     protected function newDescendants(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
@@ -260,7 +260,7 @@ trait HasAdjacencyList
     /**
      * Get the model's parent.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<static, static>
      */
     public function parent()
     {
@@ -270,7 +270,7 @@ trait HasAdjacencyList
     /**
      * Get the model's parent and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<static>
      */
     public function parentAndSelf()
     {
@@ -280,7 +280,7 @@ trait HasAdjacencyList
     /**
      * Get the model's root ancestor.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor<static>
      */
     public function rootAncestor()
     {
@@ -299,7 +299,7 @@ trait HasAdjacencyList
      * @param \Illuminate\Database\Eloquent\Model $parent
      * @param string $foreignKey
      * @param string $localKey
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor<static>
      */
     protected function newRootAncestor(Builder $query, Model $parent, $foreignKey, $localKey)
     {
@@ -309,7 +309,7 @@ trait HasAdjacencyList
     /**
      * Get the model's siblings.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings<static>
      */
     public function siblings()
     {
@@ -325,7 +325,7 @@ trait HasAdjacencyList
     /**
      * Get the model's siblings and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings<static>
      */
     public function siblingsAndSelf()
     {
@@ -346,7 +346,7 @@ trait HasAdjacencyList
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings<static>
      */
     protected function newSiblings(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {

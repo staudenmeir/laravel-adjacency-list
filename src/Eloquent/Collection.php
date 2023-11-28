@@ -12,6 +12,12 @@ use Illuminate\Database\Eloquent\Collection as Base;
  */
 class Collection extends Base
 {
+    /**
+     * Generate a nested tree.
+     *
+     * @param string $childrenRelation
+     * @return static<int, TModel>
+     */
     public function toTree($childrenRelation = 'children')
     {
         if ($this->isEmpty()) {
