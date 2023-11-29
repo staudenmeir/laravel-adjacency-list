@@ -26,9 +26,9 @@ class BelongsToManyOfDescendantsTest extends TestCase
 
     public function testEagerLoading()
     {
-        $users = User::with(['roles' => function (BelongsToManyOfDescendants $query) {
-            $query->orderBy('id');
-        }])->get();
+        $users = User::with([
+            'roles' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([21, 31, 41, 51, 61, 71, 81], $users[0]->roles->pluck('id')->all());
         $this->assertEquals([51, 81], $users[1]->roles->pluck('id')->all());
@@ -39,9 +39,9 @@ class BelongsToManyOfDescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
-        $users = User::with(['rolesAndSelf' => function (BelongsToManyOfDescendants $query) {
-            $query->orderBy('id');
-        }])->get();
+        $users = User::with([
+            'rolesAndSelf' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([11, 21, 31, 41, 51, 61, 71, 81], $users[0]->rolesAndSelf->pluck('id')->all());
         $this->assertEquals([21, 51, 81], $users[1]->rolesAndSelf->pluck('id')->all());
@@ -52,9 +52,9 @@ class BelongsToManyOfDescendantsTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load(['roles' => function (BelongsToManyOfDescendants $query) {
-            $query->orderBy('id');
-        }]);
+        $users = User::orderBy('id')->get()->load([
+            'roles' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([21, 31, 41, 51, 61, 71, 81], $users[0]->roles->pluck('id')->all());
         $this->assertEquals([51, 81], $users[1]->roles->pluck('id')->all());
@@ -65,9 +65,9 @@ class BelongsToManyOfDescendantsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf()
     {
-        $users = User::all()->load(['rolesAndSelf' => function (BelongsToManyOfDescendants $query) {
-            $query->orderBy('id');
-        }]);
+        $users = User::orderBy('id')->get()->load([
+            'rolesAndSelf' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([11, 21, 31, 41, 51, 61, 71, 81], $users[0]->rolesAndSelf->pluck('id')->all());
         $this->assertEquals([21, 51, 81], $users[1]->rolesAndSelf->pluck('id')->all());

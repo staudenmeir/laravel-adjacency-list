@@ -17,7 +17,7 @@ class RootAncestorTest extends TestCase
 
     public function testEagerLoading()
     {
-        $users = User::with('rootAncestor')->get();
+        $users = User::with('rootAncestor')->orderBy('id')->get();
 
         $this->assertNull($users[0]->rootAncestor);
         $this->assertEquals(1, $users[7]->rootAncestor->id);
@@ -28,7 +28,7 @@ class RootAncestorTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load('rootAncestor');
+        $users = User::orderBy('id')->get()->load('rootAncestor');
 
         $this->assertNull($users[0]->rootAncestor);
         $this->assertEquals(1, $users[7]->rootAncestor->id);

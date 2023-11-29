@@ -26,9 +26,9 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testEagerLoading()
     {
-        $users = User::with(['videos' => function (BelongsToManyOfDescendants $query) {
-            $query->orderBy('id');
-        }])->get();
+        $users = User::with([
+            'videos' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([23, 33, 43, 53, 63, 73, 83], $users[0]->videos->pluck('id')->all());
         $this->assertEquals([53, 83], $users[1]->videos->pluck('id')->all());
@@ -39,9 +39,9 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
-        $users = User::with(['videosAndSelf' => function (BelongsToManyOfDescendants $query) {
-            $query->orderBy('id');
-        }])->get();
+        $users = User::with([
+            'videosAndSelf' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([13, 23, 33, 43, 53, 63, 73, 83], $users[0]->videosAndSelf->pluck('id')->all());
         $this->assertEquals([23, 53, 83], $users[1]->videosAndSelf->pluck('id')->all());
@@ -52,9 +52,9 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load(['videos' => function (BelongsToManyOfDescendants $query) {
-            $query->orderBy('id');
-        }]);
+        $users = User::orderBy('id')->get()->load([
+            'videos' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([23, 33, 43, 53, 63, 73, 83], $users[0]->videos->pluck('id')->all());
         $this->assertEquals([53, 83], $users[1]->videos->pluck('id')->all());
@@ -65,9 +65,9 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf()
     {
-        $users = User::all()->load(['videosAndSelf' => function (BelongsToManyOfDescendants $query) {
-            $query->orderBy('id');
-        }]);
+        $users = User::orderBy('id')->get()->load([
+            'videosAndSelf' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([13, 23, 33, 43, 53, 63, 73, 83], $users[0]->videosAndSelf->pluck('id')->all());
         $this->assertEquals([23, 53, 83], $users[1]->videosAndSelf->pluck('id')->all());

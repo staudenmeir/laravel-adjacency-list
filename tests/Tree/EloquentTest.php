@@ -10,14 +10,14 @@ class EloquentTest extends TestCase
 {
     public function testChildren()
     {
-        $children = User::find(1)->children;
+        $children = User::find(1)->children()->orderBy('id')->get();
 
         $this->assertEquals([2, 3, 4], $children->pluck('id')->all());
     }
 
     public function testChildrenAndSelf()
     {
-        $childrenAndSelf = User::find(1)->childrenAndSelf;
+        $childrenAndSelf = User::find(1)->childrenAndSelf()->orderBy('id')->get();
 
         $this->assertEquals([1, 2, 3, 4], $childrenAndSelf->pluck('id')->all());
     }
@@ -66,9 +66,7 @@ class EloquentTest extends TestCase
 
     public function testScopeTreeOfWithCallable()
     {
-        $constraint = function (Builder $query) {
-            $query->whereIn('id', [2, 4]);
-        };
+        $constraint = fn (Builder $query) => $query->whereIn('id', [2, 4]);
 
         $tree = User::treeOf($constraint)->orderBy('id')->get();
 
@@ -77,9 +75,7 @@ class EloquentTest extends TestCase
 
     public function testScopeTreeOfWithCallableAndMaxDepth()
     {
-        $constraint = function (Builder $query) {
-            $query->whereIn('id', [2, 4]);
-        };
+        $constraint = fn (Builder $query) => $query->whereIn('id', [2, 4]);
 
         $tree = User::treeOf($constraint, 1)->orderBy('id')->get();
 
@@ -106,42 +102,42 @@ class EloquentTest extends TestCase
 
     public function testScopeHasChildren()
     {
-        $users = User::hasChildren()->get();
+        $users = User::hasChildren()->orderBy('id')->get();
 
         $this->assertEquals([1, 2, 3, 4, 5, 6, 11], $users->pluck('id')->all());
     }
 
     public function testScopeDoesntHaveChildren()
     {
-        $users = User::doesntHaveChildren()->get();
+        $users = User::doesntHaveChildren()->orderBy('id')->get();
 
         $this->assertEquals([7, 8, 9, 12], $users->pluck('id')->all());
     }
 
     public function testScopeHasParent()
     {
-        $users = User::hasParent()->get();
+        $users = User::hasParent()->orderBy('id')->get();
 
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8, 9, 12], $users->pluck('id')->all());
     }
 
     public function testScopeIsLeaf()
     {
-        $users = User::isLeaf()->get();
+        $users = User::isLeaf()->orderBy('id')->get();
 
         $this->assertEquals([7, 8, 9, 12], $users->pluck('id')->all());
     }
 
     public function testScopeIsRoot()
     {
-        $users = User::isRoot()->get();
+        $users = User::isRoot()->orderBy('id')->get();
 
         $this->assertEquals([1, 11], $users->pluck('id')->all());
     }
 
     public function testScopeWhereDepth()
     {
-        $users = User::find(1)->descendants()->whereDepth(1)->get();
+        $users = User::find(1)->descendants()->whereDepth(1)->orderBy('id')->get();
 
         $this->assertEquals([2, 3, 4], $users->pluck('id')->all());
     }
@@ -189,9 +185,9 @@ class EloquentTest extends TestCase
 
     public function testSetRecursiveQueryConstraint()
     {
-        User::setRecursiveQueryConstraint(function (Builder $query) {
-            $query->where('users.parent_id', '<', 4);
-        });
+        User::setRecursiveQueryConstraint(
+            fn (Builder $query) => $query->where('users.parent_id', '<', 4)
+        );
 
         $users = User::tree()->orderBy('id')->get();
 
@@ -206,11 +202,10 @@ class EloquentTest extends TestCase
 
     public function testWithRecursiveQueryConstraint()
     {
-        $users = User::withRecursiveQueryConstraint(function (Builder $query) {
-            $query->where('users.parent_id', '<', 4);
-        }, function () {
-            return User::tree()->orderBy('id')->get();
-        });
+        $users = User::withRecursiveQueryConstraint(
+            fn (Builder $query) => $query->where('users.parent_id', '<', 4),
+            fn () => User::tree()->orderBy('id')->get()
+        );
 
         $this->assertEquals([1, 2, 3, 4, 5, 6, 11], $users->pluck('id')->all());
 
@@ -221,19 +216,21 @@ class EloquentTest extends TestCase
 
     public function testWithMaxDepth()
     {
-        $nodes = User::withMaxDepth(2, function () {
-            return User::find(1)->descendants()->orderBy('id')->get();
-        });
+        $users = User::withMaxDepth(
+            2,
+            fn () => User::find(1)->descendants()->orderBy('id')->get()
+        );
 
-        $this->assertEquals([2, 3, 4, 5, 6, 7], $nodes->pluck('id')->all());
+        $this->assertEquals([2, 3, 4, 5, 6, 7], $users->pluck('id')->all());
     }
 
     public function testWithMaxDepthWithNegativeDepth()
     {
-        $nodes = User::withMaxDepth(-2, function () {
-            return User::find(8)->ancestors()->orderBy('id')->get();
-        });
+        $users = User::withMaxDepth(
+            -2,
+            fn () => User::find(8)->ancestors()->orderBy('id')->get()
+        );
 
-        $this->assertEquals([2, 5], $nodes->pluck('id')->all());
+        $this->assertEquals([2, 5], $users->pluck('id')->all());
     }
 }

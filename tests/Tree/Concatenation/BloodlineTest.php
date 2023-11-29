@@ -27,7 +27,7 @@ class BloodlineTest extends TestCase
     {
         $users = User::with([
             'bloodlinePosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
-        ])->get();
+        ])->orderBy('id')->get();
 
         $this->assertEquals([10, 20, 30, 40, 50, 60, 70, 80], $users[0]->bloodlinePosts->pluck('id')->all());
         $this->assertEquals([10, 20, 50, 80], $users[1]->bloodlinePosts->pluck('id')->all());
@@ -36,7 +36,7 @@ class BloodlineTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load([
+        $users = User::orderBy('id')->get()->load([
             'bloodlinePosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
         ]);
 

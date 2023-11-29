@@ -142,9 +142,9 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoading()
     {
-        $nodes = Node::with(['descendants' => function (Descendants $query) {
-            $query->orderBy('id')->orderBy('depth');
-        }])->get();
+        $nodes = Node::with([
+            'descendants' => fn (Descendants $query) => $query->orderBy('id')->orderBy('depth'),
+        ])->get();
 
         $this->assertEquals(
             [2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8],
@@ -213,9 +213,9 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $nodes = Node::with(['descendantsAndSelf' => function (Descendants $query) {
-            $query->orderBy('id')->orderBy('depth');
-        }])->get();
+        $nodes = Node::with([
+            'descendantsAndSelf' => fn (Descendants $query) => $query->orderBy('id')->orderBy('depth'),
+        ])->get();
 
         $this->assertEquals(
             [1, 2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8],
@@ -285,9 +285,9 @@ class DescendantsTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $nodes = Node::all()->load(['descendants' => function (Descendants $query) {
-            $query->orderBy('id')->orderBy('depth');
-        }]);
+        $nodes = Node::all()->load([
+            'descendants' => fn (Descendants $query) => $query->orderBy('id')->orderBy('depth')
+        ]);
 
         $this->assertEquals(
             [2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8],
@@ -321,9 +321,9 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $nodes = Node::all()->load(['descendantsAndSelf' => function (Descendants $query) {
-            $query->orderBy('id')->orderBy('depth');
-        }]);
+        $nodes = Node::all()->load([
+            'descendantsAndSelf' => fn (Descendants $query) => $query->orderBy('id')->orderBy('depth')
+        ]);
 
         $this->assertEquals(
             [1, 2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8],

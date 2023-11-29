@@ -2,6 +2,8 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree\Concatenation;
 
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasOneDeep;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Role;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\TestCase;
@@ -10,14 +12,14 @@ class DescendantsTest extends TestCase
 {
     public function testLazyLoading()
     {
-        $posts = User::find(2)->descendantPosts;
+        $posts = User::find(2)->descendantPosts()->orderBy('id')->get();
 
         $this->assertEquals([50, 80], $posts->pluck('id')->all());
     }
 
     public function testLazyLoadingAndSelf()
     {
-        $posts = User::find(2)->descendantPostsAndSelf;
+        $posts = User::find(2)->descendantPostsAndSelf()->orderBy('id')->get();
 
         $this->assertEquals([20, 50, 80], $posts->pluck('id')->all());
     }
@@ -31,7 +33,9 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoading()
     {
-        $users = User::with('descendantPosts')->get();
+        $users = User::with([
+            'descendantPosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([20, 30, 40, 50, 60, 70, 80], $users[0]->descendantPosts->pluck('id')->all());
         $this->assertEquals([50, 80], $users[1]->descendantPosts->pluck('id')->all());
@@ -41,7 +45,9 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
-        $users = User::with('descendantPostsAndSelf')->get();
+        $users = User::with([
+            'descendantPostsAndSelf' => fn (HasManyDeep $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([10, 20, 30, 40, 50, 60, 70, 80], $users[0]->descendantPostsAndSelf->pluck('id')->all());
         $this->assertEquals([20, 50, 80], $users[1]->descendantPostsAndSelf->pluck('id')->all());
@@ -51,7 +57,9 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoadingWithHasOneDeep()
     {
-        $users = User::with('descendantPost')->get();
+        $users = User::with([
+            'descendantPost' => fn (HasOneDeep $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals(20, $users[0]->descendantPost->id);
         $this->assertEquals(50, $users[1]->descendantPost->id);
@@ -61,7 +69,9 @@ class DescendantsTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load('descendantPosts');
+        $users = User::orderBy('id')->get()->load([
+            'descendantPosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([20, 30, 40, 50, 60, 70, 80], $users[0]->descendantPosts->pluck('id')->all());
         $this->assertEquals([50, 80], $users[1]->descendantPosts->pluck('id')->all());
@@ -71,7 +81,9 @@ class DescendantsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf()
     {
-        $users = User::all()->load('descendantPostsAndSelf');
+        $users = User::orderBy('id')->get()->load([
+            'descendantPostsAndSelf' => fn (HasManyDeep $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([10, 20, 30, 40, 50, 60, 70, 80], $users[0]->descendantPostsAndSelf->pluck('id')->all());
         $this->assertEquals([20, 50, 80], $users[1]->descendantPostsAndSelf->pluck('id')->all());

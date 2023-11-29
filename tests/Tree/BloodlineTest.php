@@ -19,13 +19,9 @@ class BloodlineTest extends TestCase
 
     public function testEagerLoading()
     {
-        $users = User::with(
-            [
-                'bloodline' => function (Bloodline $relation) {
-                    $relation->breadthFirst()->orderBy('id');
-                },
-            ]
-        )->get();
+        $users = User::with([
+            'bloodline' => fn (Bloodline $query) => $query->breadthFirst()->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals(range(1, 9), $users[0]->bloodline->pluck('id')->all());
         $this->assertEquals([1, 2, 5, 8], $users[1]->bloodline->pluck('id')->all());
@@ -36,13 +32,9 @@ class BloodlineTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load(
-            [
-                'bloodline' => function (Bloodline $relation) {
-                    $relation->breadthFirst()->orderBy('id');
-                },
-            ]
-        );
+        $users = User::orderBy('id')->get()->load([
+            'bloodline' => fn (Bloodline $query) => $query->breadthFirst()->orderBy('id'),
+        ]);
 
         $this->assertEquals(range(1, 9), $users[0]->bloodline->pluck('id')->all());
         $this->assertEquals([1, 2, 5, 8], $users[1]->bloodline->pluck('id')->all());
