@@ -10,6 +10,15 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class BelongsToManyOfDescendantsTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if ($this->database === 'singlestore') {
+            $this->markTestSkipped();
+        }
+    }
+
     public function testLazyLoading()
     {
         $roles = User::find(2)->roles;

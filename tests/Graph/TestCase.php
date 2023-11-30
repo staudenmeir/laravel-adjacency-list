@@ -24,6 +24,10 @@ abstract class TestCase extends Base
 
         parent::setUp();
 
+        if ($this->database === 'singlestore') {
+            $this->markTestSkipped();
+        }
+
         $this->migrateDatabase();
 
         $this->seedDatabase();

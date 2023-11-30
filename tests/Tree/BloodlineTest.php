@@ -45,7 +45,7 @@ class BloodlineTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -56,7 +56,7 @@ class BloodlineTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -67,7 +67,7 @@ class BloodlineTest extends TestCase
 
     public function testIncrement()
     {
-        if ($this->database === 'mariadb') {
+        if (in_array($this->database, ['mariadb', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -81,7 +81,7 @@ class BloodlineTest extends TestCase
 
     public function testDecrement()
     {
-        if ($this->database === 'mariadb') {
+        if (in_array($this->database, ['mariadb', 'singlestore'])) {
             $this->markTestSkipped();
         }
 

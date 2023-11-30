@@ -85,6 +85,10 @@ class SiblingsTest extends TestCase
 
     public function testExistenceQuery()
     {
+        if ($this->database === 'singlestore') {
+            $this->markTestSkipped();
+        }
+
         $users = User::tree()->has('siblings', '>', 1)->get();
 
         $this->assertEquals([2, 3, 4], $users->pluck('id')->all());
@@ -92,6 +96,10 @@ class SiblingsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
+        if ($this->database === 'singlestore') {
+            $this->markTestSkipped();
+        }
+
         $descendants = User::first()->descendants()->has('siblingsAndSelf', '>', 2)->get();
 
         $this->assertEquals([2, 3, 4], $descendants->pluck('id')->all());

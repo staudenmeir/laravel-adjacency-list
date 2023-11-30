@@ -8,6 +8,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Base;
+use SingleStore\Laravel\SingleStoreProvider;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Category;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Role;
@@ -45,7 +46,7 @@ abstract class TestCase extends Base
             'users',
             function (Blueprint $table) {
                 $table->id();
-                $table->string('slug')->unique();
+                $table->string('slug');
                 $table->unsignedInteger('parent_id')->nullable();
                 $table->unsignedBigInteger('followers')->default(1);
                 $table->timestamps();
@@ -261,5 +262,10 @@ abstract class TestCase extends Base
         $app['config']->set('database.default', 'testing');
 
         $app['config']->set('database.connections.testing', $config[$this->database]);
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [SingleStoreProvider::class];
     }
 }

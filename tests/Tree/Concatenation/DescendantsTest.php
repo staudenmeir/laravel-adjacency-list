@@ -93,7 +93,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -104,7 +104,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -115,7 +115,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -126,7 +126,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
