@@ -13,9 +13,7 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $constraint = function (Builder $query) {
-            $query->whereIn('id', [3, 5]);
-        };
+        $constraint = fn (Builder $query) => $query->whereIn('id', [3, 5]);
 
         $graph = Node::subgraph($constraint)->orderBy('id')->get();
 
@@ -28,9 +26,7 @@ class EloquentTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $constraint = function (Builder $query) {
-            $query->whereIn('id', [3, 5]);
-        };
+        $constraint = fn (Builder $query) => $query->whereIn('id', [3, 5]);
 
         $graph = Node::subgraph($constraint, 1)->orderBy('id')->get();
 
@@ -125,9 +121,9 @@ class EloquentTest extends TestCase
 
     public function testSetRecursiveQueryConstraint()
     {
-        Node::setRecursiveQueryConstraint(function (Builder $query) {
-            $query->where('pivot_weight', '<', 7);
-        });
+        Node::setRecursiveQueryConstraint(
+            fn (Builder $query) => $query->where('pivot_weight', '<', 7)
+        );
 
         $nodes = Node::find(2)->descendants()->orderBy('id')->get();
 
@@ -142,11 +138,10 @@ class EloquentTest extends TestCase
 
     public function testWithRecursiveQueryConstraint()
     {
-        $nodes = Node::withRecursiveQueryConstraint(function (Builder $query) {
-            $query->where('pivot_weight', '<', 7);
-        }, function () {
-            return Node::find(2)->descendants()->orderBy('id')->get();
-        });
+        $nodes = Node::withRecursiveQueryConstraint(
+            fn (Builder $query) => $query->where('pivot_weight', '<', 7),
+            fn () => Node::find(2)->descendants()->orderBy('id')->get()
+        );
 
         $this->assertEquals([5, 7, 8], $nodes->pluck('id')->all());
 
@@ -157,18 +152,20 @@ class EloquentTest extends TestCase
 
     public function testWithMaxDepth()
     {
-        $nodes = Node::withMaxDepth(2, function () {
-            return Node::find(2)->descendants;
-        });
+        $nodes = Node::withMaxDepth(
+            2,
+            fn () => Node::find(2)->descendants
+        );
 
         $this->assertEquals([5, 7, 8], $nodes->pluck('id')->all());
     }
 
     public function testWithMaxDepthWithNegativeDepth()
     {
-        $nodes = Node::withMaxDepth(-1, function () {
-            return Node::find(5)->ancestors;
-        });
+        $nodes = Node::withMaxDepth(
+            -1,
+            fn () => Node::find(5)->ancestors
+        );
 
         $this->assertEquals([1, 2, 10], $nodes->pluck('id')->all());
     }

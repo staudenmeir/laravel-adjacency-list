@@ -3,10 +3,11 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph;
 
 use Carbon\Carbon;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
-use PHPUnit\Framework\TestCase as Base;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Orchestra\Testbench\TestCase as Base;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Node;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetection;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetectionAndStart;
@@ -19,20 +20,17 @@ abstract class TestCase extends Base
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->database = getenv('DATABASE') ?: 'sqlite';
 
-        $config = require __DIR__.'/../config/database.php';
+        parent::setUp();
 
-        $db = new DB();
-        $db->addConnection($config[$this->database]);
-        $db->setAsGlobal();
-        $db->bootEloquent();
+        if ($this->database === 'singlestore') {
+            $this->markTestSkipped();
+        }
 
-        $this->migrate();
+        $this->migrateDatabase();
 
-        $this->seed();
+        $this->seedDatabase();
     }
 
     protected function tearDown(): void
@@ -42,11 +40,11 @@ abstract class TestCase extends Base
         parent::tearDown();
     }
 
-    protected function migrate(): void
+    protected function migrateDatabase(): void
     {
-        DB::schema()->dropAllTables();
+        Schema::dropAllTables();
 
-        DB::schema()->create(
+        Schema::create(
             'nodes',
             function (Blueprint $table) {
                 $table->id();
@@ -57,7 +55,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'edges',
             function (Blueprint $table) {
                 $table->unsignedBigInteger('parent_id');
@@ -72,7 +70,7 @@ abstract class TestCase extends Base
         );
     }
 
-    protected function seed(): void
+    protected function seedDatabase(): void
     {
         Carbon::setTestNow(
             Carbon::now()->roundSecond()
@@ -288,5 +286,14 @@ abstract class TestCase extends Base
             [NodeWithCycleDetectionAndStart::class, []],
             [NodeWithUuidAndCycleDetectionAndStart::class, ['sqlsrv']],
         ];
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        $config = require __DIR__.'/../config/database.php';
+
+        $app['config']->set('database.default', 'testing');
+
+        $app['config']->set('database.connections.testing', $config[$this->database]);
     }
 }

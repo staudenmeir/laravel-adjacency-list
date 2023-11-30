@@ -9,6 +9,7 @@ use RuntimeException;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MariaDbGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\PostgresGrammar;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SingleStoreGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SQLiteGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SqlServerGrammar;
 
@@ -99,6 +100,10 @@ trait BuildsAdjacencyListQueries
             case 'sqlsrv':
                 return $this->query->getConnection()->withTablePrefix(
                     new SqlServerGrammar($this->model)
+                );
+            case 'singlestore':
+                return $this->query->getConnection()->withTablePrefix(
+                    new SingleStoreGrammar($this->model)
                 );
         }
 

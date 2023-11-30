@@ -16,6 +16,7 @@ This Laravel Eloquent extension provides recursive relationships using common ta
 - PostgreSQL 9.4+
 - SQLite 3.8.3+
 - SQL Server 2008+
+- SingleStore 8.1+ (only [trees](#trees-one-parent-per-node-one-to-many))
 
 ## Installation
 

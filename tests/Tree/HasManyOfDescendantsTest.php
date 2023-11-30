@@ -11,6 +11,15 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class HasManyOfDescendantsTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if ($this->database === 'singlestore') {
+            $this->markTestSkipped();
+        }
+    }
+
     public function testLazyLoading()
     {
         $posts = User::find(2)->posts;
@@ -34,9 +43,9 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testEagerLoading()
     {
-        $users = User::with(['posts' => function (HasManyOfDescendants $query) {
-            $query->orderBy('id');
-        }])->get();
+        $users = User::with([
+            'posts' => fn (HasManyOfDescendants $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([20, 30, 40, 50, 60, 70, 80], $users[0]->posts->pluck('id')->all());
         $this->assertEquals([50, 80], $users[1]->posts->pluck('id')->all());
@@ -47,9 +56,9 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
-        $users = User::with(['postsAndSelf' => function (HasManyOfDescendants $query) {
-            $query->orderBy('id');
-        }])->get();
+        $users = User::with([
+            'postsAndSelf' => fn (HasManyOfDescendants $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([10, 20, 30, 40, 50, 60, 70, 80], $users[0]->postsAndSelf->pluck('id')->all());
         $this->assertEquals([20, 50, 80], $users[1]->postsAndSelf->pluck('id')->all());
@@ -69,9 +78,9 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load(['posts' => function (HasManyOfDescendants $query) {
-            $query->orderBy('id');
-        }]);
+        $users = User::orderBy('id')->get()->load([
+            'posts' => fn (HasManyOfDescendants $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([20, 30, 40, 50, 60, 70, 80], $users[0]->posts->pluck('id')->all());
         $this->assertEquals([50, 80], $users[1]->posts->pluck('id')->all());
@@ -82,9 +91,9 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf()
     {
-        $users = User::all()->load(['postsAndSelf' => function (HasManyOfDescendants $query) {
-            $query->orderBy('id');
-        }]);
+        $users = User::orderBy('id')->get()->load([
+            'postsAndSelf' => fn (HasManyOfDescendants $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([10, 20, 30, 40, 50, 60, 70, 80], $users[0]->postsAndSelf->pluck('id')->all());
         $this->assertEquals([20, 50, 80], $users[1]->postsAndSelf->pluck('id')->all());

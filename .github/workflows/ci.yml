@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         php: [ 8.3, 8.2, 8.1 ]
-        database: [ mysql, mariadb, pgsql, sqlite, sqlsrv ]
+        database: [ mysql, mariadb, pgsql, sqlite, sqlsrv, singlestore ]
         release: [ stable, lowest ]
         include:
           - database: mysql
@@ -22,6 +22,8 @@ jobs:
             pdo: sqlite
           - database: sqlsrv
             pdo: sqlsrv
+          - database: singlestore
+            pdo: singlestore
           - php: 8.3
             release: stable
             coverage: xdebug
@@ -59,6 +61,16 @@ jobs:
           --health-cmd "echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P Password!"
         ports:
           - 1433
+      singlestore:
+        # check for new versions at https://github.com/singlestore-labs/singlestoredb-dev-image/pkgs/container/singlestoredb-dev/versions
+        image: ghcr.io/singlestore-labs/singlestoredb-dev:0.2.11
+        ports:
+          - 3306
+        env:
+          # this license key is only authorized for use in SingleStore laravel-cte tests and is heavily restricted
+          # if you want a free SingleStore license for your own use please visit https://www.singlestore.com/cloud-trial/
+          SINGLESTORE_LICENSE: BDMwMzMyOTEyNjMwYzQ1ODE5MDdjNThiYjU1MGM5YTAyAAAAAAAAAAAEAAAAAAAAAAwwNQIZAKqnuBG9UX3K2enIHyshQGHZIjQiCZpqlwIYE8t4J8VewDLm2m4+4i8KorAIZsJd8j6EAA==
+          ROOT_PASSWORD: "test"
 
     steps:
       - uses: actions/checkout@v3
@@ -76,6 +88,8 @@ jobs:
           coverage: ${{ matrix.coverage }}
       - run: docker exec sqlsrv /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P Password! -Q "create database [test]"
         if: matrix.database == 'sqlsrv'
+      - run: mysql -h 127.0.0.1 -u root -ptest -P ${{ job.services.singlestore.ports[3306] }} -e "create database test"
+        if: matrix.database == 'singlestore'
       - run: composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }}
       - run: cp tests/config/database.ci.php tests/config/database.php
       - run: |
@@ -87,5 +101,6 @@ jobs:
           MARIADB_PORT: ${{ job.services.mariadb.ports[3306] }}
           PGSQL_PORT: ${{ job.services.pgsql.ports[5432] }}
           SQLSRV_PORT: ${{ job.services.sqlsrv.ports[1433] }}
+          SINGLESTORE_PORT: ${{ job.services.singlestore.ports[3306] }}
       - run: php tests/coverage/scrutinizer.php
         if: matrix.coverage == 'xdebug'

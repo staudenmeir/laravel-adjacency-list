@@ -3,10 +3,12 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Carbon\Carbon;
-use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
-use PHPUnit\Framework\TestCase as Base;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Orchestra\Testbench\TestCase as Base;
+use SingleStore\Laravel\SingleStoreProvider;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Category;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Role;
@@ -20,20 +22,13 @@ abstract class TestCase extends Base
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->database = getenv('DATABASE') ?: 'sqlite';
 
-        $config = require __DIR__.'/../config/database.php';
+        parent::setUp();
 
-        $db = new DB();
-        $db->addConnection($config[$this->database]);
-        $db->setAsGlobal();
-        $db->bootEloquent();
+        $this->migrateDatabase();
 
-        $this->migrate();
-
-        $this->seed();
+        $this->seedDatabase();
     }
 
     protected function tearDown(): void
@@ -43,15 +38,15 @@ abstract class TestCase extends Base
         parent::tearDown();
     }
 
-    protected function migrate(): void
+    protected function migrateDatabase(): void
     {
-        DB::schema()->dropAllTables();
+        Schema::dropAllTables();
 
-        DB::schema()->create(
+        Schema::create(
             'users',
             function (Blueprint $table) {
                 $table->id();
-                $table->string('slug')->unique();
+                $table->string('slug');
                 $table->unsignedInteger('parent_id')->nullable();
                 $table->unsignedBigInteger('followers')->default(1);
                 $table->timestamps();
@@ -59,7 +54,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'posts',
             function (Blueprint $table) {
                 $table->unsignedInteger('id');
@@ -69,7 +64,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'roles',
             function (Blueprint $table) {
                 $table->unsignedInteger('id');
@@ -78,7 +73,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'role_user',
             function (Blueprint $table) {
                 $table->unsignedBigInteger('role_id');
@@ -86,7 +81,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'tags',
             function (Blueprint $table) {
                 $table->unsignedInteger('id');
@@ -95,7 +90,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'taggables',
             function (Blueprint $table) {
                 $table->unsignedInteger('tag_id');
@@ -103,7 +98,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'videos',
             function (Blueprint $table) {
                 $table->unsignedInteger('id');
@@ -112,7 +107,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'authorables',
             function (Blueprint $table) {
                 $table->unsignedInteger('user_id');
@@ -120,7 +115,7 @@ abstract class TestCase extends Base
             }
         );
 
-        DB::schema()->create(
+        Schema::create(
             'categories',
             function (Blueprint $table) {
                 $table->string('id');
@@ -130,7 +125,7 @@ abstract class TestCase extends Base
         );
     }
 
-    protected function seed(): void
+    protected function seedDatabase(): void
     {
         Model::unguard();
 
@@ -258,5 +253,19 @@ abstract class TestCase extends Base
         Category::create(['id' => 'b', 'parent_id' => 'a']);
 
         Model::reguard();
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        $config = require __DIR__.'/../config/database.php';
+
+        $app['config']->set('database.default', 'testing');
+
+        $app['config']->set('database.connections.testing', $config[$this->database]);
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [SingleStoreProvider::class];
     }
 }

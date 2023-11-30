@@ -11,7 +11,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/database": "^10.0",
-        "staudenmeir/laravel-cte": "^1.7",
+        "staudenmeir/laravel-cte": "^1.8",
         "staudenmeir/eloquent-has-many-deep-contracts": "^1.1"
     },
     "require-dev": {
@@ -21,7 +21,8 @@
         "mockery/mockery": "^1.5.1",
         "staudenmeir/eloquent-has-many-deep": "^1.18.1",
         "nunomaduro/larastan": "^2.0",
-        "orchestra/testbench": "^8.15"
+        "orchestra/testbench": "^8.15",
+        "singlestoredb/singlestoredb-laravel": "^1.5.1"
     },
     "suggest": {
         "barryvdh/laravel-ide-helper": "Provide type hints for attributes and relations."

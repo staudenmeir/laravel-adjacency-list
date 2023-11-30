@@ -34,7 +34,7 @@ class AncestorsTest extends TestCase
     {
         $users = User::with([
             'ancestorPosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
-        ])->get();
+        ])->orderBy('id')->get();
 
         $this->assertEquals([], $users[0]->ancestorPosts->pluck('id')->all());
         $this->assertEquals([10], $users[1]->ancestorPosts->pluck('id')->all());
@@ -44,7 +44,9 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
-        $users = User::with('ancestorAndSelfPosts')->get();
+        $users = User::with([
+            'ancestorAndSelfPosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
+        ])->orderBy('id')->get();
 
         $this->assertEquals([10], $users[0]->ancestorAndSelfPosts->pluck('id')->all());
         $this->assertEquals([10, 20], $users[1]->ancestorAndSelfPosts->pluck('id')->all());
@@ -56,7 +58,7 @@ class AncestorsTest extends TestCase
     {
         $users = User::with([
             'ancestorPost' => fn (HasManyDeep $query) => $query->orderBy('id'),
-        ])->get();
+        ])->orderBy('id')->get();
 
         $this->assertNull($users[0]->ancestorPost);
         $this->assertEquals(10, $users[1]->ancestorPost->id);
@@ -66,7 +68,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyEagerLoading()
     {
-        $users = User::all()->load([
+        $users = User::orderBy('id')->get()->load([
             'ancestorPosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
         ]);
 
@@ -78,7 +80,9 @@ class AncestorsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf()
     {
-        $users = User::all()->load('ancestorAndSelfPosts');
+        $users = User::orderBy('id')->get()->load([
+            'ancestorAndSelfPosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
+        ]);
 
         $this->assertEquals([10], $users[0]->ancestorAndSelfPosts->pluck('id')->all());
         $this->assertEquals([10, 20], $users[1]->ancestorAndSelfPosts->pluck('id')->all());
@@ -88,7 +92,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -99,7 +103,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -110,7 +114,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -121,7 +125,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->database, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
