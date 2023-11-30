@@ -9,14 +9,14 @@ class AncestorsTest extends TestCase
 {
     public function testLazyLoading()
     {
-        $ancestors = User::find(8)->ancestors;
+        $ancestors = User::find(8)->ancestors()->orderBy('id')->get();
 
-        $this->assertEquals([5, 2, 1], $ancestors->pluck('id')->all());
-        $this->assertEquals([-1, -2, -3], $ancestors->pluck('depth')->all());
-        $this->assertEquals(['5', '5.2', '5.2.1'], $ancestors->pluck('path')->all());
-        $this->assertEquals(['user-5', 'user-5/user-2', 'user-5/user-2/user-1'], $ancestors->pluck('slug_path')->all());
+        $this->assertEquals([1, 2, 5], $ancestors->pluck('id')->all());
+        $this->assertEquals([-3, -2, -1], $ancestors->pluck('depth')->all());
+        $this->assertEquals(['5.2.1', '5.2', '5'], $ancestors->pluck('path')->all());
+        $this->assertEquals(['user-5/user-2/user-1', 'user-5/user-2', 'user-5'], $ancestors->pluck('slug_path')->all());
         $this->assertEquals(
-            ['user-5', 'user-2/user-5', 'user-1/user-2/user-5'],
+            ['user-1/user-2/user-5', 'user-2/user-5', 'user-5'],
             $ancestors->pluck('reverse_slug_path')->all()
         );
     }
