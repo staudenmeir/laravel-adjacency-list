@@ -37,9 +37,9 @@
             "Staudenmeir\\LaravelAdjacencyList\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable" : true,
     "config": {
         "sort-packages": true
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable" : true
 }
