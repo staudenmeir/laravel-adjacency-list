@@ -196,6 +196,7 @@ $noLeaves = User::hasChildren()->get();
 $noRoots = User::hasParent()->get();
 
 $leaves = User::isLeaf()->get();
+$leaves = User::doesntHaveChildren()->get();
 
 $roots = User::isRoot()->get();
 ```
