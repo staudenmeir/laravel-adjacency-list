@@ -245,7 +245,7 @@ trait IsOfDescendantsRelation
 
         $query->withRecursiveExpression($name, $expression);
 
-        $query->withGlobalScope(get_class(), function (Builder $query) use ($name) {
+        $query->withGlobalScope(get_class($this), function (Builder $query) use ($name) {
             $query->whereIn(
                 $this->getExpressionForeignKeyName(),
                 (new $this->parent())->setTable($name)
