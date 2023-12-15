@@ -40,6 +40,13 @@
     "config": {
         "sort-packages": true
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Staudenmeir\\LaravelAdjacencyList\\IdeHelperServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable" : true
 }

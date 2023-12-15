@@ -147,13 +147,6 @@ User::find($id)->descendants()->update(['active' => false]);
 User::find($id)->siblings()->delete();
 ```
 
-> **Note:** If you are using [barryvdh/laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper), this package
-> provides a [model hook](https://github.com/barryvdh/laravel-ide-helper#model-hooks) that will correctly add relations
-> when generating the type hints.
-> To get the correct type hints, in
-> the [ide-helper.php](https://github.com/barryvdh/laravel-ide-helper/blob/master/config/ide-helper.php) config file,
-> add `\Staudenmeir\LaravelAdjacencyList\IdeHelper\RecursiveRelationsHook::class` to the `model_hooks` array.
-
 #### Trees
 
 The trait provides the `tree()` query scope to get all models, beginning at the root(s):
@@ -788,13 +781,6 @@ Node::find($id)->descendants()->update(['active' => false]);
 
 Node::find($id)->parents()->delete();
 ```
-
-> **Note:** If you are using [barryvdh/laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper), this package
-> provides a [model hook](https://github.com/barryvdh/laravel-ide-helper#model-hooks) that will correctly add relations
-> when generating the type hints.
-> To get the correct type hints, in
-> the [ide-helper.php](https://github.com/barryvdh/laravel-ide-helper/blob/master/config/ide-helper.php) config file,
-> add `\Staudenmeir\LaravelAdjacencyList\IdeHelper\RecursiveRelationsHook::class` to the `model_hooks` array.
 
 #### <a name="graphs-pivot-columns">Pivot Columns</a>
 
