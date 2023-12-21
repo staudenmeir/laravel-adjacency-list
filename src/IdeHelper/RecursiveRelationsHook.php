@@ -6,7 +6,6 @@ use Barryvdh\LaravelIdeHelper\Console\ModelsCommand;
 use Barryvdh\LaravelIdeHelper\Contracts\ModelHookInterface;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
