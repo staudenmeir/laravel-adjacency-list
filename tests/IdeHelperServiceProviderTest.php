@@ -9,7 +9,7 @@ use Staudenmeir\LaravelAdjacencyList\IdeHelper\RecursiveRelationsHook;
 
 class IdeHelperServiceProviderTest extends TestCase
 {
-    public function testAutoRegistrationOfModelHook(): void
+    public function tesRegister(): void
     {
         $this->app->loadDeferredProvider(BarryvdhIdeHelperServiceProvider::class);
         $this->app->loadDeferredProvider(IdeHelperServiceProvider::class);
