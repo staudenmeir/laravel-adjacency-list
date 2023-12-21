@@ -64,6 +64,7 @@ Supports Laravel 5.5.29+.
 - [Recursive Query Constraints](#recursive-query-constraints)
 - [Custom Relationships](#custom-relationships)
 - [Concatenation](#concatenation)
+- [Known Issues](#known-issues)
 
 #### Getting Started
 
@@ -399,10 +400,10 @@ $tree = User::withRecursiveQueryConstraint(function (Builder $query) {
 });
  ```
 
-Be aware, in the first function:
+Be aware that in the first closure:
 
-- you can't use `whereHas` with recursive relationship like `descendants`
-- you should specify qualified column name in `where` conditions
+- You need to qualify column names.
+- You can't use `whereHas()` with recursive relationships like `descendants`.
 
 #### Custom Relationships
 
@@ -674,6 +675,13 @@ At the moment, recursive relationships can only be at the beginning of deep rela
 - Supported: `User` → descendants → `User` → has many → `Post`
 - Not supported: `Country` → has many → `User` → descendants → `User`
 
+#### Known Issues
+
+##### MariaDB
+
+MariaDB [doesn't yet support](https://jira.mariadb.org/browse/MDEV-19077) correlated CTEs in subqueries. This affects
+queries like `User::whereHas('descendants')` or `User::withCount('descendants')`.
+
 ### Graphs: Multiple Parents per Node (Many-to-Many)
 
 You can also use the package to traverse graphs with multiple parents per node that are defined in a pivot table. Use
@@ -691,6 +699,7 @@ Supports Laravel 9+.
 - [Path](#graphs-path)
 - [Custom Paths](#graphs-custom-paths)
 - [Recursive Query Constraints](#graphs-recursive-query-constraints)
+- [Known Issues](#graphs-known-issues)
 
 #### <a name="graphs-getting-started">Getting Started</a>
 
@@ -1018,6 +1027,14 @@ $descendants = Node::withRecursiveQueryConstraint(function (Builder $query) {
     return Node::find($id)->descendants;
 });
  ```
+
+#### <a name="graphs-known-issues">Known Issues</a>
+
+##### MariaDB
+
+MariaDB [doesn't yet support](https://jira.mariadb.org/browse/MDEV-19077) correlated CTEs in subqueries. This affects
+queries like `Node::whereHas('descendants')` or `Node::withCount('descendants')`.
+
 
 ### Package Conflicts
 
