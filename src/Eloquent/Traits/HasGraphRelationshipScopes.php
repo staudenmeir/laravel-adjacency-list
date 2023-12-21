@@ -194,6 +194,7 @@ trait HasGraphRelationshipScopes
                 (new $this())->getTable(),
                 $this->getLocalKeyName()
             );
+
             foreach ($columns as $i => $column) {
                 if ($i < 2) {
                     $type = $localKeyType;

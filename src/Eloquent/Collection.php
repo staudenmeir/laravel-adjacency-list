@@ -37,7 +37,10 @@ class Collection extends Base
         $itemsByParentKey = $this->groupBy($parentKeyName);
 
         foreach ($this->items as $item) {
-            $item->setRelation($childrenRelation, $itemsByParentKey[$item->$localKeyName] ?? new static());
+            $item->setRelation(
+                $childrenRelation,
+                $itemsByParentKey[$item->$localKeyName] ?? new static()
+            );
         }
 
         return $tree;
