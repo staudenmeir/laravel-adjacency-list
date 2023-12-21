@@ -677,8 +677,6 @@ At the moment, recursive relationships can only be at the beginning of deep rela
 
 #### Known Issues
 
-##### MariaDB
-
 MariaDB [doesn't yet support](https://jira.mariadb.org/browse/MDEV-19077) correlated CTEs in subqueries. This affects
 queries like `User::whereHas('descendants')` or `User::withCount('descendants')`.
 
@@ -1029,8 +1027,6 @@ $descendants = Node::withRecursiveQueryConstraint(function (Builder $query) {
  ```
 
 #### <a name="graphs-known-issues">Known Issues</a>
-
-##### MariaDB
 
 MariaDB [doesn't yet support](https://jira.mariadb.org/browse/MDEV-19077) correlated CTEs in subqueries. This affects
 queries like `Node::whereHas('descendants')` or `Node::withCount('descendants')`.
