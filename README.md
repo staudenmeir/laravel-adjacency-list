@@ -7,7 +7,8 @@
 [![Total Downloads](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/downloads)](https://packagist.org/packages/staudenmeir/laravel-adjacency-list/stats)
 [![License](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/license)](https://github.com/staudenmeir/laravel-adjacency-list/blob/master/LICENSE)
 
-This Laravel Eloquent extension provides recursive relationships using common table expressions (CTE).
+This Laravel Eloquent extension provides recursive relationships for [trees](#trees-one-parent-per-node-one-to-many) and
+[graphs](#graphs-multiple-parents-per-node-many-to-many) using common table expressions (CTE).
 
 ## Compatibility
 
