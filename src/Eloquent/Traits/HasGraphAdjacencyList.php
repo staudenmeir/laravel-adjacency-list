@@ -5,6 +5,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants;
 
@@ -419,6 +420,17 @@ trait HasGraphAdjacencyList
     public function newEloquentBuilder($query)
     {
         return new \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder($query);
+    }
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param array $models
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new Collection($models);
     }
 
     /**

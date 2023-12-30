@@ -56,7 +56,7 @@ class RecursiveRelationsHookTest extends TestCase
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',
-            '\Illuminate\Database\Eloquent\Collection|Node[]',
+            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection|Node[]',
             true,
             false,
             "The node's recursive parents and itself.",

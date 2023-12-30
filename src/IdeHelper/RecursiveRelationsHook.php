@@ -7,7 +7,8 @@ use Barryvdh\LaravelIdeHelper\Contracts\ModelHookInterface;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection as TreeCollection;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection as GraphCollection;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
@@ -148,7 +149,7 @@ class RecursiveRelationsHook implements ModelHookInterface
     {
         foreach (static::$treeRelationMap as $relationDefinition) {
             $type = $relationDefinition['manyRelation']
-                ? '\\' . Collection::class . '|' . class_basename($model) . '[]'
+                ? '\\' . TreeCollection::class . '|' . class_basename($model) . '[]'
                 : class_basename($model);
 
             $command->setProperty(
@@ -176,7 +177,7 @@ class RecursiveRelationsHook implements ModelHookInterface
     protected function setGraphRelationProperties(ModelsCommand $command, Model $model): void
     {
         foreach (static::$graphRelationMap as $relationDefinition) {
-            $type = '\\' . EloquentCollection::class . '|' . class_basename($model) . '[]';
+            $type = '\\' . GraphCollection::class . '|' . class_basename($model) . '[]';
 
             $command->setProperty(
                 $relationDefinition['name'],

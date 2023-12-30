@@ -325,7 +325,7 @@ class User extends Model
 
 #### Nested Results
 
-Use the `toTree()` method on the result collection to generate a nested tree:
+Use the `toTree()` method on a result collection to generate a nested tree:
 
 ```php
 $users = User::tree()->get();
@@ -662,6 +662,7 @@ Supports Laravel 9+.
 - [Depth](#graphs-depth)
 - [Path](#graphs-path)
 - [Custom Paths](#graphs-custom-paths)
+- [Nested Results](#graphs-nested-results)
 - [Recursive Query Constraints](#graphs-recursive-query-constraints)
 
 #### <a name="graphs-getting-started">Getting Started</a>
@@ -983,6 +984,46 @@ class Node extends Model
         ];
     }
 }
+```
+
+#### <a name="graphs-nested-results">Nested Results</a>
+
+Use the `toTree()` method on a result collection to generate a nested tree:
+
+```php
+$nodes = Node::find($id)->descendants;
+
+$tree = $nodes->toTree();
+```
+
+This recursively sets `children` relationships:
+
+```json
+[
+  {
+    "id": 1,
+    "children": [
+      {
+        "id": 2,
+        "children": [
+          {
+            "id": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "children": [
+          {
+            "id": 5,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]
 ```
 
 #### <a name="graphs-recursive-query-constraints">Recursive Query Constraints</a>
