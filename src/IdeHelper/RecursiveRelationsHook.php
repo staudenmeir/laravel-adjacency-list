@@ -4,10 +4,10 @@ namespace Staudenmeir\LaravelAdjacencyList\IdeHelper;
 
 use Barryvdh\LaravelIdeHelper\Console\ModelsCommand;
 use Barryvdh\LaravelIdeHelper\Contracts\ModelHookInterface;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection as TreeCollection;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection as GraphCollection;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
@@ -135,7 +135,7 @@ class RecursiveRelationsHook implements ModelHookInterface
         if (in_array(HasRecursiveRelationships::class, $traits)) {
             foreach (static::$treeRelationships as $relationship) {
                 $type = $relationship['manyRelation']
-                    ? '\\' . Collection::class . '|\\' . $model::class . '[]'
+                    ? '\\' . TreeCollection::class . '|\\' . $model::class . '[]'
                     : '\\' . $model::class;
 
                 $this->addRelationship($command, $relationship, $type);
@@ -144,7 +144,7 @@ class RecursiveRelationsHook implements ModelHookInterface
 
         if (in_array(HasGraphRelationships::class, $traits)) {
             foreach (static::$graphRelationships as $relationship) {
-                $type = '\\' . EloquentCollection::class . '|\\' . $model::class . '[]';
+                $type = '\\' . GraphCollection::class . '|\\' . $model::class . '[]';
 
                 $this->addRelationship($command, $relationship, $type);
             }

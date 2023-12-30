@@ -19,7 +19,7 @@ class CollectionTest extends TestCase
         $this->assertEquals([12], $tree[1]->children->pluck('id')->all());
     }
 
-    public function testToTreeWithDescendants()
+    public function testToTreeWithRelationship()
     {
         $users = User::find(1)->descendants()->orderBy('id')->get();
 
