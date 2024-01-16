@@ -51,7 +51,7 @@ The package offers recursive relationships for traversing two types of data stru
 Use the package to traverse a tree structure with one parent per node. Use cases might be recursive categories, a page
 hierarchy or nested comments.
 
-Supports Laravel 5.5.29+.
+Supports Laravel 5.5+.
 
 - [Getting Started](#getting-started)
 - [Included Relationships](#included-relationships)
