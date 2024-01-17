@@ -15,14 +15,8 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings;
 trait HasAdjacencyList
 {
     use HasOfDescendantsRelationships;
+    use HasQueryConstraints;
     use HasRecursiveRelationshipScopes;
-
-    /**
-     * The additional constraint for the recursive query.
-     *
-     * @var callable|null
-     */
-    public static $recursiveQueryConstraint;
 
     /**
      * Get the name of the parent key column.
@@ -413,46 +407,5 @@ trait HasAdjacencyList
     public function newCollection(array $models = [])
     {
         return new Collection($models);
-    }
-
-    /**
-     * Set an additional constraint for the recursive query.
-     *
-     * @param callable $constraint
-     * @return void
-     */
-    public static function setRecursiveQueryConstraint(callable $constraint)
-    {
-        static::$recursiveQueryConstraint = $constraint;
-    }
-
-    /**
-     * Unset the additional constraint for the recursive query.
-     *
-     * @return void
-     */
-    public static function unsetRecursiveQueryConstraint()
-    {
-        static::$recursiveQueryConstraint = null;
-    }
-
-    /**
-     * Execute a query with an additional constraint for the recursive query.
-     *
-     * @param callable $constraint
-     * @param callable $query
-     * @return mixed
-     */
-    public static function withRecursiveQueryConstraint(callable $constraint, callable $query)
-    {
-        $previous = static::$recursiveQueryConstraint;
-
-        static::$recursiveQueryConstraint = $constraint;
-
-        $result = $query();
-
-        static::$recursiveQueryConstraint = $previous;
-
-        return $result;
     }
 }

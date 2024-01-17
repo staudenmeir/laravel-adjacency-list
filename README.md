@@ -48,7 +48,7 @@ Supports Laravel 5.5.29+.
 - [Path](#path)
 - [Custom Paths](#custom-paths)
 - [Nested Results](#nested-results)
-- [Recursive Query Constraints](#recursive-query-constraints)
+- [Initial & Recursive Query Constraints](#initial--recursive-query-constraints)
 - [Custom Relationships](#custom-relationships)
 - [Concatenation](#concatenation)
 
@@ -363,18 +363,21 @@ This recursively sets `children` relationships:
 ]
 ```
 
-#### Recursive Query Constraints
+#### Initial & Recursive Query Constraints
 
-You can add custom constraints to the CTE's recursive query. Consider a query where you want to traverse a tree while
-skipping inactive users and their subtrees:
+You can add custom constraints to the CTE's initial and recursive query. Consider a query where you want to traverse a
+tree while skipping inactive users and their descendants:
 
  ```php
-$tree = User::withRecursiveQueryConstraint(function (Builder $query) {
+$tree = User::withQueryConstraint(function (Builder $query) {
     $query->where('users.active', true);
 }, function () {
     return User::tree()->get();
 });
  ```
+
+ You can also add a custom constraint to only the initial or recursive query using `withInitialQueryConstraint()`/
+ `withRecursiveQueryConstraint()`.
 
 #### Custom Relationships
 
@@ -663,7 +666,7 @@ Supports Laravel 9+.
 - [Path](#graphs-path)
 - [Custom Paths](#graphs-custom-paths)
 - [Nested Results](#graphs-nested-results)
-- [Recursive Query Constraints](#graphs-recursive-query-constraints)
+- [Initial & Recursive Query Constraints](#graphs-initial--recursive-query-constraints)
 
 #### <a name="graphs-getting-started">Getting Started</a>
 
@@ -1026,18 +1029,21 @@ This recursively sets `children` relationships:
 ]
 ```
 
-#### <a name="graphs-recursive-query-constraints">Recursive Query Constraints</a>
+#### <a name="graphs-initial--recursive-query-constraints">Initial & Recursive Query Constraints</a>
 
-You can add custom constraints to the CTE's recursive query. Consider a query where you want to traverse a node's
-descendants while skipping inactive nodes and their subgraphs:
+You can add custom constraints to the CTE's initial and recursive query. Consider a query where you want to traverse a
+node's descendants while skipping inactive nodes and their descendants:
 
  ```php
-$descendants = Node::withRecursiveQueryConstraint(function (Builder $query) {
+$descendants = Node::withQueryConstraint(function (Builder $query) {
     $query->where('nodes.active', true);
 }, function () {
     return Node::find($id)->descendants;
 });
  ```
+
+You can also add a custom constraint to only the initial or recursive query using `withInitialQueryConstraint()`/
+`withRecursiveQueryConstraint()`.
 
 ### Package Conflicts
 

@@ -109,36 +109,66 @@ class EloquentTest extends TestCase
         $this->assertEquals([2, 5, 7, 8, 8, 3, 6, 4, 5, 7, 8, 8], $nodes->pluck('id')->all());
     }
 
-    public function testSetRecursiveQueryConstraint()
+    public function testWithInitialQueryConstraint()
     {
-        Node::setRecursiveQueryConstraint(function (Builder $query) {
-            $query->where('pivot_weight', '<', 7);
+        $nodes = Node::withInitialQueryConstraint(function (Builder $query) {
+            $query->where('edges.weight', '<', 2);
+        }, function () {
+            return Node::find(1)->descendants()->orderBy('id')->get();
         });
 
-        $nodes = Node::find(2)->descendants()->orderBy('id')->get();
+        $this->assertEquals([2, 5, 7, 8, 8], $nodes->pluck('id')->all());
 
-        $this->assertEquals([5, 7, 8], $nodes->pluck('id')->all());
+        $nodes = Node::find(1)->descendants()->orderBy('id')->get();
 
-        Node::unsetRecursiveQueryConstraint();
-
-        $nodes = Node::find(2)->descendants()->orderBy('id')->get();
-
-        $this->assertEquals([5, 7, 8, 8], $nodes->pluck('id')->all());
+        $this->assertEquals([2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8], $nodes->pluck('id')->all());
     }
 
     public function testWithRecursiveQueryConstraint()
     {
         $nodes = Node::withRecursiveQueryConstraint(function (Builder $query) {
-            $query->where('pivot_weight', '<', 7);
+            $query->where('edges.weight', '<', 5);
         }, function () {
-            return Node::find(2)->descendants()->orderBy('id')->get();
+            return Node::find(1)->descendants()->orderBy('id')->get();
         });
 
-        $this->assertEquals([5, 7, 8], $nodes->pluck('id')->all());
+        $this->assertEquals([2, 3, 4, 5], $nodes->pluck('id')->all());
 
-        $nodes = Node::find(2)->descendants()->orderBy('id')->get();
+        $nodes = Node::find(1)->descendants()->orderBy('id')->get();
 
-        $this->assertEquals([5, 7, 8, 8], $nodes->pluck('id')->all());
+        $this->assertEquals([2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8], $nodes->pluck('id')->all());
+    }
+
+    public function testSetRecursiveQueryConstraint()
+    {
+        Node::setRecursiveQueryConstraint(function (Builder $query) {
+            $query->where('edges.weight', '<', 5);
+        });
+
+        $nodes = Node::find(1)->descendants()->orderBy('id')->get();
+
+        $this->assertEquals([2, 3, 4, 5], $nodes->pluck('id')->all());
+
+        Node::unsetRecursiveQueryConstraint();
+
+        $nodes = Node::find(1)->descendants()->orderBy('id')->get();
+
+        $this->assertEquals([2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8], $nodes->pluck('id')->all());
+    }
+
+    public function testWithQueryConstraint()
+    {
+        $nodes = Node::withQueryConstraint(function (Builder $query) {
+            $query->where('edges.weight', '<', 4);
+        }, function () {
+            return Node::find(1)->descendants()->orderBy('id')->get();
+        });
+
+        $this->assertEquals([2, 3, 4], $nodes->pluck('id')->all());
+
+        $nodes = Node::find(1)->descendants()->orderBy('id')->get();
+
+        $this->assertEquals([2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8], $nodes->pluck('id')->all());
     }
 
     public function testWithMaxDepth()
