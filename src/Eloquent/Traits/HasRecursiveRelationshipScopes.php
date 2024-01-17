@@ -205,6 +205,10 @@ trait HasRecursiveRelationshipScopes
 
         $constraint($query);
 
+        if (static::$initialQueryConstraint) {
+            (static::$initialQueryConstraint)($query);
+        }
+
         return $query;
     }
 
