@@ -36,9 +36,7 @@ trait HasRecursiveRelationshipScopes
     public function scopeTreeOf(Builder $query, callable|Model $constraint, $maxDepth = null)
     {
         if ($constraint instanceof Model) {
-            $constraint = function ($query) use ($constraint) {
-                $query->whereKey($constraint->getKey());
-            };
+            $constraint = fn ($query) => $query->whereKey($constraint->getKey());
         }
 
         return $query->withRelationshipExpression('desc', $constraint, 0, null, $maxDepth);
