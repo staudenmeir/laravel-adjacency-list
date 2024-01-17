@@ -41,7 +41,7 @@ class AncestorsTest extends TestCase
     #[DataProvider(methodName: 'cycleDetectionClassProvider')]
     public function testLazyLoadingWithCycleDetection(string $class, array $exclusions)
     {
-        if (in_array($this->database, $exclusions)) {
+        if (in_array($this->connection, $exclusions)) {
             $this->markTestSkipped();
         }
 
@@ -56,7 +56,7 @@ class AncestorsTest extends TestCase
     #[DataProvider(methodName: 'cycleDetectionAndStartClassProvider')]
     public function testLazyLoadingWithCycleDetectionAndStart(string $class, array $exclusions)
     {
-        if (in_array($this->database, $exclusions)) {
+        if (in_array($this->connection, $exclusions)) {
             $this->markTestSkipped();
         }
 
@@ -71,7 +71,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyLoadingAndSelf()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -113,7 +113,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyLoadingAndSelfWithCycleDetection()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -127,7 +127,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyLoadingAndSelfWithCycleDetectionAndStart()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -167,7 +167,7 @@ class AncestorsTest extends TestCase
     #[DataProvider(methodName: 'cycleDetectionClassProvider')]
     public function testEagerLoadingWithCycleDetection(string $class, array $exclusions)
     {
-        if (in_array($this->database, $exclusions)) {
+        if (in_array($this->connection, $exclusions)) {
             $this->markTestSkipped();
         }
 
@@ -184,7 +184,7 @@ class AncestorsTest extends TestCase
     #[DataProvider(methodName: 'cycleDetectionAndStartClassProvider')]
     public function testEagerLoadingWithCycleDetectionAndStart(string $class, array $exclusions)
     {
-        if (in_array($this->database, $exclusions)) {
+        if (in_array($this->connection, $exclusions)) {
             $this->markTestSkipped();
         }
 
@@ -201,7 +201,7 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -240,7 +240,7 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelfWithCycleDetection()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -254,7 +254,7 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelfWithCycleDetectionAndStart()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -293,7 +293,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -332,7 +332,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -343,7 +343,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -354,7 +354,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -365,7 +365,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -376,7 +376,7 @@ class AncestorsTest extends TestCase
 
     public function testWithSumForSelfRelation()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -387,7 +387,7 @@ class AncestorsTest extends TestCase
 
     public function testWithSumForSelfRelationAndSelf()
     {
-        if (in_array($this->database, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -398,7 +398,7 @@ class AncestorsTest extends TestCase
 
     public function testDelete()
     {
-        if ($this->database === 'mariadb') {
+        if ($this->connection === 'mariadb') {
             $this->markTestSkipped();
         }
 

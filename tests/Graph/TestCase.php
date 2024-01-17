@@ -16,15 +16,15 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithUuidAndCycleDete
 
 abstract class TestCase extends Base
 {
-    protected string $database;
+    protected string $connection;
 
     protected function setUp(): void
     {
-        $this->database = getenv('DATABASE') ?: 'sqlite';
+        $this->connection = getenv('DB_CONNECTION') ?: 'sqlite';
 
         parent::setUp();
 
-        if ($this->database === 'singlestore') {
+        if ($this->connection === 'singlestore') {
             $this->markTestSkipped();
         }
 
@@ -294,6 +294,6 @@ abstract class TestCase extends Base
 
         $app['config']->set('database.default', 'testing');
 
-        $app['config']->set('database.connections.testing', $config[$this->database]);
+        $app['config']->set('database.connections.testing', $config[$this->connection]);
     }
 }

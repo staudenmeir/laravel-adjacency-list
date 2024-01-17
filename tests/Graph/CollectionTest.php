@@ -11,7 +11,7 @@ class CollectionTest extends TestCase
 {
     public function testToTree()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -41,7 +41,7 @@ class CollectionTest extends TestCase
 
     public function testToTreeWithCycle()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -61,7 +61,7 @@ class CollectionTest extends TestCase
 
     public function testToTreeWithCycleAndStart()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -81,7 +81,7 @@ class CollectionTest extends TestCase
 
     public function testToTreeWithEmptyCollection()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 

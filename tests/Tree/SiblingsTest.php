@@ -85,7 +85,7 @@ class SiblingsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if ($this->database === 'singlestore') {
+        if ($this->connection === 'singlestore') {
             $this->markTestSkipped();
         }
 
@@ -96,7 +96,7 @@ class SiblingsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if ($this->database === 'singlestore') {
+        if ($this->connection === 'singlestore') {
             $this->markTestSkipped();
         }
 

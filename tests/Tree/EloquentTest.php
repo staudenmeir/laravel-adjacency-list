@@ -165,7 +165,7 @@ class EloquentTest extends TestCase
 
     public function testScopeDepthFirstWithNaturalSorting()
     {
-        if (in_array($this->database, ['sqlite', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['sqlite', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 

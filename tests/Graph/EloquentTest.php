@@ -9,7 +9,7 @@ class EloquentTest extends TestCase
 {
     public function testScopeSubgraph()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -22,7 +22,7 @@ class EloquentTest extends TestCase
 
     public function testScopeSubgraphWithMaxDepth()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -53,7 +53,7 @@ class EloquentTest extends TestCase
 
     public function testChildrenAndSelf()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 
@@ -82,7 +82,7 @@ class EloquentTest extends TestCase
 
     public function testParentsAndSelf()
     {
-        if ($this->database === 'sqlsrv') {
+        if ($this->connection === 'sqlsrv') {
             $this->markTestSkipped();
         }
 

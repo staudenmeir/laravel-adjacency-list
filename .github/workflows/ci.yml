@@ -96,7 +96,7 @@ jobs:
           PHPUNIT_FLAGS=$([ "${{ matrix.coverage }}" == "xdebug" ] && echo "--coverage-clover=coverage.xml" || echo "")
           vendor/bin/phpunit $PHPUNIT_FLAGS
         env:
-          DATABASE: ${{ matrix.database }}
+          DB_CONNECTION: ${{ matrix.database }}
           MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
           MARIADB_PORT: ${{ job.services.mariadb.ports[3306] }}
           PGSQL_PORT: ${{ job.services.pgsql.ports[5432] }}

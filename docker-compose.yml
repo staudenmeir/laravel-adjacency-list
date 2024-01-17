@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  php81:
+    build:
+      context: .
+      dockerfile: .docker/php81.Dockerfile
+    container_name: php81
+    working_dir: /var/www/html
+    networks:
+      - test
+    volumes:
+      - .:/var/www/html:delegated
+  php82:
+    build:
+      context: .
+      dockerfile: .docker/php82.Dockerfile
+    container_name: php82
+    working_dir: /var/www/html
+    networks:
+      - test
+    volumes:
+      - .:/var/www/html:delegated
+  php83:
+    build:
+      context: .
+      dockerfile: .docker/php83.Dockerfile
+    container_name: php83
+    working_dir: /var/www/html
+    networks:
+      - test
+    volumes:
+      - .:/var/www/html:delegated
+  mysql:
+    image: 'mysql:latest'
+    ports:
+      - '33060:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: test
+    networks:
+      - test
+  mariadb:
+    image: 'mariadb:latest'
+    ports:
+      - '33061:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: test
+    networks:
+      - test
+  pgsql:
+    image: 'postgres:latest'
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test
+    networks:
+      - test
+  sqlsrv:
+    image: 'mcr.microsoft.com/mssql/server:2019-latest'
+    ports:
+      - '1433:1433'
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Password!
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$${SA_PASSWORD}" -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - test
+
+networks:
+    test:
+        driver: bridge
