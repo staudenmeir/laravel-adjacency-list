@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: .docker/php81.Dockerfile
-    container_name: php81
     working_dir: /var/www/html
     networks:
       - test
@@ -15,7 +14,6 @@ services:
     build:
       context: .
       dockerfile: .docker/php82.Dockerfile
-    container_name: php82
     working_dir: /var/www/html
     networks:
       - test
@@ -25,7 +23,6 @@ services:
     build:
       context: .
       dockerfile: .docker/php83.Dockerfile
-    container_name: php83
     working_dir: /var/www/html
     networks:
       - test
