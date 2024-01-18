@@ -1,7 +1,7 @@
 FROM php:8.3-cli
 
 RUN apt-get update && \
-    apt-get install -y libpq-dev && \
+    apt-get install -y libpq-dev unzip && \
     docker-php-ext-install pdo_mysql pdo_pgsql
 
 RUN apt-get -y install gpg &&  \
