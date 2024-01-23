@@ -64,7 +64,7 @@ Supports Laravel 5.5+.
 - [Nested Results](#nested-results)
 - [Initial & Recursive Query Constraints](#initial--recursive-query-constraints)
 - [Custom Relationships](#custom-relationships)
-- [Relationship Concatenation](#relationship-concatenation)
+- [Deep Relationship Concatenation](#deep-relationship-concatenation)
 - [Known Issues](#known-issues)
 
 #### Getting Started
@@ -630,7 +630,7 @@ class Post extends Model
 }
 ```
 
-#### Relationship Concatenation
+#### Deep Relationship Concatenation
 
 You can include recursive relationships into deep relationships by concatenating them with other relationships
 using [staudenmeir/eloquent-has-many-deep](https://github.com/staudenmeir/eloquent-has-many-deep). This
