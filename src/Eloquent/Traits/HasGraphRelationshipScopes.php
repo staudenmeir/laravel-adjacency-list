@@ -378,30 +378,32 @@ trait HasGraphRelationshipScopes
      */
     protected function addRecursiveQueryCycleDetection(Builder $query, ExpressionGrammar $grammar): void
     {
-        if ($this->enableCycleDetection()) {
-            $sql = $grammar->compileCycleDetection(
-                $this->getQualifiedLocalKeyName(),
-                $this->getPathName()
+        if (!$this->enableCycleDetection()) {
+            return;
+        }
+
+        $sql = $grammar->compileCycleDetection(
+            $this->getQualifiedLocalKeyName(),
+            $this->getPathName()
+        );
+
+        $bindings = $grammar->getCycleDetectionBindings(
+            $this->getPathSeparator()
+        );
+
+        if ($this->includeCycleStart()) {
+            $cycleDetectionColumn = $this->getCycleDetectionColumnName();
+
+            $query->selectRaw(
+                $grammar->compileCycleDetectionRecursiveSelect($sql, $cycleDetectionColumn),
+                $bindings
             );
 
-            $bindings = $grammar->getCycleDetectionBindings(
-                $this->getPathSeparator()
+            $query->whereRaw(
+                $grammar->compileCycleDetectionStopConstraint($cycleDetectionColumn)
             );
-
-            if ($this->includeCycleStart()) {
-                $cycleDetectionColumn = $this->getCycleDetectionColumnName();
-
-                $query->selectRaw(
-                    $grammar->compileCycleDetectionRecursiveSelect($sql, $cycleDetectionColumn),
-                    $bindings
-                );
-
-                $query->whereRaw(
-                    $grammar->compileCycleDetectionStopConstraint($cycleDetectionColumn)
-                );
-            } else {
-                $query->whereRaw("not($sql)", $bindings);
-            }
+        } else {
+            $query->whereRaw("not($sql)", $bindings);
         }
     }
 
