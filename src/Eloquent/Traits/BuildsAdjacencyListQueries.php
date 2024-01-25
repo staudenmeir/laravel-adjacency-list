@@ -3,7 +3,6 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
 use Illuminate\Database\PostgresConnection;
-use Illuminate\Support\Str;
 use PDO;
 use RuntimeException;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MariaDbGrammar;
@@ -84,7 +83,7 @@ trait BuildsAdjacencyListQueries
             case 'mysql':
                 $version = $this->query->getConnection()->getReadPdo()->getAttribute(PDO::ATTR_SERVER_VERSION);
 
-                $grammar = Str::contains($version, 'MariaDB')
+                $grammar = str_contains($version, 'MariaDB')
                     ? new MariaDbGrammar($this->model)
                     : new MySqlGrammar($this->model);
 

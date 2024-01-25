@@ -4,7 +4,6 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
@@ -368,7 +367,7 @@ trait HasAdjacencyList
     {
         $path = $this->attributes[$this->getPathName()];
 
-        return Str::contains($path, $this->getPathSeparator());
+        return str_contains($path, $this->getPathSeparator());
     }
 
     /**
