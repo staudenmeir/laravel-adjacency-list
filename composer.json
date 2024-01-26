@@ -18,7 +18,7 @@
         "barryvdh/laravel-ide-helper": "^2.13",
         "doctrine/dbal": "^3.5.2",
         "mockery/mockery": "^1.5.1",
-        "nunomaduro/larastan": "^2.0",
+        "larastan/larastan": "^2.0",
         "orchestra/testbench": "^8.15",
         "phpunit/phpunit": "^10.1",
         "singlestoredb/singlestoredb-laravel": "^1.5.1",
