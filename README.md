@@ -672,7 +672,7 @@ $descendantPosts = User::find($id)->descendantPosts;
 At the moment, recursive relationships can only be at the beginning of deep relationships:
 
 - Supported: `User` → descendants → `User` → has many → `Post`
-- Not supported: `Country` → has many → `User` → descendants → `User`
+- Not supported: `Post` → belongs to → `User` → descendants → `User`
 
 #### Known Issues
 
@@ -1111,7 +1111,7 @@ $descendantPosts = Node::find($id)->descendantPosts;
 At the moment, recursive relationships can only be at the beginning of deep relationships:
 
 - Supported: `Node` → descendants → `Node` → has many → `Post`
-- Not supported: `Country` → has many → `Node` → descendants → `Node`
+- Not supported: `Post` → belongs to → `Node` → descendants → `Node`
 
 #### <a name="graphs-known-issues">Known Issues</a>
 
