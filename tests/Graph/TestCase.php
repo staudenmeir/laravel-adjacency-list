@@ -13,6 +13,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetection;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetectionAndStart;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithUuidAndCycleDetection;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithUuidAndCycleDetectionAndStart;
+use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Post;
 
 abstract class TestCase extends Base
 {
@@ -66,6 +67,16 @@ abstract class TestCase extends Base
                 $table->tinyInteger('weight');
                 $table->decimal('value', 8, 3);
                 $table->timestamp('created_at');
+            }
+        );
+
+        Schema::create(
+            'posts',
+            function (Blueprint $table) {
+                $table->unsignedInteger('id');
+                $table->unsignedInteger('node_id');
+                $table->timestamps();
+                $table->softDeletes();
             }
         );
     }
@@ -214,6 +225,17 @@ abstract class TestCase extends Base
                 ],
             ]
         );
+
+        Post::create(['id' => 101, 'node_id' => 1, 'deleted_at' => null]);
+        Post::create(['id' => 102, 'node_id' => 2, 'deleted_at' => null]);
+        Post::create(['id' => 103, 'node_id' => 3, 'deleted_at' => null]);
+        Post::create(['id' => 104, 'node_id' => 4, 'deleted_at' => null]);
+        Post::create(['id' => 105, 'node_id' => 5, 'deleted_at' => null]);
+        Post::create(['id' => 106, 'node_id' => 6, 'deleted_at' => null]);
+        Post::create(['id' => 107, 'node_id' => 7, 'deleted_at' => null]);
+        Post::create(['id' => 108, 'node_id' => 8, 'deleted_at' => null]);
+        Post::create(['id' => 109, 'node_id' => 9, 'deleted_at' => null]);
+        Post::create(['id' => 110, 'node_id' => 9, 'deleted_at' => Carbon::now()]);
 
         Model::reguard();
     }

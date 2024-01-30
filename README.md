@@ -697,6 +697,7 @@ Supports Laravel 9+.
 - [Custom Paths](#graphs-custom-paths)
 - [Nested Results](#graphs-nested-results)
 - [Initial & Recursive Query Constraints](#graphs-initial--recursive-query-constraints)
+- [Deep Relationship Concatenation](#graphs-deep-relationship-concatenation)
 - [Known Issues](#graphs-known-issues)
 
 #### <a name="graphs-getting-started">Getting Started</a>
@@ -1068,6 +1069,49 @@ $descendants = Node::withQueryConstraint(function (Builder $query) {
 
 You can also add a custom constraint to only the initial or recursive query using `withInitialQueryConstraint()`/
 `withRecursiveQueryConstraint()`.
+
+#### <a name="graphs-deep-relationship-concatenation">Deep Relationship Concatenation</a>
+
+You can include recursive relationships into deep relationships by concatenating them with other relationships
+using [staudenmeir/eloquent-has-many-deep](https://github.com/staudenmeir/eloquent-has-many-deep) (Laravel 9+).
+
+Consider a `HasMany` relationship between `Node` and `Post` and building a deep relationship to get all posts of a
+node's descendants:
+
+`Node` → descendants → `Node` → has many → `Post`
+
+[Install](https://github.com/staudenmeir/eloquent-has-many-deep/#installation) the additional package, add the
+`HasRelationships` trait to the recursive model
+and [define](https://github.com/staudenmeir/eloquent-has-many-deep/#concatenating-existing-relationships) a
+deep relationship:
+
+```php
+class Node extends Model
+{
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+    public function descendantPosts()
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->descendants(),
+            (new static)->posts()
+        );
+    }
+    
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+}
+
+$descendantPosts = Node::find($id)->descendantPosts;
+```
+
+At the moment, recursive relationships can only be at the beginning of deep relationships:
+
+- Supported: `Node` → descendants → `Node` → has many → `Post`
+- Not supported: `Country` → has many → `Node` → descendants → `Node`
 
 #### <a name="graphs-known-issues">Known Issues</a>
 
