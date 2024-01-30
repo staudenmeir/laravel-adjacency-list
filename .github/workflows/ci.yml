@@ -12,97 +12,40 @@ jobs:
         database: [ mysql, mariadb, pgsql, sqlite, sqlsrv, singlestore ]
         release: [ stable, lowest ]
         include:
-          - database: mysql
-            pdo: mysql
-          - database: mariadb
-            pdo: mysql
-          - database: pgsql
-            pdo: pgsql
-          - database: sqlite
-            pdo: sqlite
-          - database: sqlsrv
-            pdo: sqlsrv
-          - database: singlestore
-            pdo: singlestore
           - php: 8.3
             release: stable
-            coverage: xdebug
-
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: test
-        ports:
-          - 3306
-      mariadb:
-        image: mariadb:latest
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: test
-        ports:
-          - 3306
-      pgsql:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: test
-        ports:
-          - 5432/tcp
-      sqlsrv:
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: Password!
-        options: >-
-          --name sqlsrv
-          --health-cmd "echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P Password!"
-        ports:
-          - 1433
-      singlestore:
-        # check for new versions at https://github.com/singlestore-labs/singlestoredb-dev-image/pkgs/container/singlestoredb-dev/versions
-        image: ghcr.io/singlestore-labs/singlestoredb-dev:0.2.11
-        ports:
-          - 3306
-        env:
-          # this license key is only authorized for use in SingleStore laravel-cte tests and is heavily restricted
-          # if you want a free SingleStore license for your own use please visit https://www.singlestore.com/cloud-trial/
-          SINGLESTORE_LICENSE: BDMwMzMyOTEyNjMwYzQ1ODE5MDdjNThiYjU1MGM5YTAyAAAAAAAAAAAEAAAAAAAAAAwwNQIZAKqnuBG9UX3K2enIHyshQGHZIjQiCZpqlwIYE8t4J8VewDLm2m4+4i8KorAIZsJd8j6EAA==
-          ROOT_PASSWORD: "test"
+            coverage: true
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 2
-      - uses: actions/cache@v3
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
         with:
           path: ~/.cache/composer/files
-          key: php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          tools: pecl
-          extensions: bcmath, ctype, json, mbstring, openssl, pdo, pdo_${{ matrix.pdo }}, tokenizer, xml
-          coverage: ${{ matrix.coverage }}
-      - run: docker exec sqlsrv /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P Password! -Q "create database [test]"
+          key: php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+      - name: Start database container
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up --wait ${{ matrix.database }}
+        if: matrix.database != 'sqlite'
+      - name: Create SQL Server database
+        run: docker compose exec sqlsrv /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P Password! -Q 'create database [test]'
         if: matrix.database == 'sqlsrv'
-      - run: mysql -h 127.0.0.1 -u root -ptest -P ${{ job.services.singlestore.ports[3306] }} -e "create database test"
+      - name: Create SingleStore database
+        run: docker compose exec singlestore singlestore -uroot -ppassword -e 'create database `test`'
         if: matrix.database == 'singlestore'
-      - run: composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }}
-      - run: cp tests/config/database.ci.php tests/config/database.php
-      - run: |
-          PHPUNIT_FLAGS=$([ "${{ matrix.coverage }}" == "xdebug" ] && echo "--coverage-clover=coverage.xml" || echo "")
-          vendor/bin/phpunit $PHPUNIT_FLAGS
+      - name: Install dependencies
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml run --rm php${{ matrix.php }} \
+            composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }}
+      - name: Run tests
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml run -e DB_CONNECTION=${{ matrix.database }} \
+            --rm php${{ matrix.php }}${{ env.XDEBUG }} vendor/bin/phpunit ${{ env.COVERAGE }}
         env:
-          DB_CONNECTION: ${{ matrix.database }}
-          MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
-          MARIADB_PORT: ${{ job.services.mariadb.ports[3306] }}
-          PGSQL_PORT: ${{ job.services.pgsql.ports[5432] }}
-          SQLSRV_PORT: ${{ job.services.sqlsrv.ports[1433] }}
-          SINGLESTORE_PORT: ${{ job.services.singlestore.ports[3306] }}
-      - uses: codecov/codecov-action@v3
+          XDEBUG: ${{ matrix.coverage && '-xdebug' || '' }}
+          COVERAGE: ${{ matrix.coverage && '--coverage-clover=coverage.xml' || '' }}
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: matrix.coverage == 'xdebug' && env.CODECOV_TOKEN
+        if: matrix.coverage && env.CODECOV_TOKEN

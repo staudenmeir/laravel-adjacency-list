@@ -3,4 +3,3 @@
 /vendor
 .php-cs-fixer.cache
 composer.lock
-docker-compose.override.yml
