@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Query\Expression;
+use Staudenmeir\EloquentHasManyDeepContracts\Interfaces\ConcatenableRelation;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\Concatenation\IsConcatenableAncestorsRelation;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\IsRecursiveRelation;
 
-class Ancestors extends BelongsToMany
+class Ancestors extends BelongsToMany implements ConcatenableRelation
 {
+    use IsConcatenableAncestorsRelation;
     use IsRecursiveRelation {
         buildDictionary as baseBuildDictionary;
     }
