@@ -73,6 +73,8 @@ services:
       ROOT_PASSWORD: password
     networks:
       - test
+    volumes:
+      - .docker/singlestore/init.sql:/init.sql
 
 networks:
   test:

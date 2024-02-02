@@ -30,9 +30,6 @@ jobs:
       - name: Create SQL Server database
         run: docker compose exec sqlsrv /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P Password! -Q 'create database [test]'
         if: matrix.database == 'sqlsrv'
-      - name: Create SingleStore database
-        run: docker compose exec singlestore singlestore -uroot -ppassword -e 'create database `test`'
-        if: matrix.database == 'singlestore'
       - name: Install dependencies
         run: |
           docker compose -f docker-compose.yml -f docker-compose.ci.yml run --rm php${{ matrix.php }} \
