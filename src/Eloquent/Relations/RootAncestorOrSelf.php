@@ -16,7 +16,7 @@ class RootAncestorOrSelf extends RootAncestor
      * @param string $localKey
      * @return void
      */
-    public function __construct(Builder $query, Model $parent, $foreignKey, $localKey)
+    public function __construct(Builder $query, Model $parent, string $foreignKey, string $localKey)
     {
         $this->baseConstruct($query, $parent, $foreignKey, $localKey, true);
     }
