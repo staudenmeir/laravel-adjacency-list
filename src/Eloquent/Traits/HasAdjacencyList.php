@@ -10,6 +10,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestorOrSelf;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings;
 
 trait HasAdjacencyList
@@ -298,6 +299,35 @@ trait HasAdjacencyList
     protected function newRootAncestor(Builder $query, Model $parent, $foreignKey, $localKey)
     {
         return new RootAncestor($query, $parent, $foreignKey, $localKey);
+    }
+
+    /**
+     * Get the model's root ancestor or self.
+     *
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestorOrSelf<static>
+     */
+    public function rootAncestorOrSelf(): RootAncestorOrSelf
+    {
+        return $this->newRootAncestorOrSelf(
+            (new static())->newQuery(),
+            $this,
+            $this->getQualifiedParentKeyName(),
+            $this->getLocalKeyName()
+        );
+    }
+
+    /**
+     * Instantiate a new RootAncestorOrSelf relationship.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param string $foreignKey
+     * @param string $localKey
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestorOrSelf<static>
+     */
+    protected function newRootAncestorOrSelf(Builder $query, Model $parent, string $foreignKey, string $localKey): RootAncestorOrSelf
+    {
+        return new RootAncestorOrSelf($query, $parent, $foreignKey, $localKey);
     }
 
     /**
