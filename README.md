@@ -130,6 +130,7 @@ The trait provides various relationships:
 - `parent()`: The model's direct parent.
 - `parentAndSelf()`: The model's direct parent and itself.
 - `rootAncestor()`: The model's topmost parent.
+- `rootAncestorOrSelf()`: The model's topmost parent or itself.
 - `siblings()`: The parent's other children.
 - `siblingsAndSelf()`: All the parent's children.
 

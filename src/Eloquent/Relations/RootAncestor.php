@@ -17,6 +17,7 @@ class RootAncestor extends HasOne
         __construct as baseConstruct;
         addConstraints as baseAddConstraints;
     }
+
     /**
      * Create a new root ancestor relationship instance.
      *
