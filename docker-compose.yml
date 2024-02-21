@@ -38,7 +38,7 @@ services:
     networks:
       - test
   mariadb:
-    image: 'mariadb:latest'
+    image: 'mariadb:11.2'
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: test
