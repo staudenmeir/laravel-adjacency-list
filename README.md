@@ -31,6 +31,7 @@ Use this command if you are in PowerShell on Windows (e.g. in VS Code):
 
 | Laravel | Package |
 |:--------|:--------|
+| 11.x    | 1.20    |
 | 10.x    | 1.13    |
 | 9.x     | 1.12    |
 | 8.x     | 1.9     |
