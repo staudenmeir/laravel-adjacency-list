@@ -38,7 +38,7 @@ class FirebirdGrammar extends Base implements ExpressionGrammar
 
     public function compilePivotColumnNullValue(string $type, int $precision, int $scale): string
     {
-        throw new RuntimeException('This graph relationship feature is not supported on SQL Server.'); // @codeCoverageIgnore
+        throw new RuntimeException('This graph relationship feature is not supported on Firebird.'); // @codeCoverageIgnore
     }
 
     public function compileCycleDetection(string $localKey, string $path): string
