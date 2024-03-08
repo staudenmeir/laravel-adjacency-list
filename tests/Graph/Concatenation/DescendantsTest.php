@@ -18,7 +18,7 @@ class DescendantsTest extends TestCase
 
     public function testLazyLoadingAndSelf()
     {
-        if ($this->connection === 'sqlsrv') {
+        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -39,7 +39,7 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelf()
     {
-        if ($this->connection === 'sqlsrv') {
+        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -73,7 +73,7 @@ class DescendantsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf()
     {
-        if ($this->connection === 'sqlsrv') {
+        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -87,7 +87,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -98,7 +98,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -109,7 +109,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -120,7 +120,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 

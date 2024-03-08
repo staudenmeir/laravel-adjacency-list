@@ -184,6 +184,8 @@ trait HasRecursiveRelationshipScopes
      */
     protected function getInitialQuery(ExpressionGrammar $grammar, callable $constraint, $initialDepth, $from)
     {
+        $table = explode(' as ', $from)[1] ?? $from;
+
         $depth = $grammar->wrap($this->getDepthName());
 
         $initialPath = $grammar->compileInitialPath(
@@ -192,7 +194,7 @@ trait HasRecursiveRelationshipScopes
         );
 
         $query = $this->newModelQuery()
-            ->select('*')
+            ->select("$table.*")
             ->selectRaw($initialDepth.' as '.$depth)
             ->selectRaw($initialPath)
             ->from($from);
@@ -241,7 +243,10 @@ trait HasRecursiveRelationshipScopes
         ];
 
         if ($direction === 'both') {
-            $recursiveDepth = "$depth + (case when {$joinColumns['desc'][1]}={$joinColumns['desc'][0]} then 1 else -1 end)";
+            $left = $grammar->wrap($joinColumns['desc'][1]);
+            $right = $grammar->wrap($joinColumns['desc'][0]);
+
+            $recursiveDepth = "$depth + (case when $left=$right then 1 else -1 end)";
         } else {
             $recursiveDepth = $depth.' '.($direction === 'asc' ? '-' : '+').' 1';
         }

@@ -76,4 +76,14 @@ return [
             PDO::ATTR_EMULATE_PREPARES => true,
         ]) : [],
     ],
+    'firebird' => [
+        'driver' => 'firebird',
+        'host' => 'firebird',
+        'port' => '3050',
+        'database' => '/firebird/data/test.fdb',
+        'username' => 'sysdba',
+        'password' => 'password',
+        'charset' => 'UTF8',
+        'role' => null,
+    ],
 ];

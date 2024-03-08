@@ -5,6 +5,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 use Illuminate\Database\PostgresConnection;
 use PDO;
 use RuntimeException;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\FirebirdGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MariaDbGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\PostgresGrammar;
@@ -103,6 +104,10 @@ trait BuildsAdjacencyListQueries
             case 'singlestore':
                 return $this->query->getConnection()->withTablePrefix(
                     new SingleStoreGrammar($this->model)
+                );
+            case 'firebird':
+                return $this->query->getConnection()->withTablePrefix(
+                    new FirebirdGrammar($this->model)
                 );
         }
 

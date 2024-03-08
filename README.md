@@ -18,6 +18,7 @@ This Laravel Eloquent extension provides recursive relationships for [trees](#tr
 - SQLite 3.8.3+
 - SQL Server 2008+
 - SingleStore 8.1+ (only [trees](#trees-one-parent-per-node-one-to-many))
+- Firebird
 
 ## Installation
 

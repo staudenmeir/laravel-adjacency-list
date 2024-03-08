@@ -23,6 +23,12 @@ class User extends Model
     use HasTableAlias;
     use SoftDeletes;
 
+    public $incrementing = false;
+
+    protected $casts = [
+        'id' => 'int',
+    ];
+
     public function getCustomPaths(): array
     {
         return array_merge(
@@ -35,7 +41,9 @@ class User extends Model
                 ],
                 [
                     'name' => 'reverse_slug_path',
-                    'column' => new Expression('users.slug'),
+                    'column' => new Expression(
+                        $this->newQuery()->getGrammar()->wrap('users.slug')
+                    ),
                     'separator' => '/',
                     'reverse' => true,
                 ],

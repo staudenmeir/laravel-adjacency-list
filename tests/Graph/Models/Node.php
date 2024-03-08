@@ -22,6 +22,8 @@ class Node extends Model
     use HasTableAlias;
     use SoftDeletes;
 
+    public $incrementing = false;
+
     protected $table = 'nodes';
 
     public function getPivotTableName(): string
@@ -41,7 +43,9 @@ class Node extends Model
                 ],
                 [
                     'name' => 'reverse_slug_path',
-                    'column' => new Expression('nodes.slug'),
+                    'column' => new Expression(
+                        $this->newQuery()->getGrammar()->wrap('nodes.slug')
+                    ),
                     'separator' => '/',
                     'reverse' => true,
                 ],

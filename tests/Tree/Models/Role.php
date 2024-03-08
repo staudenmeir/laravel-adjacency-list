@@ -15,6 +15,8 @@ class Role extends Model
     use QueriesExpressions;
     use SoftDeletes;
 
+    public $incrementing = false;
+
     public function userAncestors(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(

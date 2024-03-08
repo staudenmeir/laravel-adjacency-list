@@ -42,7 +42,7 @@ class RootAncestorOrSelfTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -53,7 +53,7 @@ class RootAncestorOrSelfTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -64,7 +64,7 @@ class RootAncestorOrSelfTest extends TestCase
 
     public function testUpdate()
     {
-        if (in_array($this->connection, ['mariadb', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 

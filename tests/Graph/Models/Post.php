@@ -15,6 +15,8 @@ class Post extends Model
     use QueriesExpressions;
     use SoftDeletes;
 
+    public $incrementing = false;
+
     public function node(): BelongsTo
     {
         return $this->belongsTo(Node::class);

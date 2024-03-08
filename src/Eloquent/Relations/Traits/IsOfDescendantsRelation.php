@@ -276,8 +276,11 @@ trait IsOfDescendantsRelation
 
         $depth = $grammar->wrap($model->getDepthName());
 
-        $query = $model->newModelQuery()
-            ->select('*')
+        $query = $model->newModelQuery();
+
+        $table = $alias ?: $query->getQuery()->from;
+
+        $query->select("$table.*")
             ->selectRaw("$initialDepth as $depth");
 
         if ($alias) {

@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Tests\Scopes\DepthScope;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post;
@@ -104,7 +105,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -115,7 +116,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -126,7 +127,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -137,7 +138,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -148,7 +149,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testUpdate()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -161,7 +162,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testUpdateAndSelf()
     {
-        if ($this->connection === 'mariadb') {
+        if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
         }
 

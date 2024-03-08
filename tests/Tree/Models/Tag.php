@@ -10,4 +10,6 @@ class Tag extends Model
 {
     use QueriesExpressions;
     use SoftDeletes;
+
+    public $incrementing = false;
 }

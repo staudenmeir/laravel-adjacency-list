@@ -75,6 +75,14 @@ services:
       - test
     volumes:
       - .docker/singlestore/init.sql:/init.sql
+  firebird:
+    image: jacobalberty/firebird:latest
+    environment:
+      FIREBIRD_DATABASE: 'test.fdb'
+      ISC_PASSWORD: 'password'
+      EnableLegacyClientAuth: 'true'
+    networks:
+      - test
 
 networks:
   test:

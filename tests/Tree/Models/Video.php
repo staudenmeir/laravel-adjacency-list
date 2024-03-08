@@ -10,4 +10,6 @@ class Video extends Model
 {
     use QueriesExpressions;
     use SoftDeletes;
+
+    public $incrementing = false;
 }

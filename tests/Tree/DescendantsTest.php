@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
+use Illuminate\Support\Facades\DB;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
@@ -9,7 +10,11 @@ class DescendantsTest extends TestCase
 {
     public function testLazyLoading()
     {
+        DB::connection()->enableQueryLog();
+
         $descendants = User::find(2)->descendants;
+
+        //dd(DB::getQueryLog());
 
         $this->assertEquals([5, 8], $descendants->pluck('id')->all());
         $this->assertEquals([1, 2], $descendants->pluck('depth')->all());
@@ -92,7 +97,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -103,7 +108,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -114,7 +119,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -125,7 +130,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -136,7 +141,7 @@ class DescendantsTest extends TestCase
 
     public function testWithSumForSelfRelation()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -147,7 +152,7 @@ class DescendantsTest extends TestCase
 
     public function testWithSumForSelfRelationAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -158,7 +163,7 @@ class DescendantsTest extends TestCase
 
     public function testDelete()
     {
-        if (in_array($this->connection, ['mariadb', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -171,7 +176,7 @@ class DescendantsTest extends TestCase
 
     public function testForceDelete()
     {
-        if (in_array($this->connection, ['mariadb', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 

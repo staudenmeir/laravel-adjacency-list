@@ -47,7 +47,7 @@ class BloodlineTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 

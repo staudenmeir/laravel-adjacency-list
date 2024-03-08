@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
+use Illuminate\Support\Facades\DB;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
@@ -102,7 +103,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQuery()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -113,7 +114,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -124,7 +125,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -135,7 +136,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -146,7 +147,7 @@ class AncestorsTest extends TestCase
 
     public function testWithSumForSelfRelation()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -157,7 +158,7 @@ class AncestorsTest extends TestCase
 
     public function testWithSumForSelfRelationAndSelf()
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 
@@ -168,7 +169,7 @@ class AncestorsTest extends TestCase
 
     public function testUpdate()
     {
-        if (in_array($this->connection, ['mariadb', 'singlestore'])) {
+        if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
         }
 

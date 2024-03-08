@@ -12,11 +12,12 @@
         "php": "^8.1",
         "illuminate/database": "^10.0",
         "staudenmeir/eloquent-has-many-deep-contracts": "^1.1",
-        "staudenmeir/laravel-cte": "^1.8"
+        "staudenmeir/laravel-cte": "^1.10"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
         "doctrine/dbal": "^3.5.2",
+        "harrygulliford/laravel-firebird": "^3.2",
         "larastan/larastan": "^2.0",
         "mockery/mockery": "^1.5.1",
         "orchestra/testbench": "^8.15",
