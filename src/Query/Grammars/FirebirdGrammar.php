@@ -4,6 +4,7 @@ namespace Staudenmeir\LaravelAdjacencyList\Query\Grammars;
 
 use HarryGulliford\Firebird\Query\Grammars\FirebirdGrammar as Base;
 use Illuminate\Database\Query\Builder;
+use RuntimeException;
 
 class FirebirdGrammar extends Base implements ExpressionGrammar
 {
@@ -37,7 +38,7 @@ class FirebirdGrammar extends Base implements ExpressionGrammar
 
     public function compilePivotColumnNullValue(string $type, int $precision, int $scale): string
     {
-        return 'null';
+        throw new RuntimeException('This graph relationship feature is not supported on SQL Server.'); // @codeCoverageIgnore
     }
 
     public function compileCycleDetection(string $localKey, string $path): string

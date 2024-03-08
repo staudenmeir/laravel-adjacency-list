@@ -26,6 +26,10 @@ class Node extends Model
 
     protected $table = 'nodes';
 
+    protected $casts = [
+        'id' => 'int',
+    ];
+
     public function getPivotTableName(): string
     {
         return 'edges';

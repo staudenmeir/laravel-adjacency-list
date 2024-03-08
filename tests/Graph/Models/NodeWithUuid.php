@@ -4,6 +4,10 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models;
 
 class NodeWithUuid extends Node
 {
+    protected $casts = [
+        'id' => 'string',
+    ];
+
     public function getParentKeyName(): string
     {
         return 'parent_uuid';
