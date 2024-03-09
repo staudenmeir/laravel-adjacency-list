@@ -171,11 +171,6 @@ class AncestorsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        // TODO[L11]
-        if ($this->connection === 'firebird' && version_compare(phpversion(), '8.2', '<')) {
-            $this->markTestSkipped();
-        }
-
         $this->seedCycle();
 
         $nodes = $class::with([
@@ -190,11 +185,6 @@ class AncestorsTest extends TestCase
     public function testEagerLoadingWithCycleDetectionAndStart(string $class, array $exclusions)
     {
         if (in_array($this->connection, $exclusions)) {
-            $this->markTestSkipped();
-        }
-
-        // TODO[L11]
-        if ($this->connection === 'firebird' && version_compare(phpversion(), '8.2', '<')) {
             $this->markTestSkipped();
         }
 
