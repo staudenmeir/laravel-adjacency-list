@@ -39,9 +39,6 @@
         "sort-packages": true
     },
     "extra": {
-        "branch-alias": {
-            "dev-l11": "1.21.x-dev"
-        },
         "laravel": {
             "providers": [
                 "Staudenmeir\\LaravelAdjacencyList\\IdeHelperServiceProvider"
