@@ -36,7 +36,14 @@ class FirebirdGrammar extends Base implements ExpressionGrammar
         )->from($expression);
     }
 
-    public function compilePivotColumnNullValue(string $type, int $precision, int $scale): string
+    /**
+     * Compile a pivot column null value.
+     *
+     * @param string $typeName
+     * @param string $type
+     * @return string
+     */
+    public function compilePivotColumnNullValue(string $typeName, string $type): string
     {
         throw new RuntimeException('This graph relationship feature is not supported on Firebird.'); // @codeCoverageIgnore
     }

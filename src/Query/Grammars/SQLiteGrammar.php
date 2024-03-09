@@ -69,12 +69,11 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
     /**
      * Compile a pivot column null value.
      *
+     * @param string $typeName
      * @param string $type
-     * @param int $precision
-     * @param int $scale
      * @return string
      */
-    public function compilePivotColumnNullValue(string $type, int $precision, int $scale): string
+    public function compilePivotColumnNullValue(string $typeName, string $type): string
     {
         return 'null';
     }

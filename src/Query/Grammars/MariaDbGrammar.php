@@ -2,8 +2,13 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Query\Grammars;
 
-class MariaDbGrammar extends MySqlGrammar
+use Illuminate\Database\Query\Grammars\MariaDbGrammar as Base;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\Traits\CompilesMySqlAdjacencyLists;
+
+class MariaDbGrammar extends Base implements ExpressionGrammar
 {
+    use CompilesMySqlAdjacencyLists;
+
     /**
      * Compile an "order by path" clause.
      *

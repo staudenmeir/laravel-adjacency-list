@@ -100,17 +100,25 @@ SQL;
     /**
      * Compile a pivot column null value.
      *
+     * @param string $typeName
      * @param string $type
-     * @param int $precision
-     * @param int $scale
      * @return string
      */
-    public function compilePivotColumnNullValue(string $type, int $precision, int $scale): string
+    public function compilePivotColumnNullValue(string $typeName, string $type): string
     {
-        $cast = match ($type) {
-            'bigint', 'boolean', 'integer', 'smallint' => 'signed',
+        if ($typeName === 'decimal') {
+            preg_match('/\((\d+),(\d+)\)/', $type, $matches);
+
+            [$precision, $scale] = [$matches[1], $matches[2]];
+        } else {
+            [$precision, $scale] = [null, null];
+        }
+
+        $cast = match ($typeName) {
+            'bigint', 'boolean', 'integer', 'smallint', 'tinyint' => 'signed',
             'decimal' => "decimal($precision, $scale)",
-            'string' => 'char(65535)',
+            'timestamp' => 'datetime',
+            'varchar' => 'char(65535)',
             default => $type,
         };
 

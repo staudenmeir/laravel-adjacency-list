@@ -3,7 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
-use RuntimeException;
+use Illuminate\Support\Collection;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
 trait HasGraphRelationshipScopes
@@ -186,33 +186,13 @@ trait HasGraphRelationshipScopes
         $columns = [$this->getParentKeyName(), $this->getChildKeyName(), ...$this->getPivotColumns()];
 
         if ($initialDepth === 0) {
-            if (!$query->getConnection()->isDoctrineAvailable()) {
-                // @codeCoverageIgnoreStart
-                throw new RuntimeException(
-                    'This feature requires the doctrine/dbal package. Please run "composer require doctrine/dbal".'
-                );
-                // @codeCoverageIgnoreEnd
-            }
+            $columnDefinitions = (new Collection($query->getConnection()->getSchemaBuilder()->getColumns($pivotTable)))
+                ->keyBy('name');
 
-            $localKeyType = $query->getConnection()->getSchemaBuilder()->getColumnType(
-                (new $this())->getTable(),
-                $this->getLocalKeyName()
-            );
+            foreach ($columns as $column) {
+                $columnDefinition = $columnDefinitions[$column];
 
-            foreach ($columns as $i => $column) {
-                if ($i < 2) {
-                    $type = $localKeyType;
-                } else {
-                    $type = $query->getConnection()->getSchemaBuilder()->getColumnType($pivotTable, $column);
-                }
-
-                $doctrineColumn = $query->getConnection()->getDoctrineColumn($pivotTable, $column);
-
-                $null = $grammar->compilePivotColumnNullValue(
-                    $type,
-                    $doctrineColumn->getPrecision(),
-                    $doctrineColumn->getScale()
-                );
+                $null = $grammar->compilePivotColumnNullValue($columnDefinition['type_name'], $columnDefinition['type']);
 
                 $query->selectRaw("$null as " . $grammar->wrap("pivot_$column"));
             }

@@ -9,21 +9,18 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "illuminate/database": "^10.0",
-        "staudenmeir/eloquent-has-many-deep-contracts": "^1.1",
-        "staudenmeir/laravel-cte": "^1.10"
+        "php": "^8.2",
+        "illuminate/database": "^11.0",
+        "staudenmeir/eloquent-has-many-deep-contracts": "^1.2",
+        "staudenmeir/laravel-cte": "^1.11"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.13",
-        "doctrine/dbal": "^3.5.2",
-        "harrygulliford/laravel-firebird": "^3.2",
+        "barryvdh/laravel-ide-helper": "^3.0",
         "larastan/larastan": "^2.0",
         "mockery/mockery": "^1.5.1",
-        "orchestra/testbench": "^8.15",
-        "phpunit/phpunit": "^10.1",
-        "singlestoredb/singlestoredb-laravel": "^1.5.1",
-        "staudenmeir/eloquent-has-many-deep": "^1.18.1"
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^10.5",
+        "staudenmeir/eloquent-has-many-deep": "^1.20"
     },
     "suggest": {
         "barryvdh/laravel-ide-helper": "Provide type hints for attributes and relations."
@@ -42,6 +39,9 @@
         "sort-packages": true
     },
     "extra": {
+        "branch-alias": {
+            "dev-l11": "1.21.x-dev"
+        },
         "laravel": {
             "providers": [
                 "Staudenmeir\\LaravelAdjacencyList\\IdeHelperServiceProvider"

@@ -16,7 +16,7 @@ return [
         'engine' => null,
     ],
     'mariadb' => [
-        'driver' => 'mysql',
+        'driver' => 'mariadb',
         'host' => 'mariadb',
         'port' => '3306',
         'database' => 'test',
