@@ -20,6 +20,7 @@
         "mockery/mockery": "^1.5.1",
         "orchestra/testbench": "^9.0",
         "phpunit/phpunit": "^10.5",
+        "singlestoredb/singlestoredb-laravel": "^1.5.4",
         "staudenmeir/eloquent-has-many-deep": "^1.20"
     },
     "suggest": {
