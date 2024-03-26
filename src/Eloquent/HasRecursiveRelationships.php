@@ -23,6 +23,14 @@ trait HasRecursiveRelationships
 
     public function depthRelatedTo(Model $user)
     {
-        return $this->ancestors && $this->ancestors->contains($user) ? $this->ancestors->indexOf($user) + 1 : null;
+        if (!$this->relationLoaded('ancestors')) {
+            $this->load('ancestors');
+        }
+
+        $index = $this->ancestors->search(function ($ancestor) use ($user) {
+            return $ancestor->id == $user->id;
+        });
+
+        return $index !== false ? $index + 1 : null;
     }
 }
