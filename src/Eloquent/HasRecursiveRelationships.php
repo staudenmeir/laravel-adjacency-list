@@ -13,16 +13,16 @@ trait HasRecursiveRelationships
 
     public function isParentOf(Model $user)
     {
-        return $this->children->contains($user);
+        return $this->children && $this->children->contains($user);
     }
 
     public function isChildOf(Model $user)
     {
-        return $this->parent->is($user);
+        return $this->parent && $this->parent->is($user);
     }
 
     public function depthRelatedTo(Model $user)
     {
-        return $this->ancestors->contains($user) ? $this->ancestors->indexOf($user) + 1 : null;
+        return $this->ancestors && $this->ancestors->contains($user) ? $this->ancestors->indexOf($user) + 1 : null;
     }
 }
