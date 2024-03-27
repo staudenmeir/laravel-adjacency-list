@@ -16,7 +16,7 @@ trait HasRecursiveRelationships
         if (!$this->relationLoaded('children')) {
             $this->load('children');
         }
-        return $this->children && $this->children->contains($user);
+        return $this->children ? $this->children->contains($user) : false;
     }
 
     public function isChildOf(Model $user)
@@ -24,7 +24,7 @@ trait HasRecursiveRelationships
         if (!$this->relationLoaded('parent')) {
             $this->load('parent');
         }
-        return $this->parent && $this->parent->is($user);
+        return $this->parent ? $this->parent->is($user) : false;
     }
 
     public function depthRelatedTo(Model $user)
