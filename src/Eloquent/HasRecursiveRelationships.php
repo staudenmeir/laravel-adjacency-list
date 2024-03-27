@@ -21,6 +21,9 @@ trait HasRecursiveRelationships
 
     public function isChildOf(Model $user)
     {
+        if (!$this->relationLoaded('parent')) {
+            $this->load('parent');
+        }
         return $this->parent && $this->parent->is($user);
     }
 
