@@ -28,7 +28,7 @@ trait HasRecursiveRelationships
         }
 
         $index = $this->ancestors->search(function ($ancestor) use ($user) {
-            return $ancestor->id == $user->id;
+            return $ancestor->getKey() === $user->getKey();
         });
 
         return $index !== false ? $index + 1 : null;
