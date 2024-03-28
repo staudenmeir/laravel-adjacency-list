@@ -1116,6 +1116,24 @@ At the moment, recursive relationships can only be at the beginning of deep rela
 - Supported: `Node` → descendants → `Node` → has many → `Post`
 - Not supported: `Post` → belongs to → `Node` → descendants → `Node`
 
+#### <a name="additional-methods">Additional Methods</a>
+
+The `HasRecursiveRelations` trait also provides methods to check relationships.  
+
+-  `isParentOf(Model $model)`: Checks if the current model instance is a parent of the given model. 
+-  `isChildOf(Model $model)`: Checks if the current model instance is a child of the given model. 
+-  `depthRelatedTo(Model $model)`: Returns the depth of the relationship between the current model instance and the given model.
+  
+```php
+$rootUser = User::create(['parent_id' => null]); 
+$firstLevelUser = User::create(['parent_id' => $rootUser->id]); 
+$secondLevelUser = User::create(['parent_id' => $firstLevelUser->id]);  
+
+$isParentOf = $rootUser->isParentOf($firstLevelUser); // Output: true 
+$isChildOf = $secondLevelUser->isChildOf($firstLevelUser); // Output: true 
+$depthRelatedTo = $secondLevelUser->depthRelatedTo($rootUser); // Output: 2
+```
+
 #### <a name="graphs-known-issues">Known Issues</a>
 
 MariaDB [doesn't yet support](https://jira.mariadb.org/browse/MDEV-19077) correlated CTEs in subqueries. This affects
