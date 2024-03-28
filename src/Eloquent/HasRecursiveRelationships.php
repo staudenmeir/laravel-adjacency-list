@@ -11,30 +11,30 @@ trait HasRecursiveRelationships
     use HasAdjacencyList;
     use QueriesExpressions;
 
-    public function isParentOf(Model $user)
+    public function isParentOf(Model $model)
     {
         if (!$this->relationLoaded('children')) {
             $this->load('children');
         }
-        return $this->children ? $this->children->contains($user) : false;
+        return $this->children ? $this->children->contains($model) : false;
     }
 
-    public function isChildOf(Model $user)
+    public function isChildOf(Model $model)
     {
         if (!$this->relationLoaded('parent')) {
             $this->load('parent');
         }
-        return $this->parent ? $this->parent->is($user) : false;
+        return $this->parent ? $this->parent->is($model) : false;
     }
 
-    public function depthRelatedTo(Model $user)
+    public function depthRelatedTo(Model $model)
     {
         if (!$this->relationLoaded('ancestors')) {
             $this->load('ancestors');
         }
 
-        $index = $this->ancestors->search(function ($ancestor) use ($user) {
-            return $ancestor->getKey() === $user->getKey();
+        $index = $this->ancestors->search(function ($ancestor) use ($model) {
+            return $ancestor->getKey() === $model->getKey();
         });
 
         return $index !== false ? $index + 1 : null;
