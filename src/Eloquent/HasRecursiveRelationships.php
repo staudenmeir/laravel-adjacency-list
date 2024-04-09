@@ -13,30 +13,23 @@ trait HasRecursiveRelationships
 
     public function isParentOf(Model $model)
     {
-        if (!$this->relationLoaded('children')) {
-            $this->load('children');
-        }
-        return $this->children ? $this->children->contains($model) : false;
+        return $this->children->contains($model);
     }
 
     public function isChildOf(Model $model)
     {
-        if (!$this->relationLoaded('parent')) {
-            $this->load('parent');
-        }
         return $this->parent ? $this->parent->is($model) : false;
     }
 
     public function depthRelatedTo(Model $model)
     {
-        if (!$this->relationLoaded('ancestors')) {
-            $this->load('ancestors');
+        $currentModel = $this->bloodline->firstWhere('id', $this->getKey());
+        $relatedModel = $this->bloodline->firstWhere('id', $model->getKey());
+
+        if ($currentModel && $relatedModel) {
+            return $currentModel->depth - $relatedModel->depth;
         }
 
-        $index = $this->ancestors->search(function ($ancestor) use ($model) {
-            return $ancestor->getKey() === $model->getKey();
-        });
-
-        return $index !== false ? $index + 1 : null;
+        return null;
     }
 }
