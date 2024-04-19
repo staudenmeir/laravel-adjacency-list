@@ -24,9 +24,13 @@ class Collection extends Base
             return $this;
         }
 
-        $parentKeyName = $this->first()->getParentKeyName();
-        $localKeyName = $this->first()->getLocalKeyName();
-        $depthName = $this->first()->getDepthName();
+        $model = $this->first();
+
+        $parentKeyName = $model->getParentKeyName();
+
+        $localKeyName = $model->getLocalKeyName();
+
+        $depthName = $model->getDepthName();
 
         $depths = $this->pluck($depthName);
 

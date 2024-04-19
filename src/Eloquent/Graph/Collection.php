@@ -24,11 +24,15 @@ class Collection extends Base
             return $this;
         }
 
-        $parentKeyName = $this->first->relationLoaded('pivot')
-            ? 'pivot.' . $this->first()->getParentKeyName()
-            : 'pivot_' . $this->first()->getParentKeyName();
-        $localKeyName = $this->first()->getLocalKeyName();
-        $depthName = $this->first()->getDepthName();
+        $model = $this->first();
+
+        $parentKeyName = $model->relationLoaded('pivot')
+            ? 'pivot.' . $model->getParentKeyName()
+            : 'pivot_' . $model->getParentKeyName();
+
+        $localKeyName = $model->getLocalKeyName();
+
+        $depthName = $model->getDepthName();
 
         $depths = $this->pluck($depthName);
 
