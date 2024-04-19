@@ -410,7 +410,7 @@ $tree = User::withQueryConstraint(function (Builder $query) {
 
 #### Additional Methods
 
-The trait also provides methods to check relationships between models.
+The trait also provides methods to check relationships between models:
 
 - `isChildOf(Model $model)`: Checks if the current model is a child of the given model.
 - `isParentOf(Model $model)`: Checks if the current model is a parent of the given model.
