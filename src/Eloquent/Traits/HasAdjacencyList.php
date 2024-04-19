@@ -16,6 +16,7 @@ trait HasAdjacencyList
 {
     use HasOfDescendantsRelationships;
     use HasQueryConstraints;
+    use HasRecursiveRelationshipHelpers;
     use HasRecursiveRelationshipScopes;
 
     /**

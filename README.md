@@ -65,6 +65,7 @@ Supports Laravel 5.5+.
 - [Custom Paths](#custom-paths)
 - [Nested Results](#nested-results)
 - [Initial & Recursive Query Constraints](#initial--recursive-query-constraints)
+- [Additional Methods](#additional-methods)
 - [Custom Relationships](#custom-relationships)
 - [Deep Relationship Concatenation](#deep-relationship-concatenation)
 - [Known Issues](#known-issues)
@@ -406,6 +407,24 @@ $tree = User::withQueryConstraint(function (Builder $query) {
 
  You can also add a custom constraint to only the initial or recursive query using `withInitialQueryConstraint()`/
  `withRecursiveQueryConstraint()`.
+
+#### Additional Methods
+
+The trait also provides methods to check relationships between models.
+
+- `isChildOf(Model $model)`: Checks if the current model is a child of the given model.
+- `isParentOf(Model $model)`: Checks if the current model is a parent of the given model.
+- `getDepthRelatedTo(Model $model)`: Returns the depth of the current model related to the given model.
+
+```php
+$rootUser = User::create(['parent_id' => null]); 
+$firstLevelUser = User::create(['parent_id' => $rootUser->id]); 
+$secondLevelUser = User::create(['parent_id' => $firstLevelUser->id]);  
+
+$isChildOf = $secondLevelUser->isChildOf($firstLevelUser); // Output: true
+$isParentOf = $rootUser->isParentOf($firstLevelUser); // Output: true
+$depthRelatedTo = $secondLevelUser->getDepthRelatedTo($rootUser); // Output: 2
+```
 
 #### Custom Relationships
 
@@ -1115,24 +1134,6 @@ At the moment, recursive relationships can only be at the beginning of deep rela
 
 - Supported: `Node` → descendants → `Node` → has many → `Post`
 - Not supported: `Post` → belongs to → `Node` → descendants → `Node`
-
-#### <a name="additional-methods">Additional Methods</a>
-
-The `HasRecursiveRelations` trait also provides methods to check relationships.  
-
--  `isParentOf(Model $model)`: Checks if the current model instance is a parent of the given model. 
--  `isChildOf(Model $model)`: Checks if the current model instance is a child of the given model. 
--  `depthRelatedTo(Model $model)`: Returns the depth of the relationship between the current model instance and the given model.
-  
-```php
-$rootUser = User::create(['parent_id' => null]); 
-$firstLevelUser = User::create(['parent_id' => $rootUser->id]); 
-$secondLevelUser = User::create(['parent_id' => $firstLevelUser->id]);  
-
-$isParentOf = $rootUser->isParentOf($firstLevelUser); // Output: true 
-$isChildOf = $secondLevelUser->isChildOf($firstLevelUser); // Output: true 
-$depthRelatedTo = $secondLevelUser->depthRelatedTo($rootUser); // Output: 2
-```
 
 #### <a name="graphs-known-issues">Known Issues</a>
 
