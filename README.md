@@ -65,6 +65,7 @@ Supports Laravel 5.5+.
 - [Custom Paths](#custom-paths)
 - [Nested Results](#nested-results)
 - [Initial & Recursive Query Constraints](#initial--recursive-query-constraints)
+- [Additional Methods](#additional-methods)
 - [Custom Relationships](#custom-relationships)
 - [Deep Relationship Concatenation](#deep-relationship-concatenation)
 - [Known Issues](#known-issues)
@@ -406,6 +407,24 @@ $tree = User::withQueryConstraint(function (Builder $query) {
 
  You can also add a custom constraint to only the initial or recursive query using `withInitialQueryConstraint()`/
  `withRecursiveQueryConstraint()`.
+
+#### Additional Methods
+
+The trait also provides methods to check relationships between models:
+
+- `isChildOf(Model $model)`: Checks if the current model is a child of the given model.
+- `isParentOf(Model $model)`: Checks if the current model is a parent of the given model.
+- `getDepthRelatedTo(Model $model)`: Returns the depth of the current model related to the given model.
+
+```php
+$rootUser = User::create(['parent_id' => null]); 
+$firstLevelUser = User::create(['parent_id' => $rootUser->id]); 
+$secondLevelUser = User::create(['parent_id' => $firstLevelUser->id]);  
+
+$isChildOf = $secondLevelUser->isChildOf($firstLevelUser); // Output: true
+$isParentOf = $rootUser->isParentOf($firstLevelUser); // Output: true
+$depthRelatedTo = $secondLevelUser->getDepthRelatedTo($rootUser); // Output: 2
+```
 
 #### Custom Relationships
 

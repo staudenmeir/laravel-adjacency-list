@@ -191,6 +191,27 @@ class EloquentTest extends TestCase
         $this->assertEquals(['a', 'b', 'c', 'd'], $categories->pluck('id')->all());
     }
 
+    public function testIsChildOf()
+    {
+        $this->assertTrue(User::find(5)->isChildOf(User::find(2)));
+        $this->assertFalse(User::find(5)->isChildOf(User::find(1)));
+        $this->assertFalse(User::find(1)->isChildOf(User::find(2)));
+    }
+
+    public function testIsParentOf()
+    {
+        $this->assertTrue(User::find(2)->isParentOf(User::find(5)));
+        $this->assertFalse(User::find(1)->isParentOf(User::find(5)));
+        $this->assertFalse(User::find(2)->isParentOf(User::find(1)));
+    }
+
+    public function testGetDepthRelatedTo()
+    {
+        $this->assertEquals(2, User::find(5)->getDepthRelatedTo(User::find(1)));
+        $this->assertEquals(-2, User::find(1)->getDepthRelatedTo(User::find(5)));
+        $this->assertNull(User::find(4)->getDepthRelatedTo(User::find(5)));
+    }
+
     public function testWithInitialQueryConstraint()
     {
         $users = User::withInitialQueryConstraint(function (Builder $query) {
