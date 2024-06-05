@@ -94,9 +94,7 @@ By default, the trait expects a parent key named `parent_id`. You can customize 
 
 ```php
 class User extends Model
-{
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-    
+{ 
     public function getParentKeyName()
     {
         return 'parent_id';
@@ -110,8 +108,6 @@ overriding `getLocalKeyName()`:
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-    
     public function getLocalKeyName()
     {
         return 'id';
@@ -228,13 +224,11 @@ echo $descendantsAndSelf[1]->depth; // 1
 echo $descendantsAndSelf[2]->depth; // 2
 ```
 
-You can customize the column name by overriding `getDepthName()`:
+Change the column name by overriding `getDepthName()` if your table already contains a `depth` column:
 
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function getDepthName()
     {
         return 'depth';
@@ -284,18 +278,22 @@ echo $descendantsAndSelf[1]->path; // 1.2
 echo $descendantsAndSelf[2]->path; // 1.2.3
 ```
 
-You can customize the column name and the separator by overriding the respective methods:
+Change the column name by overriding `getPathName()` if your table already contains a `path` column:
 
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function getPathName()
     {
         return 'path';
     }
+```
 
+You can also customize the path separator by overriding `getPathSeparator()`:
+
+```php
+class User extends Model
+{
     public function getPathSeparator()
     {
         return '.';
@@ -310,8 +308,6 @@ You can add custom path columns to the query results:
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function getCustomPaths()
     {
         return [
@@ -336,8 +332,6 @@ You can also reverse custom paths:
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function getCustomPaths()
     {
         return [
@@ -456,8 +450,6 @@ Define a `HasManyOfDescendants` relationship to get all posts of a user and its 
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function recursivePosts()
     {
         return $this->hasManyOfDescendantsAndSelf(Post::class);
@@ -474,8 +466,6 @@ Use `hasManyOfDescendants()` to only get the descendants' posts:
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function descendantPosts()
     {
         return $this->hasManyOfDescendants(Post::class);
@@ -502,8 +492,6 @@ Define a `BelongsToManyOfDescendants` relationship to get all roles of a user an
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function recursiveRoles()
     {
         return $this->belongsToManyOfDescendantsAndSelf(Role::class);
@@ -520,8 +508,6 @@ Use `belongsToManyOfDescendants()` to only get the descendants' roles:
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function descendantRoles()
     {
         return $this->belongsToManyOfDescendants(Role::class);
@@ -548,8 +534,6 @@ Define a `MorphToManyOfDescendants` relationship to get all tags of a user and i
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function recursiveTags()
     {
         return $this->morphToManyOfDescendantsAndSelf(Tag::class, 'taggable');
@@ -566,8 +550,6 @@ Use `morphToManyOfDescendants()` to only get the descendants' tags:
 ```php
 class User extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function descendantTags()
     {
         return $this->morphToManyOfDescendants(Tag::class, 'taggable');
@@ -594,8 +576,6 @@ Define a `MorphedByManyOfDescendants` relationship to get all posts of a categor
 ```php
 class Category extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function recursivePosts()
     {
         return $this->morphedByManyOfDescendantsAndSelf(Post::class, 'categorizable');
@@ -612,8 +592,6 @@ Use `morphedByManyOfDescendants()` to only get the descendants' posts:
 ```php
 class Category extends Model
 {
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
-
     public function descendantPosts()
     {
         return $this->morphedByManyOfDescendants(Post::class, 'categorizable');
@@ -920,7 +898,7 @@ echo $descendantsAndSelf[1]->depth; // 1
 echo $descendantsAndSelf[2]->depth; // 2
 ```
 
-You can customize the column name by overriding `getDepthName()`:
+Change the column name by overriding `getDepthName()` if your table already contains a `depth` column:
 
 ```php
 class Node extends Model
@@ -974,7 +952,7 @@ echo $descendantsAndSelf[1]->path; // 1.2
 echo $descendantsAndSelf[2]->path; // 1.2.3
 ```
 
-You can customize the column name and the separator by overriding the respective methods:
+Change the column name by overriding `getPathName()` if your table already contains a `path` column:
 
 ```php
 class Node extends Model
@@ -983,7 +961,14 @@ class Node extends Model
     {
         return 'path';
     }
+}
+```
 
+You can also customize the path separator by overriding `getPathSeparator()`:
+
+```php
+class Node extends Model
+{
     public function getPathSeparator(): string
     {
         return '.';
@@ -1111,7 +1096,7 @@ deep relationship:
 class Node extends Model
 {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
-    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+    use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 
     public function descendantPosts()
     {
