@@ -63,7 +63,7 @@ trait TracksIntermediateScopes
      * @param array|null $scopes
      * @return $this
      */
-    public function withoutIntermediateScopes(array $scopes = null)
+    public function withoutIntermediateScopes(?array $scopes = null)
     {
         if (!is_array($scopes)) {
             $scopes = array_keys($this->intermediateScopes);

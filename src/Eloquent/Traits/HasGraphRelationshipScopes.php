@@ -16,7 +16,7 @@ trait HasGraphRelationshipScopes
      * @param int|null $maxDepth
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSubgraph(Builder $query, callable $constraint, int $maxDepth = null): Builder
+    public function scopeSubgraph(Builder $query, callable $constraint, ?int $maxDepth = null): Builder
     {
         return $query->withRelationshipExpression('desc', $constraint, 0, null, $maxDepth);
     }
@@ -77,8 +77,8 @@ trait HasGraphRelationshipScopes
         string $direction,
         callable $constraint,
         int $initialDepth,
-        string $from = null,
-        int $maxDepth = null,
+        ?string $from = null,
+        ?int $maxDepth = null,
         string $union = 'unionAll'
     ): Builder {
         $from = $from ?: $this->getTable();
@@ -261,7 +261,7 @@ trait HasGraphRelationshipScopes
         ExpressionGrammar $grammar,
         string $direction,
         string $from,
-        int $maxDepth = null
+        ?int $maxDepth = null
     ): Builder {
         $name = $this->getExpressionName();
 

@@ -169,8 +169,8 @@ class Descendants extends BelongsToMany implements ConcatenableRelation
      */
     protected function addExpression(
         callable $constraint,
-        Builder $query = null,
-        string $from = null,
+        ?Builder $query = null,
+        ?string $from = null,
         string $union = 'unionAll'
     ): Builder {
         $query = $query ?: $this->query;

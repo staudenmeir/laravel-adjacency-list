@@ -33,7 +33,7 @@ class Bloodline extends Descendants
      * @param string|null $from
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function addExpression(callable $constraint, Builder $query = null, $from = null)
+    protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {
         $query = $query ?: $this->query;
 

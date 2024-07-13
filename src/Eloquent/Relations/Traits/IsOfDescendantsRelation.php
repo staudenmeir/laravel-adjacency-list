@@ -230,7 +230,7 @@ trait IsOfDescendantsRelation
      * @param bool $selectPath
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function addExpression(callable $constraint, Builder $query = null, $alias = null, $selectPath = false)
+    protected function addExpression(callable $constraint, ?Builder $query = null, $alias = null, $selectPath = false)
     {
         $name = $this->parent->getExpressionName();
 
