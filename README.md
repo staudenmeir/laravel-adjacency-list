@@ -652,7 +652,7 @@ class User extends Model
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
-    public function descendantPosts()
+    public function descendantPosts(): \Staudenmeir\EloquentHasManyDeep\HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
             $this->descendants(),
@@ -1098,7 +1098,7 @@ class Node extends Model
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 
-    public function descendantPosts()
+    public function descendantPosts(): \Staudenmeir\EloquentHasManyDeep\HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
             $this->descendants(),
