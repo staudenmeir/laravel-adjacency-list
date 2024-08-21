@@ -2,7 +2,6 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
-use Illuminate\Support\Facades\DB;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
@@ -10,11 +9,7 @@ class DescendantsTest extends TestCase
 {
     public function testLazyLoading()
     {
-        DB::connection()->enableQueryLog();
-
         $descendants = User::find(2)->descendants;
-
-        //dd(DB::getQueryLog());
 
         $this->assertEquals([5, 8], $descendants->pluck('id')->all());
         $this->assertEquals([1, 2], $descendants->pluck('depth')->all());
