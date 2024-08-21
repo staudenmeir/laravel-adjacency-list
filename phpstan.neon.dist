@@ -1,9 +1,28 @@
 includes:
     - ./vendor/larastan/larastan/extension.neon
 parameters:
-    level: 1
+    level: 2
     paths:
         - src
         - tests
     ignoreErrors:
         - '#Unsafe usage of new static\(\).#'
+        - '#Access to an undefined property Staudenmeir\\LaravelAdjacencyList\\Tests\\Tree\\Models\\[a-zA-Z\\]+::\$[a-zA-Z0-9_]+#'
+        - '#Access to an undefined property Illuminate\\Database\\Query\\Builder::\$expressions#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$laravel_through_key#'
+        - '#Call to an undefined method TRelatedModel of Illuminate\\Database\\Eloquent\\Model#'
+        - '#Call to an undefined method TDeclaringModel of Illuminate\\Database\\Eloquent\\Model#'
+        - '#Call to an undefined method TModel of Illuminate\\Database\\Eloquent\\Model#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model::#'
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
+        - '#Call to an undefined method Illuminate\\Database\\Schema\\Blueprint::shardKey\(\)#'
+        - '#Call to an undefined method Illuminate\\Database\\ConnectionInterface#'
+        - '#Call to an undefined method Staudenmeir\\LaravelAdjacencyList\\Query\\Grammars\\ExpressionGrammar::wrap\(\)#'
+        - '#PHPDoc tag \@param for parameter \$grammar with type Illuminate\\Database\\Grammar\|Staudenmeir\\LaravelAdjacencyList\\Query\\Grammars\\ExpressionGrammar is not subtype#'
+        - identifier: property.notFound
+          path: tests
+        - identifier: method.notFound
+          path: tests
+
+    excludePaths:
+        - src/Query/Grammars/FirebirdGrammar.php

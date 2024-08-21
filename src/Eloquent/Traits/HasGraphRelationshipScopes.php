@@ -103,7 +103,6 @@ trait HasGraphRelationshipScopes
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param callable $constraint
      * @param int $initialDepth
-     * @param array $pivotColumns
      * @param string $from
      * @return \Illuminate\Database\Eloquent\Builder $query
      */

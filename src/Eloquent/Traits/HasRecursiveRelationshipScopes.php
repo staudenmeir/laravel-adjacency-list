@@ -29,7 +29,7 @@ trait HasRecursiveRelationshipScopes
      * Add a recursive expression for a custom tree to the query.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param callable|\Illuminate\Database|Eloquent\Model $constraint
+     * @param callable|\Illuminate\Database\Eloquent\Model $constraint
      * @param int|null $maxDepth
      * @return \Illuminate\Database\Eloquent\Builder
      */
