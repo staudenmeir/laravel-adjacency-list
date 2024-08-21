@@ -23,6 +23,3 @@ parameters:
           path: tests
         - identifier: method.notFound
           path: tests
-
-    excludePaths:
-        - src/Query/Grammars/FirebirdGrammar.php
