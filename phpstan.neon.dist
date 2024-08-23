@@ -1,5 +1,6 @@
 includes:
     - ./vendor/larastan/larastan/extension.neon
+    - ./vendor/phpstan/phpstan-mockery/extension.neon
 parameters:
     level: 2
     paths:
@@ -19,6 +20,4 @@ parameters:
         - '#Call to an undefined method Staudenmeir\\LaravelAdjacencyList\\Query\\Grammars\\ExpressionGrammar::wrap\(\)#'
         - '#PHPDoc tag \@param for parameter \$grammar with type Illuminate\\Database\\Grammar\|Staudenmeir\\LaravelAdjacencyList\\Query\\Grammars\\ExpressionGrammar is not subtype#'
         - identifier: property.notFound
-          path: tests
-        - identifier: method.notFound
           path: tests
