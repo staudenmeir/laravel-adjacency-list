@@ -380,9 +380,10 @@ class AncestorsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $user = Node::withSum('ancestors', 'pivot_weight')->find(5);
+        $node = Node::withSum('ancestors', 'pivot_weight')->find(5);
 
-        $this->assertEquals(1 + 4 + 5 + 10 + 11, $user->ancestors_sum_pivot_weight);
+        // @phpstan-ignore property.notFound
+        $this->assertEquals(1 + 4 + 5 + 10 + 11, $node->ancestors_sum_pivot_weight);
     }
 
     public function testWithSumForSelfRelationAndSelf()
@@ -391,9 +392,10 @@ class AncestorsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $user = Node::withSum('ancestorsAndSelf', 'pivot_weight')->find(5);
+        $node = Node::withSum('ancestorsAndSelf', 'pivot_weight')->find(5);
 
-        $this->assertEquals(1 + 4 + 5 + 10 + 11, $user->ancestors_and_self_sum_pivot_weight);
+        // @phpstan-ignore property.notFound
+        $this->assertEquals(1 + 4 + 5 + 10 + 11, $node->ancestors_and_self_sum_pivot_weight);
     }
 
     public function testDelete()

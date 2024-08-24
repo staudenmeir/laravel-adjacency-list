@@ -37,6 +37,9 @@ class EloquentTest extends TestCase
     {
         $children = Node::find(1)->children;
 
+        /** @var Node $child */
+        $child = $children[0];
+
         $this->assertEquals([2, 3, 4, 5], $children->pluck('id')->all());
         $this->assertEquals(
             [
@@ -47,7 +50,7 @@ class EloquentTest extends TestCase
                 'value' => '123.456',
                 'created_at' => $this->getFormattedTestNow()
             ],
-            $children[0]->pivot->getAttributes()
+            $child->pivot->getAttributes()
         );
     }
 

@@ -464,9 +464,10 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $user = Node::withSum('descendants', 'pivot_weight')->find(2);
+        $node = Node::withSum('descendants', 'pivot_weight')->find(2);
 
-        $this->assertEquals(5 + 7 + 8 + 9, $user->descendants_sum_pivot_weight);
+        // @phpstan-ignore property.notFound
+        $this->assertEquals(5 + 7 + 8 + 9, $node->descendants_sum_pivot_weight);
     }
 
     public function testWithSumForSelfRelationAndSelf()
@@ -475,9 +476,10 @@ class DescendantsTest extends TestCase
             $this->markTestSkipped();
         }
 
-        $user = Node::withSum('descendantsAndSelf', 'pivot_weight')->find(2);
+        $node = Node::withSum('descendantsAndSelf', 'pivot_weight')->find(2);
 
-        $this->assertEquals(5 + 7 + 8 + 9, $user->descendants_and_self_sum_pivot_weight);
+        // @phpstan-ignore property.notFound
+        $this->assertEquals(5 + 7 + 8 + 9, $node->descendants_and_self_sum_pivot_weight);
     }
 
     public function testDelete()

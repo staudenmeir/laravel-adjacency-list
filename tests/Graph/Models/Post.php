@@ -5,10 +5,14 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
+/**
+ * @property Carbon|null $deleted_at
+ */
 class Post extends Model
 {
     use HasRelationships;
