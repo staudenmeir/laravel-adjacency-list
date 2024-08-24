@@ -120,13 +120,19 @@ trait IsConcatenableRelation
      */
     protected function mergeExpressions(Builder $query, Builder $from): Builder
     {
-        $query->getQuery()->expressions = array_merge(
-            $query->getQuery()->expressions,
-            $from->getQuery()->expressions
+        /** @var \Staudenmeir\LaravelCte\Query\Builder $baseQuery */
+        $baseQuery = $query->getQuery();
+
+        /** @var \Staudenmeir\LaravelCte\Query\Builder $fromQuery */
+        $fromQuery = $from->getQuery();
+
+        $baseQuery->expressions = array_merge(
+            $baseQuery->expressions,
+            $fromQuery->expressions
         );
 
         return $query->addBinding(
-            $from->getQuery()->getRawBindings()['expressions'],
+            $fromQuery->getRawBindings()['expressions'],
             'expressions'
         );
     }

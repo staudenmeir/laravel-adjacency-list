@@ -8,7 +8,6 @@ parameters:
         - tests
     ignoreErrors:
         - '#Unsafe usage of new static\(\).#'
-        - '#Access to an undefined property Illuminate\\Database\\Query\\Builder::\$expressions#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$laravel_through_key#'
         - '#Call to an undefined method TRelatedModel of Illuminate\\Database\\Eloquent\\Model#'
         - '#Call to an undefined method TDeclaringModel of Illuminate\\Database\\Eloquent\\Model#'
