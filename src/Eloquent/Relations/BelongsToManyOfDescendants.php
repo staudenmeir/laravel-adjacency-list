@@ -21,7 +21,7 @@ class BelongsToManyOfDescendants extends BelongsToMany
     /**
      * Create a new belongs to many of descendants relationship instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
      * @param \Illuminate\Database\Eloquent\Model $parent
      * @param string $table
      * @param string $foreignPivotKey
