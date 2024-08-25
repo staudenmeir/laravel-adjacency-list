@@ -5,7 +5,6 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
-use Illuminate\Support\Carbon;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasOneDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
@@ -16,12 +15,13 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants;
 
 /**
- * @property int|null $followers
  * @property string|null $slug
- * @property Carbon|null $deleted_at
- * @property int|null $depth
  * @property int|null $parent_id
- * @property string|null $path
+ * @property int $followers
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ *
+ * @property-read int $depth
+ * @property-read string $path
  */
 class User extends Model
 {
