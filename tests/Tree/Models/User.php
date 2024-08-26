@@ -22,6 +22,8 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
  *
  * @property-read int $depth
  * @property-read string $path
+ * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post|null $ancestorPost
+ * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post|null $descendantPost
  */
 class User extends Model
 {

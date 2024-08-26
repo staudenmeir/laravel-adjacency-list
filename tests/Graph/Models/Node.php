@@ -16,6 +16,8 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  *
  * @property-read \Illuminate\Database\Eloquent\Relations\Pivot $pivot
+ * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post|null $ancestorPost
+ * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post|null $descendantPost
  */
 class Node extends Model
 {
