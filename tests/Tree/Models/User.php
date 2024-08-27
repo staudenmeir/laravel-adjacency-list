@@ -63,7 +63,7 @@ class User extends Model
     }
 
     /**
-     * @return HasOneDeep<User>
+     * @return HasOneDeep<Post>
      */
     public function ancestorPost(): HasOneDeep
     {
