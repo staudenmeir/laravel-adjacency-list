@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ *
  * @extends RootAncestor<TRelatedModel>
  */
 class RootAncestorOrSelf extends RootAncestor

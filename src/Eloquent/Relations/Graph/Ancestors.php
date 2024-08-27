@@ -12,6 +12,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\IsRecursive
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ *
  * @extends BelongsToMany<TRelatedModel>
  */
 class Ancestors extends BelongsToMany implements ConcatenableRelation

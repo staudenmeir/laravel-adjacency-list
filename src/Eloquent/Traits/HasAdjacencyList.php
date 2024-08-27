@@ -13,17 +13,17 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestorOrSelf;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings;
 
 /**
- * @property-read static|null $rootAncestor
- * @property-read static $rootAncestorOrSelf
- * @property-read static|null $parent
- * @property-read Collection<int, static> $parentAndSelf
  * @property-read Collection<int, static> $ancestors
  * @property-read Collection<int, static> $ancestorsAndSelf
- * @property-read Collection<int, static> $descendants
- * @property-read Collection<int, static> $descendantsAndSelf
  * @property-read Collection<int, static> $bloodline
  * @property-read Collection<int, static> $children
  * @property-read Collection<int, static> $childrenAndSelf
+ * @property-read Collection<int, static> $descendants
+ * @property-read Collection<int, static> $descendantsAndSelf
+ * @property-read static|null $parent
+ * @property-read Collection<int, static> $parentAndSelf
+ * @property-read static|null $rootAncestor
+ * @property-read static $rootAncestorOrSelf
  * @property-read Collection<int, static> $siblings
  * @property-read Collection<int, static> $siblingsAndSelf
  */

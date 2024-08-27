@@ -12,10 +12,10 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants;
 /**
  * @property-read Collection<int, static> $ancestors
  * @property-read Collection<int, static> $ancestorsAndSelf
- * @property-read Collection<int, static> $descendants
- * @property-read Collection<int, static> $descendantsAndSelf
  * @property-read Collection<int, static> $children
  * @property-read Collection<int, static> $childrenAndSelf
+ * @property-read Collection<int, static> $descendants
+ * @property-read Collection<int, static> $descendantsAndSelf
  * @property-read Collection<int, static> $parents
  * @property-read Collection<int, static> $parentsAndSelf
  */

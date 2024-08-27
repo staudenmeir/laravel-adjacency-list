@@ -13,6 +13,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelati
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ *
  * @extends HasMany<TRelatedModel>
  */
 class Descendants extends HasMany implements ConcatenableRelation
