@@ -10,6 +10,7 @@ use Staudenmeir\EloquentHasManyDeep\HasOneDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Staudenmeir\EloquentHasManyDeep\HasTableAlias;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants;
@@ -23,6 +24,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants
  * @property-read int $depth
  * @property-read string $path
  * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post|null $ancestorPost
+ * @property-read \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection<int, self> $ancestorDirectories
  * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post|null $descendantPost
  */
 class User extends Model
@@ -93,6 +95,16 @@ class User extends Model
             $this->ancestorsAndSelf(),
             (new static())->hasMany(Post::class)
         );
+    }
+
+    /**
+     * @return Ancestors<self>
+     */
+    public function ancestorDirectories(): Ancestors
+    {
+        return $this->ancestorsAndSelf()
+            ->hasParent()
+            ->breadthFirst();
     }
 
     /**

@@ -140,4 +140,24 @@ class AncestorsTest extends TestCase
 
         Role::find(11)->userAncestors;
     }
+
+    public function testAncestorWithScopesLazyLoading()
+    {
+        /** @var User $user */
+        $user = User::find(8);
+
+        $users = $user->ancestorDirectories()->get();
+
+        $this->assertEquals([2, 5, 8], $users->pluck('id')->all());
+    }
+
+    public function testAncestorWithScopesEagerLoading()
+    {
+        /** @var User $user */
+        $user = User::find(8);
+
+        $users = $user->ancestorDirectories;
+
+        $this->assertEquals([2, 5, 8], $users->pluck('id')->all());
+    }
 }
