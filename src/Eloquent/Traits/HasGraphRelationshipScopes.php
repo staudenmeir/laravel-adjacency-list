@@ -103,7 +103,6 @@ trait HasGraphRelationshipScopes
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param callable $constraint
      * @param int $initialDepth
-     * @param array $pivotColumns
      * @param string $from
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
@@ -186,7 +185,10 @@ trait HasGraphRelationshipScopes
         $columns = [$this->getParentKeyName(), $this->getChildKeyName(), ...$this->getPivotColumns()];
 
         if ($initialDepth === 0) {
-            $columnDefinitions = (new Collection($query->getConnection()->getSchemaBuilder()->getColumns($pivotTable)))
+            /** @var \Illuminate\Database\Connection $connection */
+            $connection = $query->getConnection();
+
+            $columnDefinitions = (new Collection($connection->getSchemaBuilder()->getColumns($pivotTable)))
                 ->keyBy('name');
 
             foreach ($columns as $column) {

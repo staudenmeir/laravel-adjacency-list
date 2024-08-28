@@ -16,7 +16,7 @@ class Collection extends Base
      * Generate a nested tree.
      *
      * @param string $childrenRelation
-     * @return static<int, TModel>
+     * @return $this<int, TModel>
      */
     public function toTree(string $childrenRelation = 'children'): static
     {
@@ -24,6 +24,7 @@ class Collection extends Base
             return $this;
         }
 
+        /** @var TModel $model */
         $model = $this->first();
 
         $parentKeyName = $model->relationLoaded('pivot')

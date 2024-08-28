@@ -142,6 +142,7 @@ class DescendantsTest extends TestCase
 
         $user = User::withSum('descendants', 'followers')->find(2);
 
+        // @phpstan-ignore property.notFound
         $this->assertEquals(2, $user->descendants_sum_followers);
     }
 
@@ -153,6 +154,7 @@ class DescendantsTest extends TestCase
 
         $user = User::withSum('descendantsAndSelf', 'followers')->find(2);
 
+        // @phpstan-ignore property.notFound
         $this->assertEquals(3, $user->descendants_and_self_sum_followers);
     }
 

@@ -77,37 +77,39 @@ trait BuildsAdjacencyListQueries
      */
     public function getExpressionGrammar()
     {
-        $driver = $this->query->getConnection()->getDriverName();
+        /** @var \Illuminate\Database\Connection $connection */
+        $connection = $this->query->getConnection();
 
-        switch ($driver) {
+        switch ($connection->getDriverName()) {
             case 'mysql':
-                $grammar = $this->query->getConnection()->isMaria()
+                /** @var \Illuminate\Database\MySqlConnection $connection */
+                $grammar = $connection->isMaria()
                     ? new MariaDbGrammar($this->model)
                     : new MySqlGrammar($this->model);
 
-                return $this->query->getConnection()->withTablePrefix($grammar);
+                return $connection->withTablePrefix($grammar);
             case 'mariadb':
-                return $this->query->getConnection()->withTablePrefix(
+                return $connection->withTablePrefix(
                     new MariaDbGrammar($this->model)
                 );
             case 'pgsql':
-                return $this->query->getConnection()->withTablePrefix(
+                return $connection->withTablePrefix(
                     new PostgresGrammar($this->model)
                 );
             case 'sqlite':
-                return $this->query->getConnection()->withTablePrefix(
+                return $connection->withTablePrefix(
                     new SQLiteGrammar($this->model)
                 );
             case 'sqlsrv':
-                return $this->query->getConnection()->withTablePrefix(
+                return $connection->withTablePrefix(
                     new SqlServerGrammar($this->model)
                 );
             case 'singlestore':
-                return $this->query->getConnection()->withTablePrefix(
+                return $connection->withTablePrefix(
                     new SingleStoreGrammar($this->model)
                 );
             case 'firebird':
-                return $this->query->getConnection()->withTablePrefix(
+                return $connection->withTablePrefix(
                     new FirebirdGrammar($this->model)
                 );
         }

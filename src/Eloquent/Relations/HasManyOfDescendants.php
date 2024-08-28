@@ -9,6 +9,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsOfDescendantsRe
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ *
  * @extends HasMany<TRelatedModel>
  */
 class HasManyOfDescendants extends HasMany

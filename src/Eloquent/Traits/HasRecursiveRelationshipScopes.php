@@ -29,7 +29,7 @@ trait HasRecursiveRelationshipScopes
      * Add a recursive expression for a custom tree to the query.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param callable|\Illuminate\Database|Eloquent\Model $constraint
+     * @param callable|\Illuminate\Database\Eloquent\Model $constraint
      * @param int|null $maxDepth
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -176,7 +176,7 @@ trait HasRecursiveRelationshipScopes
     /**
      * Get the initial query for a relationship expression.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar|\Illuminate\Database\Grammar $grammar
+     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param callable $constraint
      * @param int $initialDepth
      * @param string $from
@@ -217,7 +217,7 @@ trait HasRecursiveRelationshipScopes
     /**
      * Get the recursive query for a relationship expression.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar|\Illuminate\Database\Grammar $grammar
+     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param string $direction
      * @param string $from
      * @param int|null $maxDepth

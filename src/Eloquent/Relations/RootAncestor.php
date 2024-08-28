@@ -9,6 +9,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsAncestorRelatio
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ *
  * @extends HasOne<TRelatedModel>
  */
 class RootAncestor extends HasOne

@@ -14,6 +14,17 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendan
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants;
 
+/**
+ * @property string|null $slug
+ * @property int|null $parent_id
+ * @property int $followers
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ *
+ * @property-read int $depth
+ * @property-read string $path
+ * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post|null $ancestorPost
+ * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Post|null $descendantPost
+ */
 class User extends Model
 {
     use HasRelationships;
@@ -51,6 +62,9 @@ class User extends Model
         );
     }
 
+    /**
+     * @return HasOneDeep<Post>
+     */
     public function ancestorPost(): HasOneDeep
     {
         return $this->hasOneDeepFromRelations(
@@ -59,6 +73,9 @@ class User extends Model
         );
     }
 
+    /**
+     * @return HasManyDeep<Post>
+     */
     public function ancestorPosts(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
@@ -67,6 +84,9 @@ class User extends Model
         );
     }
 
+    /**
+     * @return HasManyDeep<Post>
+     */
     public function ancestorAndSelfPosts(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
@@ -75,6 +95,9 @@ class User extends Model
         );
     }
 
+    /**
+     * @return HasManyDeep<Post>
+     */
     public function bloodlinePosts(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
@@ -83,6 +106,9 @@ class User extends Model
         );
     }
 
+    /**
+     * @return HasOneDeep<Post>
+     */
     public function descendantPost(): HasOneDeep
     {
         return $this->hasOneDeepFromRelations(
@@ -91,6 +117,9 @@ class User extends Model
         );
     }
 
+    /**
+     * @return HasManyDeep<Post>
+     */
     public function descendantPosts(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
@@ -99,6 +128,9 @@ class User extends Model
         );
     }
 
+    /**
+     * @return HasManyDeep<Post>
+     */
     public function descendantPostsAndSelf(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
@@ -107,41 +139,65 @@ class User extends Model
         );
     }
 
+    /**
+     * @return HasManyOfDescendants<Post>
+     */
     public function posts(): HasManyOfDescendants
     {
         return $this->hasManyOfDescendants(Post::class);
     }
 
+    /**
+     * @return HasManyOfDescendants<Post>
+     */
     public function postsAndSelf(): HasManyOfDescendants
     {
         return $this->hasManyOfDescendantsAndSelf(Post::class);
     }
 
+    /**
+     * @return BelongsToManyOfDescendants<Role>
+     */
     public function roles(): BelongsToManyOfDescendants
     {
         return $this->belongsToManyOfDescendants(Role::class);
     }
 
+    /**
+     * @return BelongsToManyOfDescendants<Role>
+     */
     public function rolesAndSelf(): BelongsToManyOfDescendants
     {
         return $this->belongsToManyOfDescendantsAndSelf(Role::class);
     }
 
+    /**
+     * @return MorphToManyOfDescendants<Tag>
+     */
     public function tags(): MorphToManyOfDescendants
     {
         return $this->morphToManyOfDescendants(Tag::class, 'taggable');
     }
 
+    /**
+     * @return MorphToManyOfDescendants<Tag>
+     */
     public function tagsAndSelf(): MorphToManyOfDescendants
     {
         return $this->morphToManyOfDescendantsAndSelf(Tag::class, 'taggable');
     }
 
+    /**
+     * @return MorphToManyOfDescendants<Video>
+     */
     public function videos(): MorphToManyOfDescendants
     {
         return $this->morphedByManyOfDescendants(Video::class, 'authorable');
     }
 
+    /**
+     * @return MorphToManyOfDescendants<Video>
+     */
     public function videosAndSelf(): MorphToManyOfDescendants
     {
         return $this->morphedByManyOfDescendantsAndSelf(Video::class, 'authorable');
