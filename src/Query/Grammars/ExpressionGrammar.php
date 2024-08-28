@@ -109,4 +109,12 @@ interface ExpressionGrammar
      * @return bool
      */
     public function supportsUnionInRecursiveExpression(): bool;
+
+    /**
+     * Wrap a value in keyword identifiers.
+     *
+     * @param \Illuminate\Contracts\Database\Query\Expression|string $value
+     * @return string
+     */
+    public function wrap($value);
 }
