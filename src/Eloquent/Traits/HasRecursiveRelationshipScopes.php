@@ -176,7 +176,7 @@ trait HasRecursiveRelationshipScopes
     /**
      * Get the initial query for a relationship expression.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar|\Illuminate\Database\Grammar $grammar
+     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param callable $constraint
      * @param int $initialDepth
      * @param string $from
@@ -217,7 +217,7 @@ trait HasRecursiveRelationshipScopes
     /**
      * Get the recursive query for a relationship expression.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar|\Illuminate\Database\Grammar $grammar
+     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param string $direction
      * @param string $from
      * @param int|null $maxDepth
