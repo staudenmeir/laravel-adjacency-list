@@ -14,6 +14,5 @@ parameters:
         - '#Call to an undefined method TModel of Illuminate\\Database\\Eloquent\\Model#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model::#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
-        - '#Call to an undefined method Illuminate\\Database\\ConnectionInterface#'
         - '#Call to an undefined method Staudenmeir\\LaravelAdjacencyList\\Query\\Grammars\\ExpressionGrammar::wrap\(\)#'
         - '#PHPDoc tag \@param for parameter \$grammar with type Illuminate\\Database\\Grammar\|Staudenmeir\\LaravelAdjacencyList\\Query\\Grammars\\ExpressionGrammar is not subtype#'
