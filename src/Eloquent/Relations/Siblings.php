@@ -70,6 +70,7 @@ class Siblings extends HasMany
      */
     public function addEagerConstraints(array $models)
     {
+        /** @var array<int, int|string|null> $keys */
         $keys = $this->getKeys($models, $this->localKey);
 
         $this->query->where(

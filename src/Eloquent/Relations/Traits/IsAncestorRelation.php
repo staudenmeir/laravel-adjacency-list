@@ -58,6 +58,7 @@ trait IsAncestorRelation
      */
     protected function getKeys(array $models, $key = null)
     {
+        /** @var array<int, int|string|null> $keys */
         $keys = parent::getKeys($models, $key);
 
         return array_filter($keys, function ($value) {
