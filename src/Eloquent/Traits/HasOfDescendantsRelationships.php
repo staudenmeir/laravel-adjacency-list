@@ -199,6 +199,7 @@ trait HasOfDescendantsRelationships
         $relatedKey,
         $andSelf
     ) {
+        // @phpstan-ignore return.type
         return new BelongsToManyOfDescendants(
             $query,
             $parent,
