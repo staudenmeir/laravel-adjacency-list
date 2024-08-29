@@ -65,7 +65,7 @@ class Siblings extends HasMany
     /**
      * Set the constraints for an eager load of the relation.
      *
-     * @param array $models
+     * @param \Illuminate\Database\Eloquent\Model[] $models
      * @return void
      */
     public function addEagerConstraints(array $models)
@@ -86,8 +86,8 @@ class Siblings extends HasMany
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param array $models
-     * @param \Illuminate\Database\Eloquent\Collection $results
+     * @param \Illuminate\Database\Eloquent\Model[] $models
+     * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
      * @param string $relation
      * @return array
      */

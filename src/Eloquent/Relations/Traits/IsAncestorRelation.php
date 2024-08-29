@@ -31,7 +31,7 @@ trait IsAncestorRelation
     /**
      * Set the constraints for an eager load of the relation.
      *
-     * @param array $models
+     * @param \Illuminate\Database\Eloquent\Model[] $models
      * @return void
      */
     public function addEagerConstraints(array $models)
@@ -52,7 +52,7 @@ trait IsAncestorRelation
     /**
      * Get all of the primary keys for an array of models.
      *
-     * @param array $models
+     * @param \Illuminate\Database\Eloquent\Model[] $models
      * @param string $key
      * @return array
      */
@@ -68,8 +68,8 @@ trait IsAncestorRelation
     /**
      * Match the eagerly loaded results to their many parents.
      *
-     * @param array $models
-     * @param \Illuminate\Database\Eloquent\Collection $results
+     * @param \Illuminate\Database\Eloquent\Model[] $models
+     * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
      * @param string $relation
      * @param string $type
      * @return array
@@ -96,10 +96,10 @@ trait IsAncestorRelation
     /**
      * Add the constraints for a relationship query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $parentQuery
      * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -123,10 +123,10 @@ trait IsAncestorRelation
     /**
      * Add the constraints for a relationship query on the same table.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $parentQuery
      * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
      */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -157,9 +157,9 @@ trait IsAncestorRelation
      * Add a recursive expression to the query.
      *
      * @param callable $constraint
-     * @param \Illuminate\Database\Eloquent\Builder|null $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>|null $query
      * @param string|null $from
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
      */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {

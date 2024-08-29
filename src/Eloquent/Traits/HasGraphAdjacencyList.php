@@ -419,7 +419,7 @@ trait HasGraphAdjacencyList
      * Create a new Eloquent query builder for the model.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     public function newEloquentBuilder($query)
     {
@@ -429,8 +429,8 @@ trait HasGraphAdjacencyList
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param array $models
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection
+     * @param static[] $models
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection<int, static>
      */
     public function newCollection(array $models = [])
     {

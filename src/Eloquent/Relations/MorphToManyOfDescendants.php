@@ -97,7 +97,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
      * Set the where clause on the recursive expression query for an eager load of the relation.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $models
+     * @param \Illuminate\Database\Eloquent\Model[] $models
      * @return void
      */
     public function addEagerExpressionWhereConstraints(Builder $query, array $models)
