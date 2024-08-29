@@ -2,7 +2,7 @@ includes:
     - ./vendor/larastan/larastan/extension.neon
     - ./vendor/phpstan/phpstan-mockery/extension.neon
 parameters:
-    level: 3
+    level: 4
     paths:
         - src
         - tests
@@ -14,3 +14,5 @@ parameters:
         - '#Call to an undefined method TModel of Illuminate\\Database\\Eloquent\\Model#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model::#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
+        - identifier: expr.resultUnused
+          path: tests
