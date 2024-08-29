@@ -140,24 +140,4 @@ class AncestorsTest extends TestCase
 
         Role::find(11)->userAncestors;
     }
-
-    public function testAncestorWithMultipleScopesLazyLoading()
-    {
-        /** @var User $user */
-        $user = User::find(8);
-
-        $users = $user->ancestorAndSelfWithMultipleScopes()->get();
-
-        $this->assertEquals([2, 5, 8], $users->pluck('id')->all());
-    }
-
-    public function testAncestorWithMultipleScopesEagerLoading()
-    {
-        /** @var User $user */
-        $user = User::find(8);
-
-        $users = $user->ancestorAndSelfWithMultipleScopes;
-
-        $this->assertEquals([2, 5, 8], $users->pluck('id')->all());
-    }
 }

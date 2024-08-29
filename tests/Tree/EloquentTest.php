@@ -292,4 +292,24 @@ class EloquentTest extends TestCase
 
         $this->assertEquals([2, 5], $users->pluck('id')->all());
     }
+
+    public function testLazyLoadingWithMultipleScopes()
+    {
+        /** @var User $user */
+        $user = User::find(8);
+
+        $ancestorsAndSelf = $user->ancestorAndSelfWithMultipleScopes()->get();
+
+        $this->assertEquals([2, 5, 8], $ancestorsAndSelf->pluck('id')->all());
+    }
+
+    public function testEagerLoadingWithMultipleScopes()
+    {
+        /** @var User $user */
+        $user = User::find(8);
+
+        $ancestorsAndSelf = $user->ancestorAndSelfWithMultipleScopes;
+
+        $this->assertEquals([2, 5, 8], $ancestorsAndSelf->pluck('id')->all());
+    }
 }
