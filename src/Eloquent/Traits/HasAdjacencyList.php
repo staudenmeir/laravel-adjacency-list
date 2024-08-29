@@ -127,7 +127,7 @@ trait HasAdjacencyList
     /**
      * Get the model's ancestors.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<static>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<self>
      */
     public function ancestors()
     {
@@ -159,8 +159,8 @@ trait HasAdjacencyList
     /**
      * Instantiate a new Ancestors relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<self> $query
+     * @param self $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
@@ -168,6 +168,7 @@ trait HasAdjacencyList
      */
     protected function newAncestors(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
+        // @phpstan-ignore return.type
         return new Ancestors($query, $parent, $foreignKey, $localKey, $andSelf);
     }
 
@@ -189,8 +190,8 @@ trait HasAdjacencyList
     /**
      * Instantiate a new Bloodline relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<self> $query
+     * @param self $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline<self>
@@ -203,10 +204,11 @@ trait HasAdjacencyList
     /**
      * Get the model's children.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<self>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<$this>
      */
     public function children()
     {
+        // @phpstan-ignore return.type
         return $this->hasMany(static::class, $this->getParentKeyName(), $this->getLocalKeyName());
     }
 
@@ -255,8 +257,8 @@ trait HasAdjacencyList
     /**
      * Instantiate a new Descendants relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<self> $query
+     * @param self $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
@@ -264,16 +266,18 @@ trait HasAdjacencyList
      */
     protected function newDescendants(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
+        // @phpstan-ignore return.type
         return new Descendants($query, $parent, $foreignKey, $localKey, $andSelf);
     }
 
     /**
      * Get the model's parent.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<self, self>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<self, $this>
      */
     public function parent()
     {
+        // @phpstan-ignore return.type
         return $this->belongsTo(static::class, $this->getParentKeyName(), $this->getLocalKeyName());
     }
 
@@ -305,8 +309,8 @@ trait HasAdjacencyList
     /**
      * Instantiate a new RootAncestor relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<self> $query
+     * @param self $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor<self>
@@ -334,8 +338,8 @@ trait HasAdjacencyList
     /**
      * Instantiate a new RootAncestorOrSelf relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<self> $query
+     * @param self $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestorOrSelf<self>
@@ -380,8 +384,8 @@ trait HasAdjacencyList
     /**
      * Instantiate a new Siblings relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<self> $query
+     * @param self $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
@@ -436,11 +440,14 @@ trait HasAdjacencyList
      * Create a new Eloquent query builder for the model.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     public function newEloquentBuilder($query)
     {
-        return new \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder($query);
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $builder */
+        $builder = new \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder($query);
+
+        return $builder;
     }
 
     /**
@@ -451,7 +458,10 @@ trait HasAdjacencyList
      */
     public function newCollection(array $models = [])
     {
-        return new Collection($models);
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection<array-key, static> $collection */
+        $collection = new Collection($models);
+
+        return $collection;
     }
 
     /**

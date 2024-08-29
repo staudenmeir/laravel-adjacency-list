@@ -16,7 +16,8 @@ class Collection extends Base
      * Generate a nested tree.
      *
      * @param string $childrenRelation
-     * @return $this<int, TModel>
+     * @return static<TKey, TModel>
+     * @phpstan-ignore return.phpDocType
      */
     public function toTree(string $childrenRelation = 'children'): static
     {

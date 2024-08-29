@@ -22,7 +22,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
     /**
      * The class name of the morph type constraint.
      *
-     * @var string
+     * @var class-string<TRelatedModel>
      */
     protected $morphClass;
 
@@ -41,7 +41,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
      * @param \Illuminate\Database\Eloquent\Model $parent
      * @param string $name
-     * @param string $table
+     * @param string|class-string<TRelatedModel> $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey

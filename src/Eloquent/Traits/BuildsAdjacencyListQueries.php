@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
+use Illuminate\Database\MySqlConnection;
 use Illuminate\Database\PostgresConnection;
 use RuntimeException;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\FirebirdGrammar;
@@ -12,6 +13,9 @@ use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SingleStoreGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SQLiteGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SqlServerGrammar;
 
+/**
+ * @mixin \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder
+ */
 trait BuildsAdjacencyListQueries
 {
     /**
@@ -80,41 +84,39 @@ trait BuildsAdjacencyListQueries
         /** @var \Illuminate\Database\Connection $connection */
         $connection = $this->query->getConnection();
 
-        switch ($connection->getDriverName()) {
-            case 'mysql':
-                /** @var \Illuminate\Database\MySqlConnection $connection */
-                $grammar = $connection->isMaria()
-                    ? new MariaDbGrammar($this->model)
-                    : new MySqlGrammar($this->model);
+        if ($connection instanceof MySqlConnection) {
+            /** @var \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar */
+            $grammar = $connection->withTablePrefix($connection->isMaria()
+                ? new MariaDbGrammar($this->model)
+                : new MySqlGrammar($this->model));
 
-                return $connection->withTablePrefix($grammar);
-            case 'mariadb':
-                return $connection->withTablePrefix(
-                    new MariaDbGrammar($this->model)
-                );
-            case 'pgsql':
-                return $connection->withTablePrefix(
-                    new PostgresGrammar($this->model)
-                );
-            case 'sqlite':
-                return $connection->withTablePrefix(
-                    new SQLiteGrammar($this->model)
-                );
-            case 'sqlsrv':
-                return $connection->withTablePrefix(
-                    new SqlServerGrammar($this->model)
-                );
-            case 'singlestore':
-                return $connection->withTablePrefix(
-                    new SingleStoreGrammar($this->model)
-                );
-            case 'firebird':
-                return $connection->withTablePrefix(
-                    new FirebirdGrammar($this->model)
-                );
+            return $grammar;
         }
 
-        throw new RuntimeException('This database is not supported.'); // @codeCoverageIgnore
+        /** @var \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar */
+        $grammar = match ($connection->getDriverName()) {
+            'mariadb' => $connection->withTablePrefix(
+                new MariaDbGrammar($this->model)
+            ),
+            'pgsql' => $connection->withTablePrefix(
+                new PostgresGrammar($this->model)
+            ),
+            'sqlite' => $connection->withTablePrefix(
+                new SQLiteGrammar($this->model)
+            ),
+            'sqlsrv' => $connection->withTablePrefix(
+                new SqlServerGrammar($this->model)
+            ),
+            'singlestore' => $connection->withTablePrefix(
+                new SingleStoreGrammar($this->model)
+            ),
+            'firebird' => $connection->withTablePrefix(
+                new FirebirdGrammar($this->model)
+            ),
+            default => throw new RuntimeException('This database is not supported.'),
+        };
+
+        return $grammar;
     }
 
     /**

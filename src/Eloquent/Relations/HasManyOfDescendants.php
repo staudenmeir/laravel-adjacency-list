@@ -20,7 +20,7 @@ class HasManyOfDescendants extends HasMany
      * Create a new has many of descendants relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param TRelatedModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf

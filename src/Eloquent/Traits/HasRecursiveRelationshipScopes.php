@@ -12,9 +12,9 @@ trait HasRecursiveRelationshipScopes
     /**
      * Add a recursive expression for the whole tree to the query.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
      * @param int|null $maxDepth
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeTree(Builder $query, $maxDepth = null)
     {
@@ -28,10 +28,10 @@ trait HasRecursiveRelationshipScopes
     /**
      * Add a recursive expression for a custom tree to the query.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
      * @param callable|\Illuminate\Database\Eloquent\Model $constraint
      * @param int|null $maxDepth
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeTreeOf(Builder $query, callable|Model $constraint, $maxDepth = null)
     {
@@ -45,8 +45,8 @@ trait HasRecursiveRelationshipScopes
     /**
      * Limit the query to models with children.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeHasChildren(Builder $query)
     {
@@ -60,20 +60,20 @@ trait HasRecursiveRelationshipScopes
     /**
      * Limit the query to models without children.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeDoesntHaveChildren(Builder $query)
     {
-        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>|static $query */
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>|self $query */
         return $query->isLeaf();
     }
 
     /**
      * Limit the query to models with a parent.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeHasParent(Builder $query)
     {
@@ -83,8 +83,8 @@ trait HasRecursiveRelationshipScopes
     /**
      * Limit the query to leaf models.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeIsLeaf(Builder $query)
     {
@@ -98,8 +98,8 @@ trait HasRecursiveRelationshipScopes
     /**
      * Limit the query to root models.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeIsRoot(Builder $query)
     {
@@ -109,10 +109,10 @@ trait HasRecursiveRelationshipScopes
     /**
      * Limit the query by depth.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
      * @param mixed $operator
      * @param mixed|null $value
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeWhereDepth(Builder $query, $operator, $value = null)
     {
@@ -124,8 +124,8 @@ trait HasRecursiveRelationshipScopes
     /**
      * Order the query breadth-first.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeBreadthFirst(Builder $query)
     {
@@ -135,8 +135,8 @@ trait HasRecursiveRelationshipScopes
     /**
      * Order the query depth-first.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeDepthFirst(Builder $query)
     {
@@ -148,13 +148,13 @@ trait HasRecursiveRelationshipScopes
     /**
      * Add a recursive expression for the relationship to the query.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
      * @param string $direction
      * @param callable $constraint
      * @param int $initialDepth
      * @param string|null $from
      * @param int|null $maxDepth
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     public function scopeWithRelationshipExpression(Builder $query, $direction, callable $constraint, $initialDepth, $from = null, $maxDepth = null)
     {
@@ -183,7 +183,7 @@ trait HasRecursiveRelationshipScopes
      * @param callable $constraint
      * @param int $initialDepth
      * @param string $from
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     protected function getInitialQuery(ExpressionGrammar $grammar, callable $constraint, $initialDepth, $from)
     {
@@ -224,7 +224,7 @@ trait HasRecursiveRelationshipScopes
      * @param string $direction
      * @param string $from
      * @param int|null $maxDepth
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self>
      */
     protected function getRecursiveQuery(ExpressionGrammar $grammar, $direction, $from, $maxDepth = null)
     {
@@ -290,7 +290,7 @@ trait HasRecursiveRelationshipScopes
     /**
      * Add join and where clauses to the recursive query for a relationship expression.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<self> $query
      * @param string $direction
      * @param string $name
      * @param array $joinColumns

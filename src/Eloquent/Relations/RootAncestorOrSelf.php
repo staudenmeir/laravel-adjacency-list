@@ -15,8 +15,8 @@ class RootAncestorOrSelf extends RootAncestor
     /**
      * Create a new root ancestor or self relationship instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param TRelatedModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return void
