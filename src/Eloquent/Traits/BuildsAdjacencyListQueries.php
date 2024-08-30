@@ -87,14 +87,7 @@ trait BuildsAdjacencyListQueries
 
         /** @var \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar */
         $grammar = match ($connection->getDriverName()) {
-            'mysql' => match (true) {
-                $connection instanceof MariaDbConnection => $connection->withTablePrefix(
-                    new MariaDbGrammar($this->model)
-                ),
-                default => $connection->withTablePrefix(
-                    new MySqlGrammar($this->model)
-                ),
-            },
+            'mysql' => $this->getMySqlExpressionGrammar($connection),
             'mariadb' => $connection->withTablePrefix(
                 new MariaDbGrammar($this->model)
             ),
@@ -115,6 +108,26 @@ trait BuildsAdjacencyListQueries
             ),
             default => throw new RuntimeException('This database is not supported.'),
         };
+
+        return $grammar;
+    }
+
+    /**
+     * Get the MySQL expression grammar.
+     * @param \Illuminate\Database\Connection $connection
+     * @return \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar
+     */
+    private function getMySqlExpressionGrammar($connection)
+    {
+        /**
+         * @var \Illuminate\Database\MySqlConnection $connection
+         * @var \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
+         */
+        $grammar = $connection->withTablePrefix(
+            $connection->isMaria()
+                ? new MariaDbGrammar($this->model)
+                : new MySqlGrammar($this->model)
+        );
 
         return $grammar;
     }
