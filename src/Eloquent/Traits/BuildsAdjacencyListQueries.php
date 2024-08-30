@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
+use Illuminate\Database\MariaDbConnection;
 use Illuminate\Database\MySqlConnection;
 use Illuminate\Database\PostgresConnection;
 use RuntimeException;
@@ -84,17 +85,16 @@ trait BuildsAdjacencyListQueries
         /** @var \Illuminate\Database\Connection $connection */
         $connection = $this->query->getConnection();
 
-        if ($connection instanceof MySqlConnection) {
-            /** @var \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar */
-            $grammar = $connection->withTablePrefix($connection->isMaria()
-                ? new MariaDbGrammar($this->model)
-                : new MySqlGrammar($this->model));
-
-            return $grammar;
-        }
-
         /** @var \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar */
         $grammar = match ($connection->getDriverName()) {
+            'mysql' => match (true) {
+                $connection instanceof MariaDbConnection => $connection->withTablePrefix(
+                    new MariaDbGrammar($this->model)
+                ),
+                default => $connection->withTablePrefix(
+                    new MySqlGrammar($this->model)
+                ),
+            },
             'mariadb' => $connection->withTablePrefix(
                 new MariaDbGrammar($this->model)
             ),
