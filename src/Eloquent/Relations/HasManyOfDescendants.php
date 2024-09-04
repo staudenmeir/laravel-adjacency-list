@@ -33,12 +33,7 @@ class HasManyOfDescendants extends HasMany
         parent::__construct($query, $parent, $foreignKey, $localKey);
     }
 
-    /**
-     * Set the where clause on the recursive expression query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return void
-     */
+    /** @inheritDoc */
     public function addExpressionWhereConstraints(Builder $query)
     {
         $column = $this->andSelf ? $this->parent->getLocalKeyName() : $this->parent->getParentKeyName();
@@ -50,41 +45,25 @@ class HasManyOfDescendants extends HasMany
         )->whereNotNull($column);
     }
 
-    /**
-     * Get the local key name for an eager load of the relation.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getEagerLoadingLocalKeyName()
     {
         return $this->getLocalKeyName();
     }
 
-    /**
-     * Get the foreign key name for an eager load of the relation.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getEagerLoadingForeignKeyName()
     {
         return $this->getForeignKeyName();
     }
 
-    /**
-     * Get the local key name for the recursion expression.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getExpressionLocalKeyName()
     {
         return $this->getLocalKeyName();
     }
 
-    /**
-     * Get the foreign key name for the recursion expression.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getExpressionForeignKeyName()
     {
         return $this->foreignKey;

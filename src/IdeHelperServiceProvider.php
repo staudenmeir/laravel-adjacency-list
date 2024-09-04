@@ -9,6 +9,7 @@ use Staudenmeir\LaravelAdjacencyList\IdeHelper\RecursiveRelationsHook;
 
 class IdeHelperServiceProvider extends ServiceProvider implements DeferrableProvider
 {
+    /** @inheritDoc */
     public function register(): void
     {
         /** @var \Illuminate\Contracts\Config\Repository $config */

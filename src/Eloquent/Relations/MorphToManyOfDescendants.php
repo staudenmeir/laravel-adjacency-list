@@ -77,12 +77,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return void
-     */
+    /** @inheritDoc */
     protected function addExpressionWhereConstraints(Builder $query)
     {
         parent::addExpressionWhereConstraints($query);
@@ -93,13 +88,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query for an eager load of the relation.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model[] $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerExpressionWhereConstraints(Builder $query, array $models)
     {
         parent::addEagerExpressionWhereConstraints($query, $models);
@@ -110,13 +99,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query for an existence query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $table
-     * @return void
-     */
+    /** @inheritDoc */
     public function addExistenceExpressionWhereConstraints(Builder $query, $table)
     {
         parent::addExistenceExpressionWhereConstraints($query, $table);

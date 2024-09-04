@@ -10,11 +10,7 @@ trait IsAncestorRelation
 {
     use IsRecursiveRelation;
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         if (static::$constraints) {
@@ -28,12 +24,7 @@ trait IsAncestorRelation
         }
     }
 
-    /**
-     * Set the constraints for an eager load of the relation.
-     *
-     * @param \Illuminate\Database\Eloquent\Model[] $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerConstraints(array $models)
     {
         $whereIn = $this->whereInMethod($this->parent, $this->localKey);
@@ -49,13 +40,7 @@ trait IsAncestorRelation
         $this->addExpression($constraint);
     }
 
-    /**
-     * Get all of the primary keys for an array of models.
-     *
-     * @param \Illuminate\Database\Eloquent\Model[] $models
-     * @param string $key
-     * @return array
-     */
+    /** @inheritDoc */
     protected function getKeys(array $models, $key = null)
     {
         /** @var array<int, int|string|null> $keys */
@@ -66,15 +51,7 @@ trait IsAncestorRelation
         });
     }
 
-    /**
-     * Match the eagerly loaded results to their many parents.
-     *
-     * @param \Illuminate\Database\Eloquent\Model[] $models
-     * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @param string $relation
-     * @param string $type
-     * @return array
-     */
+    /** @inheritDoc */
     public function matchOneOrMany(array $models, Collection $results, $relation, $type)
     {
         $dictionary = $this->buildDictionary($results);

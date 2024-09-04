@@ -85,13 +85,7 @@ trait IsRecursiveRelation
         })->all();
     }
 
-    /**
-     * Handle dynamic method calls to the relationship.
-     *
-     * @param string $method
-     * @param array $parameters
-     * @return mixed
-     */
+    /** @inheritDoc */
     public function __call($method, $parameters)
     {
         $methods = ['update', 'increment', 'decrement', 'delete', 'forceDelete'];
@@ -137,12 +131,7 @@ trait IsRecursiveRelation
         );
     }
 
-    /**
-     * Get the select columns for the relation query.
-     *
-     * @param array $columns
-     * @return array
-     */
+    /** @inheritDoc */
     protected function shouldSelect(array $columns = ['*'])
     {
         return $columns;

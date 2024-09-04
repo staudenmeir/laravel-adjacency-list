@@ -22,11 +22,7 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
         buildDictionary as baseBuildDictionary;
     }
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         if (static::$constraints) {
@@ -44,12 +40,7 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
         }
     }
 
-    /**
-     * Set the constraints for an eager load of the relation.
-     *
-     * @param \Illuminate\Database\Eloquent\Model[] $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerConstraints(array $models)
     {
         $column = $this->andSelf ? $this->getQualifiedParentKeyName() : $this->getQualifiedRelatedPivotKeyName();
@@ -94,14 +85,7 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
         return $dictionary;
     }
 
-    /**
-     * Add the constraints for a relationship query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+    /** @inheritDoc */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($query->getQuery()->from === $parentQuery->getQuery()->from) {

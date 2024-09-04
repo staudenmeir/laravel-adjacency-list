@@ -56,13 +56,7 @@ trait IsRecursiveRelation
         return $this->qualifyColumn($this->localKey);
     }
 
-    /**
-     * Handle dynamic method calls to the relationship.
-     *
-     * @param string $method
-     * @param array $parameters
-     * @return mixed
-     */
+    /** @inheritDoc */
     public function __call($method, $parameters)
     {
         $methods = ['update', 'increment', 'decrement', 'delete', 'forceDelete'];

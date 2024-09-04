@@ -9,11 +9,7 @@ class MariaDbGrammar extends Base implements ExpressionGrammar
 {
     use CompilesMySqlAdjacencyLists;
 
-    /**
-     * Compile an "order by path" clause.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileOrderByPath()
     {
         $column = $this->model->getLocalKeyName();

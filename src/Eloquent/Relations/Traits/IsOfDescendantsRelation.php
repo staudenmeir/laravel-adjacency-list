@@ -26,11 +26,7 @@ trait IsOfDescendantsRelation
      */
     protected $pathListAlias = 'laravel_paths';
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         if (static::$constraints) {
@@ -50,12 +46,7 @@ trait IsOfDescendantsRelation
      */
     abstract public function addExpressionWhereConstraints(Builder $query);
 
-    /**
-     * Set the constraints for an eager load of the relation.
-     *
-     * @param \Illuminate\Database\Eloquent\Model[] $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerConstraints(array $models)
     {
         $constraint = function (Builder $query) use ($models) {
@@ -98,12 +89,7 @@ trait IsOfDescendantsRelation
         $query->$whereIn($localKeyName, $keys);
     }
 
-    /**
-     * Build model dictionary.
-     *
-     * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, \Illuminate\Database\Eloquent\Model[]>
-     */
+    /** @inheritDoc */
     protected function buildDictionary(Collection $results)
     {
         $dictionary = [];

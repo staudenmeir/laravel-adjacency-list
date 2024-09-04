@@ -33,11 +33,7 @@ class RootAncestor extends HasOne
         $this->baseConstruct($query, $parent, $foreignKey, $localKey, false);
     }
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         $this->baseAddConstraints();
