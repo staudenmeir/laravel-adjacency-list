@@ -49,4 +49,59 @@ class Collection extends Base
 
         return $tree;
     }
+
+    /**
+     * Load parent/anscestor relations already present in the tree.
+     *
+     * @return static<int, TModel>
+     */
+    public function loadTreePathRelations()
+    {
+        $instance = $this->first();
+
+        if (is_null($instance)) {
+            return $this;
+        }
+
+        if (! method_exists($instance, 'getPathName') || ! method_exists($instance, 'getPathSeparator')) {
+            throw new RuntimeException(sprintf(
+                'Model [%s] is not have recusive relations.',
+                $instance::class,
+            ));
+        }
+
+        $keyName       = $instance->getKeyName();
+        $pathName      = $instance->getPathName();
+        $pathSeparator = $instance->getPathSeparator();
+
+        $lookup = $this->keyBy($keyName);
+
+        $keys = $this
+            ->pluck($pathName)
+            ->flatMap(fn (string $path): array => explode($pathSeparator, $path))
+            ->unique()
+            ->values();
+
+        $missing = $keys->diff($lookup->modelKeys());
+
+        if ($missing->isNotEmpty()) {
+            $lookup->merge($instance->newQuery()->findMany($missing)->keyBy($keyName));
+        }
+
+        foreach ($this->all() as $model) {
+            $path = array_reverse(explode($pathSeparator, $model->getAttribute($pathName)));
+
+            $ancestorsAndSelf = array_reduce(
+                $path,
+                fn ($collection, $step) => $collection->push($lookup[$step] ?? null),
+                $instance->newCollection(),
+            );
+
+            $model->setRelation('parent', count($path) > 1 ? $lookup[$path[1]] : null);
+            $model->setRelation('ancestorsAndSelf', $ancestorsAndSelf);
+            $model->setRelation('ancestors', $ancestorsAndSelf->slice(0, -1));
+        }
+
+        return $this;
+    }
 }
