@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent;
 
 use Illuminate\Database\Eloquent\Collection as Base;
+use RuntimeException;
 
 /**
  * @template TKey of array-key
