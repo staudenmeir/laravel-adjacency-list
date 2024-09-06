@@ -60,11 +60,11 @@ class CollectionTest extends TestCase
 
         $this->assertEquals('user-1', $tree[0]->display_path);
         $this->assertEquals('user-11', $tree[1]->display_path);
-        $this->assertEquals('user-1 > user-2', $tree[0]->children[0]->display_path);
-        $this->assertEquals('user-1 > user-3', $tree[0]->children[1]->display_path);
-        $this->assertEquals('user-1 > user-4', $tree[0]->children[2]->display_path);
-        $this->assertEquals('user-1 > user-2 > user-5', $tree[0]->children[0]->children[0]->display_path);
-        $this->assertEquals('user-1 > user-2 > user-5 > user-8', $tree[0]->children[0]->children[0]->children[0]->display_path);
+        $this->assertEquals('user-1 > user-2', $tree[0]->children->sortBy('id')[0]->display_path);
+        $this->assertEquals('user-1 > user-3', $tree[0]->children->sortBy('id')[1]->display_path);
+        $this->assertEquals('user-1 > user-4', $tree[0]->children->sortBy('id')[2]->display_path);
+        $this->assertEquals('user-1 > user-2 > user-5', $tree[0]->children->sortBy('id')[0]->children[0]->display_path);
+        $this->assertEquals('user-1 > user-2 > user-5 > user-8', $tree[0]->children->sortBy('id')[0]->children[0]->children[0]->display_path);
         $this->assertEquals('user-11 > user-12', $tree[1]->children[0]->display_path);
     }
 }
