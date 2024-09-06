@@ -38,4 +38,33 @@ class CollectionTest extends TestCase
 
         $this->assertEmpty($tree);
     }
+
+    public function testLoadTreePathRelations()
+    {
+        $limit = User::count();
+
+        $loaded = 0;
+
+        User::retrieved(function () use (&$count) {
+            $count++;
+        });
+        
+        $tree = User::query()
+            ->tree()
+            ->get()
+            ->loadTreePathRelations()
+            ->each(fn ($s) => $s->setAppends(['slug_path', 'reverse_slug_path']))
+            ->toTree();
+
+        $this->assertLessThanOrEqual($limit, $loaded);
+
+        $this->assertEquals('user-1', $tree[0]->slug_path);
+        $this->assertEquals('user-11', $tree[1]->slug_path);
+        $this->assertEquals('user-1 > user-2', $tree[0]->children[0]->slug_path);
+        $this->assertEquals('user-1 > user-3', $tree[0]->children[1]->slug_path);
+        $this->assertEquals('user-1 > user-4', $tree[0]->children[2]->slug_path);
+        $this->assertEquals('user-1 > user-2 > user-5', $tree[0]->children[0]->children[0]->slug_path);
+        $this->assertEquals('user-1 > user-2 > user-5 > user-8', $tree[0]->children[0]->children[0]->children[0]->slug_path);
+        $this->assertEquals('user-11 > user-12', $tree[1]->children[0]->slug_path);
+    }
 }
