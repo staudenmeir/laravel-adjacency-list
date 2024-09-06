@@ -53,18 +53,18 @@ class CollectionTest extends TestCase
             ->tree()
             ->get()
             ->loadTreePathRelations()
-            ->each(fn ($s) => $s->setAppends(['slug_path', 'reverse_slug_path']))
+            ->each(fn ($s) => $s->setAppends(['display_path', 'reverse_display_path']))
             ->toTree();
 
         $this->assertLessThanOrEqual($limit, $loaded);
 
-        $this->assertEquals('user-1', $tree[0]->slug_path);
-        $this->assertEquals('user-11', $tree[1]->slug_path);
-        $this->assertEquals('user-1 > user-2', $tree[0]->children[0]->slug_path);
-        $this->assertEquals('user-1 > user-3', $tree[0]->children[1]->slug_path);
-        $this->assertEquals('user-1 > user-4', $tree[0]->children[2]->slug_path);
-        $this->assertEquals('user-1 > user-2 > user-5', $tree[0]->children[0]->children[0]->slug_path);
-        $this->assertEquals('user-1 > user-2 > user-5 > user-8', $tree[0]->children[0]->children[0]->children[0]->slug_path);
-        $this->assertEquals('user-11 > user-12', $tree[1]->children[0]->slug_path);
+        $this->assertEquals('user-1', $tree[0]->display_path);
+        $this->assertEquals('user-11', $tree[1]->display_path);
+        $this->assertEquals('user-1 > user-2', $tree[0]->children[0]->display_path);
+        $this->assertEquals('user-1 > user-3', $tree[0]->children[1]->display_path);
+        $this->assertEquals('user-1 > user-4', $tree[0]->children[2]->display_path);
+        $this->assertEquals('user-1 > user-2 > user-5', $tree[0]->children[0]->children[0]->display_path);
+        $this->assertEquals('user-1 > user-2 > user-5 > user-8', $tree[0]->children[0]->children[0]->children[0]->display_path);
+        $this->assertEquals('user-11 > user-12', $tree[1]->children[0]->display_path);
     }
 }
