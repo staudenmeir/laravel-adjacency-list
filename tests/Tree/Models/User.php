@@ -214,4 +214,31 @@ class User extends Model
     {
         return $this->morphedByManyOfDescendantsAndSelf(Video::class, 'authorable');
     }
+
+    /**
+     * @return Attribute<string, never>
+     */
+    protected function displayPath(): Attribute
+    {
+        return Attribute::get(
+            fn (): string => (string) $this->ancestorsAndSelf
+                ->reverse()
+                ->reduce(function ($carry, $item) {
+                    return $carry ? "{$carry} > {$item->name}" : $item->name;
+                }),
+        );
+    }
+
+    /**
+     * @return Attribute<string, never>
+     */
+    protected function displayPathReverse(): Attribute
+    {
+        return Attribute::get(
+            fn (): string => (string) $this->ancestorsAndSelf
+                ->reduce(function ($carry, $item) {
+                    return $carry ? "{$carry} < {$item->name}" : $item->name;
+                }),
+        );
+    }
 }
