@@ -216,28 +216,28 @@ class User extends Model
     }
 
     /**
-     * @return Attribute<string, never>
+     * @return Attribute<string,never>
      */
-    protected function displayPath(): Attribute
+    protected function slugPath(): Attribute
     {
         return Attribute::get(
             fn (): string => (string) $this->ancestorsAndSelf
                 ->reverse()
-                ->reduce(function ($carry, $item) {
-                    return $carry ? "{$carry} > {$item->name}" : $item->name;
+                ->reduce(function ($carry, $user) {
+                    return $carry ? "{$carry} > {$user->slug}" : $user->slug;
                 }),
         );
     }
 
     /**
-     * @return Attribute<string, never>
+     * @return Attribute<string,never>
      */
-    protected function displayPathReverse(): Attribute
+    protected function reverseSlugPath(): Attribute
     {
         return Attribute::get(
             fn (): string => (string) $this->ancestorsAndSelf
-                ->reduce(function ($carry, $item) {
-                    return $carry ? "{$carry} < {$item->name}" : $item->name;
+                ->reduce(function ($carry, $user) {
+                    return $carry ? "{$carry} < {$user->slug}" : $user->slug;
                 }),
         );
     }
