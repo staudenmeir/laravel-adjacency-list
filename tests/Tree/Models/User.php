@@ -218,7 +218,7 @@ class User extends Model
     /**
      * @return Attribute<string,never>
      */
-    protected function slugPath(): Attribute
+    protected function displayPath(): Attribute
     {
         return Attribute::get(
             fn (): string => (string) $this->ancestorsAndSelf
@@ -232,7 +232,7 @@ class User extends Model
     /**
      * @return Attribute<string,never>
      */
-    protected function reverseSlugPath(): Attribute
+    protected function reverseDisplayPath(): Attribute
     {
         return Attribute::get(
             fn (): string => (string) $this->ancestorsAndSelf
