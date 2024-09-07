@@ -11,6 +11,9 @@ jobs:
         php: [ 8.4, 8.3, 8.2 ]
         database: [ mysql, mariadb, pgsql, sqlite, sqlsrv, singlestore, firebird ]
         release: [ stable, lowest ]
+        exclude:
+          - php: 8.4
+            database: firebird
         include:
           - php: 8.3
             release: stable
