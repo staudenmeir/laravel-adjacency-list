@@ -28,7 +28,7 @@ jobs:
         run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up --wait ${{ matrix.database }}
         if: matrix.database != 'sqlite'
       - name: Create SQL Server database
-        run: docker compose exec sqlsrv /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P Password! -Q 'create database [test]'
+        run: docker compose exec sqlsrv /opt/mssql-tools18/bin/sqlcmd -C -S 127.0.0.1 -U sa -P Password! -Q 'CREATE DATABASE [test]'
         if: matrix.database == 'sqlsrv'
       - name: Install dependencies
         run: |
