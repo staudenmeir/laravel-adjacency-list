@@ -20,7 +20,6 @@
         "larastan/larastan": "^2.0",
         "mockery/mockery": "^1.5.1",
         "orchestra/testbench": "^9.0",
-        "phpstan/phpstan": "1.11.1",
         "phpstan/phpstan-mockery": "^1.1",
         "phpstan/phpstan-phpunit": "^1.4",
         "phpunit/phpunit": "^11.0",
