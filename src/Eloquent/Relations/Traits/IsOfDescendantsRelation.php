@@ -220,6 +220,7 @@ trait IsOfDescendantsRelation
     {
         $name = $this->parent->getExpressionName();
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query */
         $query = $query ?: $this->query;
 
         $grammar = $this->getExpressionGrammar();
@@ -229,7 +230,6 @@ trait IsOfDescendantsRelation
                 $this->getRecursiveQuery($grammar, $selectPath)
             );
 
-        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query */
         $query->getQuery()->withRecursiveExpression($name, $expression->getQuery());
 
         $query->withGlobalScope(get_class($this), function (Builder $query) use ($name) {
