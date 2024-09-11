@@ -2,10 +2,10 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
-use Illuminate\Database\MariaDbConnection;
-use Illuminate\Database\MySqlConnection;
+use Illuminate\Database\Connection;
 use Illuminate\Database\PostgresConnection;
 use RuntimeException;
+use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\FirebirdGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MariaDbGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MySqlGrammar;
@@ -114,10 +114,11 @@ trait BuildsAdjacencyListQueries
 
     /**
      * Get the MySQL expression grammar.
+     *
      * @param \Illuminate\Database\Connection $connection
      * @return \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar
      */
-    private function getMySqlExpressionGrammar($connection)
+    protected function getMySqlExpressionGrammar(Connection $connection): ExpressionGrammar
     {
         /**
          * @var \Illuminate\Database\MySqlConnection $connection
