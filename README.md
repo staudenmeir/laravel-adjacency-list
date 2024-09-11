@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/staudenmeir/laravel-adjacency-list/actions/workflows/ci.yml/badge.svg)](https://github.com/staudenmeir/laravel-adjacency-list/actions/workflows/ci.yml)
 [![Code Coverage](https://codecov.io/gh/staudenmeir/laravel-adjacency-list/graph/badge.svg?token=VhZ3oBh1YE)](https://codecov.io/gh/staudenmeir/laravel-adjacency-list)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/staudenmeir/laravel-adjacency-list/?branch=main)
 [![Latest Stable Version](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/v/stable)](https://packagist.org/packages/staudenmeir/laravel-adjacency-list)
 [![Total Downloads](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/downloads)](https://packagist.org/packages/staudenmeir/laravel-adjacency-list/stats)
 [![License](https://poser.pugx.org/staudenmeir/laravel-adjacency-list/license)](https://github.com/staudenmeir/laravel-adjacency-list/blob/main/LICENSE)
