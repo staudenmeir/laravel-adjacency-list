@@ -429,10 +429,8 @@ trait HasGraphAdjacencyList
      */
     public function newEloquentBuilder($query)
     {
-        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $builder */
-        $builder = new \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder($query);
-
-        return $builder;
+        // @phpstan-ignore return.type
+        return new \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder($query);
     }
 
     /**
@@ -443,10 +441,8 @@ trait HasGraphAdjacencyList
      */
     public function newCollection(array $models = [])
     {
-        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection<array-key, static> $collection */
-        $collection = new Collection($models);
-
-        return $collection;
+        // @phpstan-ignore return.type
+        return new Collection($models);
     }
 
     /**
