@@ -12,10 +12,8 @@ use Illuminate\Database\Eloquent\Collection as Base;
  */
 class Collection extends Base
 {
-    /**
+    /*
      * Generate a nested tree.
-     *
-     * @return $this
      */
     public function toTree(string $childrenRelation = 'children'): static
     {
@@ -49,7 +47,6 @@ class Collection extends Base
             );
         }
 
-        // @phpstan-ignore return.type
         return $tree;
     }
 }
