@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Collection as Base;
  */
 class Collection extends Base
 {
-    /*
+    /**
      * Generate a nested tree.
      */
     public function toTree(string $childrenRelation = 'children'): static
