@@ -30,7 +30,6 @@ trait HasOfDescendantsRelationships
 
         $localKey = $localKey ?: $this->getKeyName();
 
-        // @phpstan-ignore return.type
         return $this->newHasManyOfDescendants(
             $instance->newQuery(),
             $this,
@@ -59,7 +58,6 @@ trait HasOfDescendantsRelationships
 
         $localKey = $localKey ?: $this->getKeyName();
 
-        // @phpstan-ignore return.type
         return $this->newHasManyOfDescendants(
             $instance->newQuery(),
             $this,
@@ -199,7 +197,6 @@ trait HasOfDescendantsRelationships
         $relatedKey,
         $andSelf
     ) {
-        // @phpstan-ignore return.type
         return new BelongsToManyOfDescendants(
             $query,
             $parent,

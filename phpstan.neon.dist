@@ -7,7 +7,6 @@ parameters:
     level: 4
     paths:
         - src
-        - tests
     ignoreErrors:
         - '#Unsafe usage of new static\(\).#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$laravel_through_key#'
@@ -16,5 +15,3 @@ parameters:
         - '#Call to an undefined method TModel of Illuminate\\Database\\Eloquent\\Model#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Model::#'
         - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
-        - identifier: expr.resultUnused
-          path: tests

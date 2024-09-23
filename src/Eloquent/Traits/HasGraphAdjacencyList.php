@@ -244,7 +244,6 @@ trait HasGraphAdjacencyList
         string $relatedKey,
         bool $andSelf
     ): Ancestors {
-        // @phpstan-ignore return.type
         return new Ancestors(
             $query,
             $parent,
@@ -264,7 +263,6 @@ trait HasGraphAdjacencyList
      */
     public function children(): BelongsToMany
     {
-        // @phpstan-ignore return.type
         return $this->belongsToMany(
             static::class,
             $this->getPivotTableName(),
@@ -284,7 +282,6 @@ trait HasGraphAdjacencyList
      */
     public function childrenAndSelf(): Descendants
     {
-        // @phpstan-ignore return.type
         return $this->descendantsAndSelf()->whereDepth('<=', 1);
     }
 
@@ -349,7 +346,6 @@ trait HasGraphAdjacencyList
         string $relatedKey,
         bool $andSelf
     ): Descendants {
-        // @phpstan-ignore return.type
         return new Descendants(
             $query,
             $parent,
@@ -369,7 +365,6 @@ trait HasGraphAdjacencyList
      */
     public function parents(): BelongsToMany
     {
-        // @phpstan-ignore return.type
         return $this->belongsToMany(
             static::class,
             $this->getPivotTableName(),
@@ -389,7 +384,6 @@ trait HasGraphAdjacencyList
      */
     public function parentsAndSelf(): Ancestors
     {
-        // @phpstan-ignore return.type
         return $this->ancestorsAndSelf()->whereDepth('>=', -1);
     }
 
@@ -429,7 +423,6 @@ trait HasGraphAdjacencyList
      */
     public function newEloquentBuilder($query)
     {
-        // @phpstan-ignore return.type
         return new \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder($query);
     }
 
@@ -441,7 +434,6 @@ trait HasGraphAdjacencyList
      */
     public function newCollection(array $models = [])
     {
-        // @phpstan-ignore return.type
         return new Collection($models);
     }
 

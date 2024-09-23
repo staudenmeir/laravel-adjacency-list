@@ -147,7 +147,6 @@ trait HasAdjacencyList
      */
     public function ancestorsAndSelf()
     {
-        // @phpstan-ignore return.type
         return $this->newAncestors(
             (new static())->newQuery(),
             $this,
@@ -169,7 +168,6 @@ trait HasAdjacencyList
      */
     protected function newAncestors(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
-        // @phpstan-ignore return.type
         return new Ancestors($query, $parent, $foreignKey, $localKey, $andSelf);
     }
 
@@ -209,7 +207,6 @@ trait HasAdjacencyList
      */
     public function children()
     {
-        // @phpstan-ignore return.type
         return $this->hasMany(static::class, $this->getParentKeyName(), $this->getLocalKeyName());
     }
 
@@ -220,7 +217,6 @@ trait HasAdjacencyList
      */
     public function childrenAndSelf()
     {
-        // @phpstan-ignore return.type
         return $this->descendantsAndSelf()->whereDepth('<=', 1);
     }
 
@@ -268,7 +264,6 @@ trait HasAdjacencyList
      */
     protected function newDescendants(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
-        // @phpstan-ignore return.type
         return new Descendants($query, $parent, $foreignKey, $localKey, $andSelf);
     }
 
@@ -279,7 +274,6 @@ trait HasAdjacencyList
      */
     public function parent()
     {
-        // @phpstan-ignore return.type
         return $this->belongsTo(static::class, $this->getParentKeyName(), $this->getLocalKeyName());
     }
 
@@ -290,7 +284,6 @@ trait HasAdjacencyList
      */
     public function parentAndSelf()
     {
-        // @phpstan-ignore return.type
         return $this->ancestorsAndSelf()->whereDepth('>=', -1);
     }
 
@@ -447,7 +440,6 @@ trait HasAdjacencyList
      */
     public function newEloquentBuilder($query)
     {
-        // @phpstan-ignore return.type
         return new \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder($query);
     }
 
@@ -459,7 +451,6 @@ trait HasAdjacencyList
      */
     public function newCollection(array $models = [])
     {
-        // @phpstan-ignore return.type
         return new Collection($models);
     }
 
