@@ -361,7 +361,7 @@ trait HasGraphAdjacencyList
     /**
      * Get the model's parents.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<$this>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<static>
      */
     public function parents(): BelongsToMany
     {

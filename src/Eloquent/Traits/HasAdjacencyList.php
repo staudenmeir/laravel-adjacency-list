@@ -203,7 +203,7 @@ trait HasAdjacencyList
     /**
      * Get the model's children.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<$this>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<static>
      */
     public function children()
     {
