@@ -24,7 +24,7 @@ class BelongsToManyOfDescendants extends BelongsToMany
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
      * @param TRelatedModel $parent
-     * @param string|class-string<TRelatedModel> $table
+     * @param class-string<TRelatedModel>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
