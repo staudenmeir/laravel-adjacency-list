@@ -14,9 +14,6 @@ use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SingleStoreGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SQLiteGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\SqlServerGrammar;
 
-/**
- * @mixin \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder
- */
 trait BuildsAdjacencyListQueries
 {
     /**
