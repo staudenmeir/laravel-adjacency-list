@@ -143,7 +143,7 @@ trait HasAdjacencyList
     /**
      * Get the model's ancestors and itself.
      *
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<self>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<static>
      */
     public function ancestorsAndSelf()
     {
