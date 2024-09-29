@@ -14,8 +14,11 @@ class Collection extends Base
 {
     /**
      * Generate a nested tree.
+     *
+     * @param string $childrenRelation
+     * @return static
      */
-    public function toTree(string $childrenRelation = 'children'): static
+    public function toTree($childrenRelation = 'children')
     {
         if ($this->isEmpty()) {
             return $this;
