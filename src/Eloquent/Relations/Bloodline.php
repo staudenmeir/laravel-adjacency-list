@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends Descendants<TRelatedModel>
+ * @extends \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<TRelatedModel, TDeclaringModel>
  */
 class Bloodline extends Descendants
 {

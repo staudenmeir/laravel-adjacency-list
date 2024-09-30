@@ -95,7 +95,9 @@ trait IsAncestorRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns));
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query);
     }
 
     /**
@@ -128,7 +130,9 @@ trait IsAncestorRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns), $from);
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query, $from);
     }
 
     /**

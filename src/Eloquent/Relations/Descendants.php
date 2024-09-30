@@ -13,8 +13,9 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelati
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends HasMany<TRelatedModel>
+ * @extends \Illuminate\Database\Eloquent\Relations\HasMany<TRelatedModel, TDeclaringModel>
  */
 class Descendants extends HasMany implements ConcatenableRelation
 {
@@ -115,7 +116,9 @@ class Descendants extends HasMany implements ConcatenableRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns));
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query);
     }
 
     /** @inheritDoc */
@@ -143,10 +146,19 @@ class Descendants extends HasMany implements ConcatenableRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns), $from);
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query, $from);
     }
 
-    /** @inheritDoc */
+    /**
+     * Add a recursive expression to the query.
+     *
+     * @param callable $constraint
+     * @param \Illuminate\Database\Eloquent\Builder|null $query
+     * @param string|null $from
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {
         $query = $query ?: $this->query;

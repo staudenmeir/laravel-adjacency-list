@@ -237,9 +237,9 @@ trait IsOfDescendantsRelation
                 $this->getExpressionForeignKeyName(),
                 (new $this->parent())->setTable($name)
                     ->newQuery()
-                    ->select($this->getExpressionLocalKeyName())
                     ->withGlobalScopes($this->intermediateScopes)
                     ->withoutGlobalScopes($this->removedIntermediateScopes)
+                    ->select($this->getExpressionLocalKeyName())
             );
         });
 
@@ -368,7 +368,9 @@ trait IsOfDescendantsRelation
             $this->addExistenceExpressionWhereConstraints($query, $table);
         };
 
-        return $this->addExpression($constraint, $query->select($columns), $alias);
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query, $alias);
     }
 
     /**

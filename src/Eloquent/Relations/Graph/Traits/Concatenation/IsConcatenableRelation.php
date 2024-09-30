@@ -131,10 +131,12 @@ trait IsConcatenableRelation
             $fromQuery->expressions
         );
 
-        return $query->addBinding(
+        $query->addBinding(
             $fromQuery->getRawBindings()['expressions'],
             'expressions'
         );
+
+        return $query;
     }
 
     /**

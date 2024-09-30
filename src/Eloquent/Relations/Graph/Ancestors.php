@@ -12,8 +12,9 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\IsRecursive
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends BelongsToMany<TRelatedModel>
+ * @extends \Illuminate\Database\Eloquent\Relations\BelongsToMany<TRelatedModel, TDeclaringModel>
  */
 class Ancestors extends BelongsToMany implements ConcatenableRelation
 {
@@ -104,7 +105,9 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns));
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query);
     }
 
     /**
@@ -140,7 +143,9 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns), $from);
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query, $from);
     }
 
     /**
