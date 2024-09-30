@@ -18,7 +18,9 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\IsRecursive
  */
 class Ancestors extends BelongsToMany implements ConcatenableRelation
 {
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\Concatenation\IsConcatenableAncestorsRelation<TRelatedModel, TDeclaringModel> */
     use IsConcatenableAncestorsRelation;
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\IsRecursiveRelation<TRelatedModel, TDeclaringModel> */
     use IsRecursiveRelation {
         buildDictionary as baseBuildDictionary;
     }
@@ -113,9 +115,9 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
     /**
      * Add the constraints for a relationship query on the same table.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     public function getRelationExistenceQueryForSelfRelation(
         Builder $query,
@@ -152,10 +154,10 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
      * Add a recursive expression to the query.
      *
      * @param callable $constraint
-     * @param \Illuminate\Database\Eloquent\Builder|null $query
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel>|null $query
      * @param string|null $from
      * @param string $union
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     protected function addExpression(
         callable $constraint,

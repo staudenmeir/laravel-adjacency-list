@@ -27,7 +27,14 @@ class Bloodline extends Descendants
         parent::__construct($query, $parent, $foreignKey, $localKey, true);
     }
 
-    /** @inheritDoc */
+    /**
+     * Add a recursive expression to the query.
+     *
+     * @param callable $constraint
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel>|null $query
+     * @param string|null $from
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
+     */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {
         $query = $query ?: $this->query;

@@ -151,6 +151,9 @@ class RecursiveRelationsHook implements ModelHookInterface
         }
     }
 
+    /**
+     * @param array{name: string, manyRelation: bool, comment: string} $relationship
+     */
     protected function addRelationship(ModelsCommand $command, array $relationship, string $type): void
     {
         $command->setProperty(

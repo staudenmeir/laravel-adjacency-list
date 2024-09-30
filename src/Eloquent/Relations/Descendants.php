@@ -20,6 +20,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelati
 class Descendants extends HasMany implements ConcatenableRelation
 {
     use IsConcatenableDescendantsRelation;
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelation<TRelatedModel, TDeclaringModel> */
     use IsRecursiveRelation {
         buildDictionary as baseBuildDictionary;
     }
@@ -155,9 +156,9 @@ class Descendants extends HasMany implements ConcatenableRelation
      * Add a recursive expression to the query.
      *
      * @param callable $constraint
-     * @param \Illuminate\Database\Eloquent\Builder|null $query
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel>|null $query
      * @param string|null $from
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {

@@ -13,8 +13,8 @@ trait IsConcatenableAncestorsRelation
     /**
      * Set the constraints for an eager load of the deep relation.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model[] $models
+     * @param \Illuminate\Database\Eloquent\Builder<*> $query
+     * @param list<\Illuminate\Database\Eloquent\Model> $models
      * @return void
      */
     public function addEagerConstraintsToDeepRelationship(Builder $query, array $models): void
@@ -27,11 +27,11 @@ trait IsConcatenableAncestorsRelation
     /**
      * Match the eagerly loaded results for a deep relationship to their parents.
      *
-     * @param \Illuminate\Database\Eloquent\Model[] $models
+     * @param list<\Illuminate\Database\Eloquent\Model> $models
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
      * @param string $relation
      * @param string $type
-     * @return array
+     * @return list<\Illuminate\Database\Eloquent\Model> $models
      */
     public function matchResultsForDeepRelationship(
         array $models,
@@ -62,7 +62,7 @@ trait IsConcatenableAncestorsRelation
      * Build the model dictionary for a deep relation.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, \Illuminate\Database\Eloquent\Model[]>
+     * @return array<string, list<\Illuminate\Database\Eloquent\Model>>
      */
     protected function buildDictionaryForDeepRelationship(Collection $results): array
     {

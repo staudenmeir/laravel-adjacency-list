@@ -446,7 +446,7 @@ trait HasAdjacencyList
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param static[] $models
+     * @param list<static> $models
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection<int, static>
      */
     public function newCollection(array $models = [])

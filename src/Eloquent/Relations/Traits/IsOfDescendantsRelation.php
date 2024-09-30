@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
+ */
 trait IsOfDescendantsRelation
 {
     use TracksIntermediateScopes;
@@ -26,7 +30,11 @@ trait IsOfDescendantsRelation
      */
     protected $pathListAlias = 'laravel_paths';
 
-    /** @inheritDoc */
+    /**
+     * Set the base constraints on the relation query.
+     *
+     * @return void
+     */
     public function addConstraints()
     {
         if (static::$constraints) {
@@ -75,7 +83,7 @@ trait IsOfDescendantsRelation
      * Set the where clause on the recursive expression query for an eager load of the relation.
      *
      * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
-     * @param \Illuminate\Database\Eloquent\Model[] $models
+     * @param list<\Illuminate\Database\Eloquent\Model> $models
      * @return void
      */
     public function addEagerExpressionWhereConstraints(Builder $query, array $models)
@@ -89,7 +97,12 @@ trait IsOfDescendantsRelation
         $query->$whereIn($localKeyName, $keys);
     }
 
-    /** @inheritDoc */
+    /**
+     * Build model dictionary keyed by the relation's foreign key.
+     *
+     * @param \Illuminate\Database\Eloquent\Collection<int, TRelatedModel> $results
+     * @return array<array<int, TRelatedModel>>|array<array<string, TRelatedModel>>
+     */
     protected function buildDictionary(Collection $results)
     {
         $dictionary = [];
@@ -156,11 +169,11 @@ trait IsOfDescendantsRelation
     /**
      * Add a result to the dictionary.
      *
-     * @param array $dictionary
-     * @param \Illuminate\Database\Eloquent\Model $result
+     * @param array<int|string, \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>> $dictionary
+     * @param TRelatedModel $result
      * @param string $pathSeparator
      * @param string $path
-     * @return array
+     * @return array<int|string, \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>>
      */
     protected function addResultToDictionary(array $dictionary, Model $result, $pathSeparator, $path)
     {
@@ -172,7 +185,10 @@ trait IsOfDescendantsRelation
 
         foreach ($keys as $key) {
             if (!isset($dictionary[$key])) {
-                $dictionary[$key] = new Collection();
+                /** @var \Illuminate\Database\Eloquent\Collection<int, TRelatedModel> $emptyCollection */
+                $emptyCollection = new Collection();
+
+                $dictionary[$key] = $emptyCollection;
             }
 
             if (!$dictionary[$key]->contains($result)) {
@@ -349,10 +365,10 @@ trait IsOfDescendantsRelation
     /**
      * Add the constraints for a relationship query.
      *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $parentQuery
-     * @param array|mixed $columns
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $parentQuery
+     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel>
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -370,7 +386,9 @@ trait IsOfDescendantsRelation
 
         $query->select($columns);
 
-        return $this->addExpression($constraint, $query, $alias);
+        $this->addExpression($constraint, $query, $alias);
+
+        return $query;
     }
 
     /**

@@ -45,12 +45,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
         return $reverse ? "$wrappedColumn || $wrappedAlias" : "$wrappedAlias || $wrappedColumn";
     }
 
-    /**
-     * Get the recursive path bindings.
-     *
-     * @param string $separator
-     * @return array
-     */
+    /** @inheritDoc */
     public function getRecursivePathBindings($separator)
     {
         return [];
@@ -111,12 +106,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
         return "$wrappedLocalKey::varchar = any($wrappedPath)";
     }
 
-    /**
-     * Get the cycle detection bindings.
-     *
-     * @param string $pathSeparator
-     * @return array
-     */
+    /** @inheritDoc */
     public function getCycleDetectionBindings(string $pathSeparator): array
     {
         return [];

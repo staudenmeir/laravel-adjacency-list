@@ -15,6 +15,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsAncestorRelatio
  */
 class RootAncestor extends HasOne
 {
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsAncestorRelation<TRelatedModel, TDeclaringModel> */
     use IsAncestorRelation {
         __construct as baseConstruct;
         addConstraints as baseAddConstraints;

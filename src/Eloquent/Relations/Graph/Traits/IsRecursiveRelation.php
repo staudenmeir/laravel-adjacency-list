@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
+ */
 trait IsRecursiveRelation
 {
     /**
@@ -19,8 +23,8 @@ trait IsRecursiveRelation
     /**
      * Create a new recursive pivot relationship instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param TDeclaringModel $parent
      * @param string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
@@ -47,7 +51,7 @@ trait IsRecursiveRelation
     /**
      * Add the recursive expression for an eager load of the relation.
      *
-     * @param \Illuminate\Database\Eloquent\Model[] $models
+     * @param list<\Illuminate\Database\Eloquent\Model> $models
      * @param string $column
      * @return void
      */
@@ -76,7 +80,7 @@ trait IsRecursiveRelation
      * Build model dictionary.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, \Illuminate\Database\Eloquent\Model[]>
+     * @return array<string, list<\Illuminate\Database\Eloquent\Model>>
      */
     protected function buildDictionary(Collection $results)
     {
@@ -85,7 +89,13 @@ trait IsRecursiveRelation
         })->all();
     }
 
-    /** @inheritDoc */
+    /**
+     * Handle dynamic method calls to the relationship.
+     *
+     * @param string $method
+     * @param array<int|string, mixed> $parameters
+     * @return mixed
+     */
     public function __call($method, $parameters)
     {
         $methods = ['update', 'increment', 'decrement', 'delete', 'forceDelete'];
@@ -110,7 +120,7 @@ trait IsRecursiveRelation
     /**
      * Replace table hash with expression name in self-relation aggregate queries.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder<*> $query
      * @param \Illuminate\Database\Query\Expression $expression
      * @return \Illuminate\Database\Query\Expression
      */
@@ -131,7 +141,12 @@ trait IsRecursiveRelation
         );
     }
 
-    /** @inheritDoc */
+    /**
+     * Set the select clause for the relation query.
+     *
+     * @param list<string> $columns
+     * @return list<string>
+     */
     protected function shouldSelect(array $columns = ['*'])
     {
         return $columns;

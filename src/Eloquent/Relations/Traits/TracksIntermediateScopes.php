@@ -9,14 +9,14 @@ trait TracksIntermediateScopes
     /**
      * Applied intermediate scopes.
      *
-     * @var array
+     * @var array<string, \Closure|\Illuminate\Database\Eloquent\Scope>
      */
     protected $intermediateScopes = [];
 
     /**
      * Removed intermediate scopes.
      *
-     * @var array
+     * @var list<string|\Illuminate\Database\Eloquent\Scope>
      */
     protected $removedIntermediateScopes = [];
 
@@ -24,7 +24,7 @@ trait TracksIntermediateScopes
      * Register a new intermediate scope.
      *
      * @param string $identifier
-     * @param \Illuminate\Database\Eloquent\Scope|\Closure $scope
+     * @param \Closure|\Illuminate\Database\Eloquent\Scope $scope
      * @return $this
      */
     public function withIntermediateScope($identifier, $scope)
@@ -41,7 +41,7 @@ trait TracksIntermediateScopes
     /**
      * Remove a registered intermediate scope.
      *
-     * @param \Illuminate\Database\Eloquent\Scope|string $scope
+     * @param string|\Illuminate\Database\Eloquent\Scope $scope
      * @return $this
      */
     public function withoutIntermediateScope($scope)
@@ -60,7 +60,7 @@ trait TracksIntermediateScopes
     /**
      * Remove all or passed registered intermediate scopes.
      *
-     * @param array|null $scopes
+     * @param list<string|\Illuminate\Database\Eloquent\Scope>|null $scopes
      * @return $this
      */
     public function withoutIntermediateScopes(?array $scopes = null)
@@ -89,7 +89,7 @@ trait TracksIntermediateScopes
     /**
      * Get applied intermediate scopes.
      *
-     * @return array
+     * @return array<string, \Closure|\Illuminate\Database\Eloquent\Scope>
      */
     public function intermediateScopes()
     {
@@ -99,7 +99,7 @@ trait TracksIntermediateScopes
     /**
      * Get removed intermediate scopes.
      *
-     * @return array
+     * @return list<string|\Illuminate\Database\Eloquent\Scope>
      */
     public function removedIntermediateScopes()
     {

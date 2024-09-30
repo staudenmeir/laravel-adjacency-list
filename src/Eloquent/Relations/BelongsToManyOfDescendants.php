@@ -15,6 +15,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsOfDescendantsRe
  */
 class BelongsToManyOfDescendants extends BelongsToMany
 {
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsOfDescendantsRelation<TRelatedModel, TDeclaringModel> */
     use IsOfDescendantsRelation {
         addConstraints as baseAddConstraints;
         getRelationExistenceQuery as baseGetRelationExistenceQuery;
@@ -55,7 +56,12 @@ class BelongsToManyOfDescendants extends BelongsToMany
         $this->baseAddConstraints();
     }
 
-    /** @inheritDoc */
+    /**
+     * Set the where clause on the recursive expression query.
+     *
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
+     * @return void
+     */
     protected function addExpressionWhereConstraints(Builder $query)
     {
         $column = $this->andSelf ? $this->parent->getLocalKeyName() : $this->parent->getParentKeyName();
@@ -67,19 +73,31 @@ class BelongsToManyOfDescendants extends BelongsToMany
         );
     }
 
-    /** @inheritDoc */
+    /**
+     * Get the local key name for an eager load of the relation.
+     *
+     * @return string
+     */
     public function getEagerLoadingLocalKeyName()
     {
         return $this->parentKey;
     }
 
-    /** @inheritDoc */
+    /**
+     * Get the foreign key name for an eager load of the relation.
+     *
+     * @return string
+     */
     public function getEagerLoadingForeignKeyName()
     {
         return $this->foreignPivotKey;
     }
 
-    /** @inheritDoc */
+    /**
+     * Get the accessor for an eager load of the relation.
+     *
+     * @return string|null
+     */
     public function getEagerLoadingAccessor()
     {
         return $this->accessor;
@@ -88,10 +106,10 @@ class BelongsToManyOfDescendants extends BelongsToMany
     /**
      * Add the constraints for a relationship query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $parentQuery
+     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel>
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -100,13 +118,21 @@ class BelongsToManyOfDescendants extends BelongsToMany
         return $this->baseGetRelationExistenceQuery($query, $parentQuery, $columns);
     }
 
-    /** @inheritDoc */
+    /**
+     * Get the local key name for the recursion expression.
+     *
+     * @return string
+     */
     public function getExpressionLocalKeyName()
     {
         return $this->parentKey;
     }
 
-    /** @inheritDoc */
+    /**
+     * Get the foreign key name for the recursion expression.
+     *
+     * @return string
+     */
     public function getExpressionForeignKeyName()
     {
         return $this->foreignPivotKey;

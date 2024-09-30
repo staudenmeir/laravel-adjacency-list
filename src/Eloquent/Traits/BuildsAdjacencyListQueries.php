@@ -19,8 +19,8 @@ trait BuildsAdjacencyListQueries
     /**
      * Get the hydrated models without eager loading.
      *
-     * @param array $columns
-     * @return \Illuminate\Database\Eloquent\Model[]
+     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @return list<\Illuminate\Database\Eloquent\Model>
      */
     public function getModels($columns = ['*'])
     {
@@ -56,7 +56,7 @@ trait BuildsAdjacencyListQueries
     /**
      * Replace the separator in a PostgreSQL path column.
      *
-     * @param array $items
+     * @param list<object> $items
      * @param string $path
      * @param string $separator
      * @return void
@@ -133,7 +133,7 @@ trait BuildsAdjacencyListQueries
     /**
      * Register all passed global scopes.
      *
-     * @param array $scopes
+     * @param array<string, \Closure|\Illuminate\Database\Eloquent\Scope> $scopes
      * @return $this
      */
     public function withGlobalScopes(array $scopes)
