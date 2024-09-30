@@ -11,13 +11,10 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection as GraphCollectio
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
-/**
- * @template TRelationship {name: string, manyRelation: boolean, comment: string}
- */
 class RecursiveRelationsHook implements ModelHookInterface
 {
     /**
-     * @var list<array<TRelationship>>
+     * @var list<array{name: string, manyRelation: boolean, comment: string}>
      */
     protected static array $treeRelationships = [
         [
@@ -83,7 +80,7 @@ class RecursiveRelationsHook implements ModelHookInterface
     ];
 
     /**
-     * @var list<array<TRelationship>>
+     * @var list<array{name: string, manyRelation: boolean, comment: string}>
      */
     protected static array $graphRelationships = [
         [
@@ -152,7 +149,7 @@ class RecursiveRelationsHook implements ModelHookInterface
     }
 
     /**
-     * @param array<TRelationship> $relationship
+     * @param array{name: string, manyRelation: boolean, comment: string} $relationship
      */
     protected function addRelationship(ModelsCommand $command, array $relationship, string $type): void
     {
