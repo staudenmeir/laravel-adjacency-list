@@ -15,8 +15,8 @@ class Bloodline extends Descendants
     /**
      * Create a new bloodline relationship instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param TRelatedModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return void
@@ -26,14 +26,7 @@ class Bloodline extends Descendants
         parent::__construct($query, $parent, $foreignKey, $localKey, true);
     }
 
-    /**
-     * Add a recursive expression to the query.
-     *
-     * @param callable $constraint
-     * @param \Illuminate\Database\Eloquent\Builder|null $query
-     * @param string|null $from
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+    /** @inheritDoc */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {
         $query = $query ?: $this->query;

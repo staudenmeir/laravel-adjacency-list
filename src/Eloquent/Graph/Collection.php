@@ -14,9 +14,6 @@ class Collection extends Base
 {
     /**
      * Generate a nested tree.
-     *
-     * @param string $childrenRelation
-     * @return $this<int, TModel>
      */
     public function toTree(string $childrenRelation = 'children'): static
     {

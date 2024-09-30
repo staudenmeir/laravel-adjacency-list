@@ -22,7 +22,9 @@ trait HasRecursiveRelationshipScopes
             $query->isRoot();
         };
 
-        return $query->treeOf($constraint, $maxDepth);
+        $query->treeOf($constraint, $maxDepth);
+
+        return $query;
     }
 
     /**
@@ -39,7 +41,9 @@ trait HasRecursiveRelationshipScopes
             $constraint = fn ($query) => $query->whereKey($constraint->getKey());
         }
 
-        return $query->withRelationshipExpression('desc', $constraint, 0, null, $maxDepth);
+        $query->withRelationshipExpression('desc', $constraint, 0, null, $maxDepth);
+
+        return $query;
     }
 
     /**
@@ -54,7 +58,9 @@ trait HasRecursiveRelationshipScopes
             ->select($this->getParentKeyName())
             ->hasParent();
 
-        return $query->whereIn($this->getLocalKeyName(), $keys);
+        $query->whereIn($this->getLocalKeyName(), $keys);
+
+        return $query;
     }
 
     /**
@@ -65,8 +71,9 @@ trait HasRecursiveRelationshipScopes
      */
     public function scopeDoesntHaveChildren(Builder $query)
     {
-        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>|static $query */
-        return $query->isLeaf();
+        $query->isLeaf();
+
+        return $query;
     }
 
     /**
@@ -77,7 +84,9 @@ trait HasRecursiveRelationshipScopes
      */
     public function scopeHasParent(Builder $query)
     {
-        return $query->whereNotNull($this->getParentKeyName());
+        $query->whereNotNull($this->getParentKeyName());
+
+        return $query;
     }
 
     /**
@@ -92,7 +101,9 @@ trait HasRecursiveRelationshipScopes
             ->select($this->getParentKeyName())
             ->hasParent();
 
-        return $query->whereNotIn($this->getLocalKeyName(), $keys);
+        $query->whereNotIn($this->getLocalKeyName(), $keys);
+
+        return $query;
     }
 
     /**
@@ -103,7 +114,9 @@ trait HasRecursiveRelationshipScopes
      */
     public function scopeIsRoot(Builder $query)
     {
-        return $query->whereNull($this->getParentKeyName());
+        $query->whereNull($this->getParentKeyName());
+
+        return $query;
     }
 
     /**
@@ -118,7 +131,9 @@ trait HasRecursiveRelationshipScopes
     {
         $arguments = array_slice(func_get_args(), 1);
 
-        return $query->where($this->getDepthName(), ...$arguments);
+        $query->where($this->getDepthName(), ...$arguments);
+
+        return $query;
     }
 
     /**
@@ -129,7 +144,9 @@ trait HasRecursiveRelationshipScopes
      */
     public function scopeBreadthFirst(Builder $query)
     {
-        return $query->orderBy($this->getDepthName());
+        $query->orderBy($this->getDepthName());
+
+        return $query;
     }
 
     /**
@@ -142,7 +159,9 @@ trait HasRecursiveRelationshipScopes
     {
         $sql = $query->getExpressionGrammar()->compileOrderByPath();
 
-        return $query->orderByRaw($sql);
+        $query->orderByRaw($sql);
+
+        return $query;
     }
 
     /**
@@ -196,6 +215,7 @@ trait HasRecursiveRelationshipScopes
             $this->getPathName()
         );
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query */
         $query = $this->newModelQuery()
             ->select("$table.*")
             ->selectRaw($initialDepth.' as '.$depth)
@@ -261,6 +281,7 @@ trait HasRecursiveRelationshipScopes
 
         $recursivePathBindings = $grammar->getRecursivePathBindings($this->getPathSeparator());
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query */
         $query = $this->newModelQuery()
             ->select($table.'.*')
             ->selectRaw($recursiveDepth.' as '.$depth)

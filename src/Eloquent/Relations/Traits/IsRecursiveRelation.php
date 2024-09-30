@@ -36,8 +36,8 @@ trait IsRecursiveRelation
     /**
      * Build model dictionary.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     * @return array
+     * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
+     * @return array<string, \Illuminate\Database\Eloquent\Model[]>
      */
     protected function buildDictionary(Collection $results)
     {
@@ -56,13 +56,7 @@ trait IsRecursiveRelation
         return $this->qualifyColumn($this->localKey);
     }
 
-    /**
-     * Handle dynamic method calls to the relationship.
-     *
-     * @param string $method
-     * @param array $parameters
-     * @return mixed
-     */
+    /** @inheritDoc */
     public function __call($method, $parameters)
     {
         $methods = ['update', 'increment', 'decrement', 'delete', 'forceDelete'];

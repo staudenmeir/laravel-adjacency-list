@@ -47,7 +47,7 @@ trait IsRecursiveRelation
     /**
      * Add the recursive expression for an eager load of the relation.
      *
-     * @param array $models
+     * @param \Illuminate\Database\Eloquent\Model[] $models
      * @param string $column
      * @return void
      */
@@ -75,8 +75,8 @@ trait IsRecursiveRelation
     /**
      * Build model dictionary.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     * @return array
+     * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
+     * @return array<string, \Illuminate\Database\Eloquent\Model[]>
      */
     protected function buildDictionary(Collection $results)
     {
@@ -85,13 +85,7 @@ trait IsRecursiveRelation
         })->all();
     }
 
-    /**
-     * Handle dynamic method calls to the relationship.
-     *
-     * @param string $method
-     * @param array $parameters
-     * @return mixed
-     */
+    /** @inheritDoc */
     public function __call($method, $parameters)
     {
         $methods = ['update', 'increment', 'decrement', 'delete', 'forceDelete'];
@@ -137,12 +131,7 @@ trait IsRecursiveRelation
         );
     }
 
-    /**
-     * Get the select columns for the relation query.
-     *
-     * @param array $columns
-     * @return array
-     */
+    /** @inheritDoc */
     protected function shouldSelect(array $columns = ['*'])
     {
         return $columns;

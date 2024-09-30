@@ -73,7 +73,7 @@ trait HasOfDescendantsRelationships
      * @template TRelatedModel of Model
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param TRelatedModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
@@ -90,7 +90,7 @@ trait HasOfDescendantsRelationships
      * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
      *
      * @param class-string<TRelatedModel> $related
-     * @param string|null $table
+     * @param class-string<TRelatedModel>|string|null $table
      * @param string|null $foreignPivotKey
      * @param string|null $relatedPivotKey
      * @param string|null $parentKey
@@ -134,7 +134,7 @@ trait HasOfDescendantsRelationships
      * @template TRelatedModel of Model
      *
      * @param class-string<TRelatedModel> $related
-     * @param string|null $table
+     * @param class-string<TRelatedModel>|string|null $table
      * @param string|null $foreignPivotKey
      * @param string|null $relatedPivotKey
      * @param string|null $parentKey
@@ -179,7 +179,7 @@ trait HasOfDescendantsRelationships
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
      * @param \Illuminate\Database\Eloquent\Model $parent
-     * @param string $table
+     * @param class-string<TRelatedModel>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
@@ -325,7 +325,7 @@ trait HasOfDescendantsRelationships
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
      * @param \Illuminate\Database\Eloquent\Model $parent
      * @param string $name
-     * @param string $table
+     * @param class-string<TRelatedModel>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey

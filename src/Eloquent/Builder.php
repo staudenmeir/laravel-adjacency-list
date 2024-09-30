@@ -8,7 +8,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Traits\BuildsAdjacencyListQueries;
 /**
  * @template TModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends Base<TModel>
+ * @extends \Illuminate\Database\Eloquent\Builder<TModel>
  */
 class Builder extends Base
 {

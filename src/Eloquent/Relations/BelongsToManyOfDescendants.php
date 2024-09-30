@@ -23,8 +23,8 @@ class BelongsToManyOfDescendants extends BelongsToMany
      * Create a new belongs to many of descendants relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
-     * @param string $table
+     * @param TRelatedModel $parent
+     * @param class-string<TRelatedModel>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
@@ -46,11 +46,7 @@ class BelongsToManyOfDescendants extends BelongsToMany
         parent::__construct($query, $parent, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey);
     }
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         $this->performJoin();
@@ -58,12 +54,7 @@ class BelongsToManyOfDescendants extends BelongsToMany
         $this->baseAddConstraints();
     }
 
-    /**
-     * Set the where clause on the recursive expression query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return void
-     */
+    /** @inheritDoc */
     protected function addExpressionWhereConstraints(Builder $query)
     {
         $column = $this->andSelf ? $this->parent->getLocalKeyName() : $this->parent->getParentKeyName();
@@ -75,31 +66,19 @@ class BelongsToManyOfDescendants extends BelongsToMany
         );
     }
 
-    /**
-     * Get the local key name for an eager load of the relation.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getEagerLoadingLocalKeyName()
     {
         return $this->parentKey;
     }
 
-    /**
-     * Get the foreign key name for an eager load of the relation.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getEagerLoadingForeignKeyName()
     {
         return $this->foreignPivotKey;
     }
 
-    /**
-     * Get the accessor for an eager load of the relation.
-     *
-     * @return string|null
-     */
+    /** @inheritDoc */
     public function getEagerLoadingAccessor()
     {
         return $this->accessor;
@@ -120,21 +99,13 @@ class BelongsToManyOfDescendants extends BelongsToMany
         return $this->baseGetRelationExistenceQuery($query, $parentQuery, $columns);
     }
 
-    /**
-     * Get the local key name for the recursion expression.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getExpressionLocalKeyName()
     {
         return $this->parentKey;
     }
 
-    /**
-     * Get the foreign key name for the recursion expression.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getExpressionForeignKeyName()
     {
         return $this->foreignPivotKey;

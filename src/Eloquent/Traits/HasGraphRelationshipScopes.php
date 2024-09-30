@@ -11,66 +11,74 @@ trait HasGraphRelationshipScopes
     /**
      * Add a recursive expression for a custom subgraph to the query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param callable $constraint
      * @param int|null $maxDepth
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     public function scopeSubgraph(Builder $query, callable $constraint, ?int $maxDepth = null): Builder
     {
-        return $query->withRelationshipExpression('desc', $constraint, 0, null, $maxDepth);
+        $query->withRelationshipExpression('desc', $constraint, 0, null, $maxDepth);
+
+        return $query;
     }
 
     /**
      * Limit the query by depth.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param mixed $operator
      * @param mixed|null $value
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     public function scopeWhereDepth(Builder $query, mixed $operator, mixed $value = null): Builder
     {
         $arguments = array_slice(func_get_args(), 1);
 
-        return $query->where($this->getDepthName(), ...$arguments);
+        $query->where($this->getDepthName(), ...$arguments);
+
+        return $query;
     }
 
     /**
      * Order the query breadth-first.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     public function scopeBreadthFirst(Builder $query): Builder
     {
-        return $query->orderBy($this->getDepthName());
+        $query->orderBy($this->getDepthName());
+
+        return $query;
     }
 
     /**
      * Order the query depth-first.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     public function scopeDepthFirst(Builder $query): Builder
     {
         $sql = $query->getExpressionGrammar()->compileOrderByPath();
 
-        return $query->orderByRaw($sql);
+        $query->orderByRaw($sql);
+
+        return $query;
     }
 
     /**
      * Add a recursive expression for the relationship to the query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param string $direction
      * @param callable $constraint
      * @param int $initialDepth
      * @param string|null $from
      * @param int|null $maxDepth
      * @param string $union
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     public function scopeWithRelationshipExpression(
         Builder $query,
@@ -85,6 +93,7 @@ trait HasGraphRelationshipScopes
 
         $grammar = $query->getExpressionGrammar();
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $expression */
         $expression = $this->getInitialQuery($grammar, $constraint, $initialDepth, $from)
             ->$union(
                 $this->getRecursiveQuery($grammar, $direction, $from, $maxDepth)
@@ -94,7 +103,9 @@ trait HasGraphRelationshipScopes
 
         $query->getModel()->setTable($name);
 
-        return $query->withRecursiveExpression($name, $expression)->from($name);
+        $query->getQuery()->withRecursiveExpression($name, $expression->getQuery())->from($name);
+
+        return $query;
     }
 
     /**
@@ -104,7 +115,7 @@ trait HasGraphRelationshipScopes
      * @param callable $constraint
      * @param int $initialDepth
      * @param string $from
-     * @return \Illuminate\Database\Eloquent\Builder $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     protected function getInitialQuery(
         ExpressionGrammar $grammar,
@@ -125,6 +136,7 @@ trait HasGraphRelationshipScopes
             $this->getPathName()
         );
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query */
         $query = $this->newModelQuery()
             ->select("$table.*")
             ->selectRaw($initialDepth . ' as ' . $depth)
@@ -151,7 +163,7 @@ trait HasGraphRelationshipScopes
     /**
      * Add custom paths to the initial query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @return void
      */
@@ -170,7 +182,7 @@ trait HasGraphRelationshipScopes
     /**
      * Add pivot columns to the initial query for a relationship expression.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param string $pivotTable
      * @param int $initialDepth
@@ -208,7 +220,7 @@ trait HasGraphRelationshipScopes
     /**
      * Add cycle detection to the initial query for a relationship expression.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @return void
      */
@@ -226,7 +238,7 @@ trait HasGraphRelationshipScopes
     /**
      * Add join clauses to the initial query for a relationship expression.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param string $pivotTable
      * @param int $initialDepth
      * @return void
@@ -257,7 +269,7 @@ trait HasGraphRelationshipScopes
      * @param string $direction
      * @param string $from
      * @param int|null $maxDepth
-     * @return \Illuminate\Database\Eloquent\Builder $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     protected function getRecursiveQuery(
         ExpressionGrammar $grammar,
@@ -293,6 +305,7 @@ trait HasGraphRelationshipScopes
 
         $recursivePathBindings = $grammar->getRecursivePathBindings($this->getPathSeparator());
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query */
         $query = $this->newModelQuery()
             ->select($table . '.*')
             ->selectRaw($recursiveDepth . ' as ' . $depth)
@@ -317,7 +330,7 @@ trait HasGraphRelationshipScopes
     /**
      * Add customs path to the recursive query for a relationship expression.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @return void
      */
@@ -338,7 +351,7 @@ trait HasGraphRelationshipScopes
     /**
      * Add pivot columns to the recursive query for a relationship expression.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param string $pivotTable
      * @return void
      */
@@ -354,7 +367,7 @@ trait HasGraphRelationshipScopes
     /**
      * Add cycle detection to the recursive query for a relationship expression.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @return void
      */
@@ -392,7 +405,7 @@ trait HasGraphRelationshipScopes
     /**
      * Add join and where clauses to the recursive query for a relationship expression.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
      * @param string $pivotTable
      * @param string $direction
      * @param string $name

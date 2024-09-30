@@ -22,8 +22,8 @@ class RootAncestor extends HasOne
     /**
      * Create a new root ancestor relationship instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param TRelatedModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return void
@@ -33,11 +33,7 @@ class RootAncestor extends HasOne
         $this->baseConstruct($query, $parent, $foreignKey, $localKey, false);
     }
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         $this->baseAddConstraints();

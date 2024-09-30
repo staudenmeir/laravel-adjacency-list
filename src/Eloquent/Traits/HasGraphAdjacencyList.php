@@ -224,9 +224,9 @@ trait HasGraphAdjacencyList
     /**
      * Instantiate a new Ancestors relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
-     * @param string $table
+     * @param \Illuminate\Database\Eloquent\Builder<*> $query
+     * @param static $parent
+     * @param class-string<static>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
@@ -326,9 +326,9 @@ trait HasGraphAdjacencyList
     /**
      * Instantiate a new Descendants relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
-     * @param string $table
+     * @param \Illuminate\Database\Eloquent\Builder<*> $query
+     * @param static $parent
+     * @param class-string<static>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
@@ -419,7 +419,7 @@ trait HasGraphAdjacencyList
      * Create a new Eloquent query builder for the model.
      *
      * @param \Illuminate\Database\Query\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static>
      */
     public function newEloquentBuilder($query)
     {
@@ -429,8 +429,8 @@ trait HasGraphAdjacencyList
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param array $models
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection
+     * @param static[] $models
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection<array-key, static>
      */
     public function newCollection(array $models = [])
     {

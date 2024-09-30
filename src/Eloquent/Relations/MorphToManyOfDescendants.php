@@ -22,7 +22,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
     /**
      * The class name of the morph type constraint.
      *
-     * @var string
+     * @var class-string<TRelatedModel>
      */
     protected $morphClass;
 
@@ -41,7 +41,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
      * @param \Illuminate\Database\Eloquent\Model $parent
      * @param string $name
-     * @param string $table
+     * @param class-string<TRelatedModel>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
@@ -77,12 +77,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return void
-     */
+    /** @inheritDoc */
     protected function addExpressionWhereConstraints(Builder $query)
     {
         parent::addExpressionWhereConstraints($query);
@@ -93,13 +88,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query for an eager load of the relation.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerExpressionWhereConstraints(Builder $query, array $models)
     {
         parent::addEagerExpressionWhereConstraints($query, $models);
@@ -110,13 +99,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query for an existence query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $table
-     * @return void
-     */
+    /** @inheritDoc */
     public function addExistenceExpressionWhereConstraints(Builder $query, $table)
     {
         parent::addExistenceExpressionWhereConstraints($query, $table);

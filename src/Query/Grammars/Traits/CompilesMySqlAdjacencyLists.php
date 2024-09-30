@@ -9,13 +9,7 @@ trait CompilesMySqlAdjacencyLists
 {
     use OrdersByPath;
 
-    /**
-     * Compile an initial path.
-     *
-     * @param string $column
-     * @param string $alias
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileInitialPath($column, $alias)
     {
         return 'cast(' . $this->wrap($column) . ' as char(65535)) as ' . $this->wrap($alias);
