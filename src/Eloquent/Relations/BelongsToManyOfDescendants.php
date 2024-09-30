@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsOfDescendantsRelation;
@@ -25,7 +26,7 @@ class BelongsToManyOfDescendants extends BelongsToMany
      * Create a new belongs to many of descendants relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param TRelatedModel $parent
+     * @param TDeclaringModel $parent
      * @param class-string<TRelatedModel>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey

@@ -26,7 +26,7 @@ class Siblings extends HasMany
      * Create a new siblings relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param TRelatedModel $parent
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf

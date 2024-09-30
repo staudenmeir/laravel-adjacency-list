@@ -40,8 +40,8 @@ trait IsRecursiveRelation
     /**
      * Build model dictionary.
      *
-     * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, list<\Illuminate\Database\Eloquent\Model>>
+     * @param \Illuminate\Database\Eloquent\Collection<array-key, TRelatedModel> $results
+     * @return array<int|string, list<TRelatedModel>>
      */
     protected function buildDictionary(Collection $results)
     {
@@ -105,7 +105,7 @@ trait IsRecursiveRelation
                 $query->getGrammar()->wrap(
                     $query->getModel()->getExpressionName()
                 ),
-                $expression->getValue(
+                (string) $expression->getValue(
                     $query->getGrammar()
                 ),
             )

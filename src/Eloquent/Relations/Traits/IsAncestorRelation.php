@@ -80,14 +80,7 @@ trait IsAncestorRelation
         return $models;
     }
 
-    /**
-     * Add the constraints for a relationship query.
-     *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel> $query
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $parentQuery
-     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel>
-     */
+    /** @inheritDoc */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($query->getQuery()->from === $parentQuery->getQuery()->from) {
@@ -97,8 +90,11 @@ trait IsAncestorRelation
         $key = $this->andSelf ? $this->localKey : $this->getForeignKeyName();
 
         $constraint = function (Builder $query) use ($key) {
+            /** @var string $from */
+            $from = $query->getQuery()->from;
+
             $query->whereColumn(
-                $query->getQuery()->from.'.'.$this->localKey,
+                "$from.$this->localKey",
                 '=',
                 $this->parent->qualifyColumn($key)
             );
@@ -111,14 +107,7 @@ trait IsAncestorRelation
         return $query;
     }
 
-    /**
-     * Add the constraints for a relationship query on the same table.
-     *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel> $query
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $parentQuery
-     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel>
-     */
+    /** @inheritDoc */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($columns instanceof Expression) {
@@ -152,9 +141,9 @@ trait IsAncestorRelation
      * Add a recursive expression to the query.
      *
      * @param callable $constraint
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>|null $query
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel>|null $query
      * @param string|null $from
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {

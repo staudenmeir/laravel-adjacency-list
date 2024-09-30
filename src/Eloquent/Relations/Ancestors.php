@@ -17,5 +17,6 @@ class Ancestors extends HasMany implements ConcatenableRelation
 {
     /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsAncestorRelation<TRelatedModel, TDeclaringModel> */
     use IsAncestorRelation;
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\Concatenation\IsConcatenableAncestorsRelation<TRelatedModel, TDeclaringModel> */
     use IsConcatenableAncestorsRelation;
 }

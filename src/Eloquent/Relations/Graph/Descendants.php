@@ -55,7 +55,7 @@ class Descendants extends BelongsToMany implements ConcatenableRelation
      * Build model dictionary.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, \Illuminate\Database\Eloquent\Model[]>
+     * @return array<int|string, \Illuminate\Database\Eloquent\Model[]>
      */
     protected function buildDictionary(Collection $results)
     {
@@ -95,8 +95,11 @@ class Descendants extends BelongsToMany implements ConcatenableRelation
             return $this->getRelationExistenceQueryForSelfRelation($query, $columns);
         }
 
+        /** @var string $from */
+        $from = $query->getQuery()->from;
+
         $first = $this->andSelf
-            ? $query->getQuery()->from . '.' . $this->parentKey
+            ? "$from.$this->parentKey"
             : $this->getQualifiedForeignPivotKeyName();
 
         $constraint = function (Builder $query) use ($first) {

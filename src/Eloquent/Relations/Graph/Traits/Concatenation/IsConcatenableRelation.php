@@ -105,7 +105,7 @@ trait IsConcatenableRelation
      * Set the constraints for an eager load of the deep relation.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param list<\Illuminate\Database\Eloquent\Model> $models
+     * @param list<TDeclaringModel> $models
      * @return void
      */
     public function addEagerConstraintsToDeepRelationship(Builder $query, array $models): void
@@ -183,7 +183,7 @@ trait IsConcatenableRelation
      * Build the model dictionary for a deep relation.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, list<\Illuminate\Database\Eloquent\Model>>
+     * @return array<int|string, list<\Illuminate\Database\Eloquent\Model>>
      */
     protected function buildDictionaryForDeepRelationship(Collection $results): array
     {

@@ -19,6 +19,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelati
  */
 class Descendants extends HasMany implements ConcatenableRelation
 {
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\Concatenation\IsConcatenableDescendantsRelation<TRelatedModel, TDeclaringModel> */
     use IsConcatenableDescendantsRelation;
     /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelation<TRelatedModel, TDeclaringModel> */
     use IsRecursiveRelation {
@@ -105,8 +106,11 @@ class Descendants extends HasMany implements ConcatenableRelation
             return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
         }
 
+        /** @var string $from */
+        $from = $query->getQuery()->from;
+
         $first = $this->andSelf
-            ? $query->getQuery()->from.'.'.$this->localKey
+            ? "$from.$this->localKey"
             : $this->foreignKey;
 
         $constraint = function (Builder $query) use ($first) {

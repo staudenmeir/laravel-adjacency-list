@@ -25,7 +25,7 @@ class RootAncestor extends HasOne
      * Create a new root ancestor relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param TRelatedModel $parent
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return void

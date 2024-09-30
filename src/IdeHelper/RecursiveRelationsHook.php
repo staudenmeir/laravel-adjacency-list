@@ -12,12 +12,12 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
- * @template RT { name: string, manyRelation: boolean, comment: string }
+ * @template TRelationship {name: string, manyRelation: boolean, comment: string}
  */
 class RecursiveRelationsHook implements ModelHookInterface
 {
     /**
-     * @var array<array<RT>>
+     * @var list<array<TRelationship>>
      */
     protected static array $treeRelationships = [
         [
@@ -83,7 +83,7 @@ class RecursiveRelationsHook implements ModelHookInterface
     ];
 
     /**
-     * @var array<array<RT>>
+     * @var list<array<TRelationship>>
      */
     protected static array $graphRelationships = [
         [
@@ -152,7 +152,7 @@ class RecursiveRelationsHook implements ModelHookInterface
     }
 
     /**
-     * @param array{name: string, manyRelation: bool, comment: string} $relationship
+     * @param array<TRelationship> $relationship
      */
     protected function addRelationship(ModelsCommand $command, array $relationship, string $type): void
     {

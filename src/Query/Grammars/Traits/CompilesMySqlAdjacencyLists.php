@@ -98,6 +98,8 @@ SQL;
         if ($typeName === 'decimal') {
             preg_match('/\((\d+),(\d+)\)/', $type, $matches);
 
+            /** @var array{0: string, 1: numeric-string, 2: numeric-string} $matches */
+
             [$precision, $scale] = [$matches[1], $matches[2]];
         } else {
             [$precision, $scale] = [null, null];

@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Relations;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsOfDescendantsRelation;
@@ -22,7 +23,7 @@ class HasManyOfDescendants extends HasMany
      * Create a new has many of descendants relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param TRelatedModel $parent
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf

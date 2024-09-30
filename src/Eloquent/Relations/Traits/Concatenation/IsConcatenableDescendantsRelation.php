@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
+ */
 trait IsConcatenableDescendantsRelation
 {
     use IsConcatenableRelation;
@@ -14,7 +18,7 @@ trait IsConcatenableDescendantsRelation
      * Set the constraints for an eager load of the deep relation.
      *
      * @param \Illuminate\Database\Eloquent\Builder<*> $query
-     * @param list<\Illuminate\Database\Eloquent\Model> $models
+     * @param list<TDeclaringModel> $models
      * @return void
      */
     public function addEagerConstraintsToDeepRelationship(Builder $query, array $models): void
@@ -66,7 +70,7 @@ trait IsConcatenableDescendantsRelation
      * Build the model dictionary for a deep relation.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, list<\Illuminate\Database\Eloquent\Model>>
+     * @return array<int|string, list<\Illuminate\Database\Eloquent\Model>>
      */
     protected function buildDictionaryForDeepRelationship(Collection $results): array
     {

@@ -17,7 +17,7 @@ class Bloodline extends Descendants
      * Create a new bloodline relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param TRelatedModel $parent
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return void
