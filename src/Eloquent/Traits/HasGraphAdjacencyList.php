@@ -226,7 +226,7 @@ trait HasGraphAdjacencyList
      *
      * @param \Illuminate\Database\Eloquent\Builder<*> $query
      * @param static $parent
-     * @param string|class-string<static> $table
+     * @param class-string<static>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
@@ -328,7 +328,7 @@ trait HasGraphAdjacencyList
      *
      * @param \Illuminate\Database\Eloquent\Builder<*> $query
      * @param static $parent
-     * @param string|class-string<static> $table
+     * @param class-string<static>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
