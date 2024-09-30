@@ -149,7 +149,7 @@ trait IsOfDescendantsRelation
      *
      * @param \Illuminate\Database\Eloquent\Model $result
      * @param string $foreignKeyName
-     * @param string $accessor
+     * @param string|null $accessor
      * @param string $pathSeparator
      * @param string $path
      * @return bool
