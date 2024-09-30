@@ -1,6 +1,7 @@
 /.docker                export-ignore
 /.github                export-ignore
 /tests                  export-ignore
+/types                  export-ignore
 .gitattributes          export-ignore
 .gitignore              export-ignore
 docker-compose.ci.yml   export-ignore
