@@ -12,12 +12,15 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\IsRecursive
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends BelongsToMany<TRelatedModel>
+ * @extends \Illuminate\Database\Eloquent\Relations\BelongsToMany<TRelatedModel, TDeclaringModel>
  */
 class Ancestors extends BelongsToMany implements ConcatenableRelation
 {
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\Concatenation\IsConcatenableAncestorsRelation<TRelatedModel, TDeclaringModel> */
     use IsConcatenableAncestorsRelation;
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Traits\IsRecursiveRelation<TRelatedModel, TDeclaringModel> */
     use IsRecursiveRelation {
         buildDictionary as baseBuildDictionary;
     }
@@ -52,7 +55,7 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
      * Build model dictionary.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, \Illuminate\Database\Eloquent\Model[]>
+     * @return array<int|string, \Illuminate\Database\Eloquent\Model[]>
      */
     protected function buildDictionary(Collection $results)
     {
@@ -85,15 +88,25 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
         return $dictionary;
     }
 
-    /** @inheritDoc */
+    /**
+     * Add the constraints for an internal relationship existence query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param \Illuminate\Database\Eloquent\Builder<TDeclaringModel> $parentQuery
+     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
+     */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($query->getQuery()->from === $parentQuery->getQuery()->from) {
             return $this->getRelationExistenceQueryForSelfRelation($query, $columns);
         }
 
+        /** @var string $from */
+        $from = $query->getQuery()->from;
+
         $first = $this->andSelf
-            ? $query->getQuery()->from . '.' . $this->parentKey
+            ? "$from.$this->parentKey"
             : $this->getQualifiedRelatedPivotKeyName();
 
         $constraint = function (Builder $query) use ($first) {
@@ -104,15 +117,17 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns));
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query);
     }
 
     /**
      * Add the constraints for a relationship query on the same table.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     public function getRelationExistenceQueryForSelfRelation(
         Builder $query,
@@ -140,17 +155,19 @@ class Ancestors extends BelongsToMany implements ConcatenableRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns), $from);
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query, $from);
     }
 
     /**
      * Add a recursive expression to the query.
      *
      * @param callable $constraint
-     * @param \Illuminate\Database\Eloquent\Builder|null $query
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel>|null $query
      * @param string|null $from
      * @param string $union
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     protected function addExpression(
         callable $constraint,

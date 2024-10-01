@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends BelongsToManyOfDescendants<TRelatedModel>
+ * @extends \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants<TRelatedModel, TDeclaringModel>
  */
 class MorphToManyOfDescendants extends BelongsToManyOfDescendants
 {
@@ -22,7 +23,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
     /**
      * The class name of the morph type constraint.
      *
-     * @var class-string<TRelatedModel>
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $morphClass;
 
@@ -39,7 +40,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
      * Create a new morph to many of descendants relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param TDeclaringModel $parent
      * @param string $name
      * @param class-string<TRelatedModel>|string $table
      * @param string $foreignPivotKey
@@ -61,9 +62,12 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         $inverse,
         $andSelf
     ) {
+        /** @var class-string<\Illuminate\Database\Eloquent\Model> $morphClass */
+        $morphClass = $inverse ? $query->getModel()->getMorphClass() : $parent->getMorphClass();
+
         $this->inverse = $inverse;
         $this->morphType = $name.'_type';
-        $this->morphClass = $inverse ? $query->getModel()->getMorphClass() : $parent->getMorphClass();
+        $this->morphClass = $morphClass;
 
         parent::__construct(
             $query,

@@ -429,7 +429,7 @@ trait HasGraphAdjacencyList
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param static[] $models
+     * @param list<static> $models
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection<array-key, static>
      */
     public function newCollection(array $models = [])

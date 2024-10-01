@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
+ */
 trait IsRecursiveRelation
 {
     /**
@@ -19,8 +23,8 @@ trait IsRecursiveRelation
     /**
      * Create a new recursive relationship instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
@@ -36,8 +40,8 @@ trait IsRecursiveRelation
     /**
      * Build model dictionary.
      *
-     * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<string, \Illuminate\Database\Eloquent\Model[]>
+     * @param \Illuminate\Database\Eloquent\Collection<array-key, TRelatedModel> $results
+     * @return array<int|string, list<TRelatedModel>>
      */
     protected function buildDictionary(Collection $results)
     {
@@ -56,7 +60,13 @@ trait IsRecursiveRelation
         return $this->qualifyColumn($this->localKey);
     }
 
-    /** @inheritDoc */
+    /**
+     * Handle dynamic method calls to the relationship.
+     *
+     * @param string $method
+     * @param array<int|string, mixed> $parameters
+     * @return mixed
+     */
     public function __call($method, $parameters)
     {
         $methods = ['update', 'increment', 'decrement', 'delete', 'forceDelete'];
@@ -81,7 +91,7 @@ trait IsRecursiveRelation
     /**
      * Replace table hash with expression name in self-relation aggregate queries.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder<*> $query
      * @param \Illuminate\Database\Query\Expression $expression
      * @return \Illuminate\Database\Query\Expression
      */
@@ -95,7 +105,7 @@ trait IsRecursiveRelation
                 $query->getGrammar()->wrap(
                     $query->getModel()->getExpressionName()
                 ),
-                $expression->getValue(
+                (string) $expression->getValue(
                     $query->getGrammar()
                 ),
             )

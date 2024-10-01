@@ -31,12 +31,7 @@ trait CompilesMySqlAdjacencyLists
         return $reverse ? "concat($wrappedColumn, ?, $wrappedAlias)" : "concat($wrappedAlias, ?, $wrappedColumn)";
     }
 
-    /**
-     * Get the recursive path bindings.
-     *
-     * @param string $separator
-     * @return array
-     */
+    /** @inheritDoc */
     public function getRecursivePathBindings($separator)
     {
         return [$separator];
@@ -103,6 +98,8 @@ SQL;
         if ($typeName === 'decimal') {
             preg_match('/\((\d+),(\d+)\)/', $type, $matches);
 
+            /** @var array{0: string, 1: numeric-string, 2: numeric-string} $matches */
+
             [$precision, $scale] = [$matches[1], $matches[2]];
         } else {
             [$precision, $scale] = [null, null];
@@ -134,12 +131,7 @@ SQL;
         return "instr($path, concat($localKey, ?)) = 1 || instr($path, concat(?, $localKey, ?)) > 1";
     }
 
-    /**
-     * Get the cycle detection bindings.
-     *
-     * @param string $pathSeparator
-     * @return array
-     */
+    /** @inheritDoc */
     public function getCycleDetectionBindings(string $pathSeparator): array
     {
         return [$pathSeparator, $pathSeparator, $pathSeparator];

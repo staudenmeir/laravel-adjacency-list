@@ -42,12 +42,7 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
         return "cast($wrappedAlias + ? + cast($wrappedColumn as varchar(max)) as varchar(max)) as $wrappedAlias";
     }
 
-    /**
-     * Get the recursive path bindings.
-     *
-     * @param string $separator
-     * @return array
-     */
+    /** @inheritDoc */
     public function getRecursivePathBindings($separator)
     {
         return [$separator];
@@ -100,12 +95,7 @@ class SqlServerGrammar extends Base implements ExpressionGrammar
         return "charindex($castLocalKey + ?, $path) > 0 or charindex(? + $castLocalKey + ?, $path) > 0";
     }
 
-    /**
-     * Get the cycle detection bindings.
-     *
-     * @param string $pathSeparator
-     * @return array
-     */
+    /** @inheritDoc */
     public function getCycleDetectionBindings(string $pathSeparator): array
     {
         return [$pathSeparator, $pathSeparator, $pathSeparator];

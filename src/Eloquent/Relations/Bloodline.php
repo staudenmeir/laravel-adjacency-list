@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends Descendants<TRelatedModel>
+ * @extends \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<TRelatedModel, TDeclaringModel>
  */
 class Bloodline extends Descendants
 {
@@ -16,7 +17,7 @@ class Bloodline extends Descendants
      * Create a new bloodline relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param TRelatedModel $parent
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return void
@@ -26,7 +27,14 @@ class Bloodline extends Descendants
         parent::__construct($query, $parent, $foreignKey, $localKey, true);
     }
 
-    /** @inheritDoc */
+    /**
+     * Add a recursive expression to the query.
+     *
+     * @param callable $constraint
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel>|null $query
+     * @param string|null $from
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
+     */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {
         $query = $query ?: $this->query;

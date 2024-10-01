@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends RootAncestor<TRelatedModel>
+ * @extends \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor<TRelatedModel, TDeclaringModel>
  */
 class RootAncestorOrSelf extends RootAncestor
 {
@@ -16,7 +17,7 @@ class RootAncestorOrSelf extends RootAncestor
      * Create a new root ancestor or self relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param TRelatedModel $parent
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return void

@@ -6,11 +6,20 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Expression;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
+ */
 trait IsAncestorRelation
 {
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelation<TRelatedModel, TDeclaringModel> */
     use IsRecursiveRelation;
 
-    /** @inheritDoc */
+    /**
+     * Set the base constraints on the relation query.
+     *
+     * @return void
+     */
     public function addConstraints()
     {
         if (static::$constraints) {
@@ -71,14 +80,7 @@ trait IsAncestorRelation
         return $models;
     }
 
-    /**
-     * Add the constraints for a relationship query.
-     *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $parentQuery
-     * @param array|mixed $columns
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
-     */
+    /** @inheritDoc */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($query->getQuery()->from === $parentQuery->getQuery()->from) {
@@ -88,24 +90,24 @@ trait IsAncestorRelation
         $key = $this->andSelf ? $this->localKey : $this->getForeignKeyName();
 
         $constraint = function (Builder $query) use ($key) {
+            /** @var string $from */
+            $from = $query->getQuery()->from;
+
             $query->whereColumn(
-                $query->getQuery()->from.'.'.$this->localKey,
+                "$from.$this->localKey",
                 '=',
                 $this->parent->qualifyColumn($key)
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns));
+        $query->select($columns);
+
+        $this->addExpression($constraint, $query);
+
+        return $query;
     }
 
-    /**
-     * Add the constraints for a relationship query on the same table.
-     *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $parentQuery
-     * @param array|mixed $columns
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
-     */
+    /** @inheritDoc */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($columns instanceof Expression) {
@@ -128,16 +130,20 @@ trait IsAncestorRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns), $from);
+        $query->select($columns);
+
+        $this->addExpression($constraint, $query, $from);
+
+        return $query;
     }
 
     /**
      * Add a recursive expression to the query.
      *
      * @param callable $constraint
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>|null $query
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel>|null $query
      * @param string|null $from
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {

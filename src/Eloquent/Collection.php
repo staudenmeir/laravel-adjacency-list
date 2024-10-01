@@ -26,6 +26,7 @@ class Collection extends Base
 
         $model = $this->first();
 
+        /** @var string $parentKeyName */
         $parentKeyName = $model->getParentKeyName();
 
         $localKeyName = $model->getLocalKeyName();

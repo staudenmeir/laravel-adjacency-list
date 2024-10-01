@@ -12,11 +12,13 @@ trait IsConcatenableRelation
     /**
      * Append the relation's through parents, foreign and local keys to a deep relationship.
      *
-     * @param string[] $through
-     * @param array $foreignKeys
-     * @param array $localKeys
+     * @param non-empty-list<string> $through
+     * @param non-empty-list<array{0: string, 1: string}|callable|string|\Staudenmeir\EloquentHasManyDeep\Eloquent\CompositeKey|null> $foreignKeys
+     * @param non-empty-list<array{0: string, 1: string}|callable|string|\Staudenmeir\EloquentHasManyDeep\Eloquent\CompositeKey|null> $localKeys
      * @param int $position
-     * @return array
+     * @return array{0: non-empty-list<string>,
+     *     1: non-empty-list<array{0: string, 1: string}|callable|string|\Staudenmeir\EloquentHasManyDeep\Eloquent\CompositeKey|null>,
+     *     2: non-empty-list<array{0: string, 1: string}|callable|string|\Staudenmeir\EloquentHasManyDeep\Eloquent\CompositeKey|null>}
      */
     public function appendToDeepRelationship(array $through, array $foreignKeys, array $localKeys, int $position): array
     {
@@ -55,7 +57,7 @@ trait IsConcatenableRelation
     /**
      * The custom callback to run at the end of the get() method.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $models
+     * @param \Illuminate\Database\Eloquent\Collection<int, *> $models
      * @return void
      */
     public function postGetCallback(Collection $models): void
@@ -78,7 +80,7 @@ trait IsConcatenableRelation
     /**
      * Replace the separator in a PostgreSQL path column.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $models
+     * @param \Illuminate\Database\Eloquent\Collection<int, *> $models
      * @param string $column
      * @param string $separator
      * @return void
@@ -112,9 +114,9 @@ trait IsConcatenableRelation
     /**
      * Merge the common table expressions from one query into another.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $from
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param \Illuminate\Database\Eloquent\Builder<*> $query
+     * @param \Illuminate\Database\Eloquent\Builder<*> $from
+     * @return \Illuminate\Database\Eloquent\Builder<*>
      */
     protected function mergeExpressions(Builder $query, Builder $from): Builder
     {
@@ -129,9 +131,11 @@ trait IsConcatenableRelation
             $fromQuery->expressions
         );
 
-        return $query->addBinding(
+        $query->addBinding(
             $fromQuery->getRawBindings()['expressions'],
             'expressions'
         );
+
+        return $query;
     }
 }

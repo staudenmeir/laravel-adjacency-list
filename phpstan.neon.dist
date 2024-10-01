@@ -1,7 +1,5 @@
-includes:
-    - ./vendor/larastan/larastan/extension.neon
 parameters:
-    level: 5
+    level: 9
     paths:
         - src
     ignoreErrors:

@@ -24,6 +24,7 @@ class FirebirdGrammar extends Base implements ExpressionGrammar
         return $reverse ? "($wrappedColumn || $placeholder || $wrappedAlias)" : "($wrappedAlias || $placeholder || $wrappedColumn)";
     }
 
+    /** @inheritDoc */
     public function getRecursivePathBindings($separator)
     {
         return [$separator];
@@ -56,6 +57,7 @@ class FirebirdGrammar extends Base implements ExpressionGrammar
         return "position($localKey || ?, $path) > 0 or position(? || $localKey || ?, $path) > 0";
     }
 
+    /** @inheritDoc */
     public function getCycleDetectionBindings(string $pathSeparator): array
     {
         return [$pathSeparator, $pathSeparator, $pathSeparator];

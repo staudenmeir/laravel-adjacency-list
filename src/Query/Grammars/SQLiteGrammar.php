@@ -37,12 +37,7 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
         return $reverse ? "$wrappedColumn || ? || $wrappedAlias" : "$wrappedAlias || ? || $wrappedColumn";
     }
 
-    /**
-     * Get the recursive path bindings.
-     *
-     * @param string $separator
-     * @return array
-     */
+    /** @inheritDoc */
     public function getRecursivePathBindings($separator)
     {
         return [$separator];
@@ -93,12 +88,7 @@ class SQLiteGrammar extends Base implements ExpressionGrammar
         return "instr($path, $localKey || ?) > 0 or instr($path, ? || $localKey || ?) > 0";
     }
 
-    /**
-     * Get the cycle detection bindings.
-     *
-     * @param string $pathSeparator
-     * @return array
-     */
+    /** @inheritDoc */
     public function getCycleDetectionBindings(string $pathSeparator): array
     {
         return [$pathSeparator, $pathSeparator, $pathSeparator];
