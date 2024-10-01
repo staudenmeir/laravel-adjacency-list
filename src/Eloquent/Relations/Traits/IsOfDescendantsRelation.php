@@ -274,7 +274,7 @@ trait IsOfDescendantsRelation
      * @param callable $constraint
      * @param string|null $alias
      * @param bool $selectPath
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> TODO: TRelatedModel?
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel>
      */
     protected function getInitialQuery(ExpressionGrammar $grammar, callable $constraint, $alias, $selectPath)
     {
@@ -284,7 +284,7 @@ trait IsOfDescendantsRelation
 
         $depth = $grammar->wrap($model->getDepthName());
 
-        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query */
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $query */
         $query = $model->newModelQuery();
 
         /** @var string $from */
@@ -318,7 +318,7 @@ trait IsOfDescendantsRelation
      *
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param bool $selectPath
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> TODO: TRelatedModel?
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel>
      */
     protected function getRecursiveQuery(ExpressionGrammar $grammar, $selectPath)
     {
@@ -330,7 +330,7 @@ trait IsOfDescendantsRelation
 
         $recursiveDepth = "$depth + 1";
 
-        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query */
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $query */
         $query = $model->newModelQuery();
 
         /** @var string $from */
