@@ -23,7 +23,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
     /**
      * The class name of the morph type constraint.
      *
-     * @var class-string<\Illuminate\Database\Eloquent\Model>
+     * @var string
      */
     protected $morphClass;
 
@@ -62,7 +62,6 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         $inverse,
         $andSelf
     ) {
-        /** @var class-string<\Illuminate\Database\Eloquent\Model> $morphClass */
         $morphClass = $inverse ? $query->getModel()->getMorphClass() : $parent->getMorphClass();
 
         $this->inverse = $inverse;
@@ -88,6 +87,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
 
         $this->query->where(
             "$this->table.$this->morphType",
+            '=',
             $this->morphClass
         );
     }
@@ -99,6 +99,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
 
         $this->query->where(
             "$this->table.$this->morphType",
+            '=',
             $this->morphClass
         );
     }
@@ -110,6 +111,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
 
         $this->query->where(
             "$this->table.$this->morphType",
+            '=',
             $this->morphClass
         );
     }
