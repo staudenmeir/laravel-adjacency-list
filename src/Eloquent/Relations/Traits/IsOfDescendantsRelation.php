@@ -6,8 +6,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Builder as AdjacencyListBuilder;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
+/**
+ * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
+ */
 trait IsOfDescendantsRelation
 {
     use TracksIntermediateScopes;
@@ -34,7 +39,7 @@ trait IsOfDescendantsRelation
     public function addConstraints()
     {
         if (static::$constraints) {
-            $constraint = function (Builder $query) {
+            $constraint = function (AdjacencyListBuilder $query) {
                 $this->addExpressionWhereConstraints($query);
             };
 
@@ -45,20 +50,15 @@ trait IsOfDescendantsRelation
     /**
      * Set the where clause on the recursive expression query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
      * @return void
      */
     abstract public function addExpressionWhereConstraints(Builder $query);
 
-    /**
-     * Set the constraints for an eager load of the relation.
-     *
-     * @param array $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerConstraints(array $models)
     {
-        $constraint = function (Builder $query) use ($models) {
+        $constraint = function (AdjacencyListBuilder $query) use ($models) {
             $this->addEagerExpressionWhereConstraints($query, $models);
         };
 
@@ -75,16 +75,19 @@ trait IsOfDescendantsRelation
             $listSeparator
         );
 
+        /** @var string $from */
+        $from = $this->query->getQuery()->from;
+
         $this->addExpression($constraint, null, null, true)
-            ->select($this->query->getQuery()->from.'.*')
+            ->select("$from.*")
             ->selectSub($pathList, $this->pathListAlias);
     }
 
     /**
      * Set the where clause on the recursive expression query for an eager load of the relation.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $models
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
+     * @param list<TDeclaringModel> $models
      * @return void
      */
     public function addEagerExpressionWhereConstraints(Builder $query, array $models)
@@ -99,10 +102,10 @@ trait IsOfDescendantsRelation
     }
 
     /**
-     * Build model dictionary.
+     * Build model dictionary keyed by the relation's foreign key.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     * @return array
+     * @param \Illuminate\Database\Eloquent\Collection<int, TRelatedModel> $results
+     * @return array<int|string, array<int, TRelatedModel>>|array<array<string, TRelatedModel>>
      */
     protected function buildDictionary(Collection $results)
     {
@@ -133,10 +136,11 @@ trait IsOfDescendantsRelation
             unset($result->{$this->pathListAlias});
         }
 
-        foreach ($dictionary as $key => $results) {
-            $dictionary[$key] = $results->all();
+        foreach ($dictionary as $key => $values) {
+            $dictionary[$key] = $values->all();
         }
 
+        /** @var array<int|string, array<int, TRelatedModel>>|array<array<string, TRelatedModel>> $dictionary */
         return $dictionary;
     }
 
@@ -145,7 +149,7 @@ trait IsOfDescendantsRelation
      *
      * @param \Illuminate\Database\Eloquent\Model $result
      * @param string $foreignKeyName
-     * @param string $accessor
+     * @param string|null $accessor
      * @param string $pathSeparator
      * @param string $path
      * @return bool
@@ -170,11 +174,11 @@ trait IsOfDescendantsRelation
     /**
      * Add a result to the dictionary.
      *
-     * @param array $dictionary
-     * @param \Illuminate\Database\Eloquent\Model $result
-     * @param string $pathSeparator
+     * @param array<int|string, \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>> $dictionary
+     * @param TRelatedModel $result
+     * @param non-empty-string $pathSeparator
      * @param string $path
-     * @return array
+     * @return array<int|string, \Illuminate\Database\Eloquent\Collection<int, TRelatedModel>>
      */
     protected function addResultToDictionary(array $dictionary, Model $result, $pathSeparator, $path)
     {
@@ -186,7 +190,10 @@ trait IsOfDescendantsRelation
 
         foreach ($keys as $key) {
             if (!isset($dictionary[$key])) {
-                $dictionary[$key] = new Collection();
+                /** @var \Illuminate\Database\Eloquent\Collection<int, TRelatedModel> $emptyCollection */
+                $emptyCollection = new Collection();
+
+                $dictionary[$key] = $emptyCollection;
             }
 
             if (!$dictionary[$key]->contains($result)) {
@@ -225,15 +232,16 @@ trait IsOfDescendantsRelation
      * Add a recursive expression to the query.
      *
      * @param callable $constraint
-     * @param \Illuminate\Database\Eloquent\Builder|null $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>|null $query
      * @param string|null $alias
      * @param bool $selectPath
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
      */
     protected function addExpression(callable $constraint, ?Builder $query = null, $alias = null, $selectPath = false)
     {
         $name = $this->parent->getExpressionName();
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query */
         $query = $query ?: $this->query;
 
         $grammar = $this->getExpressionGrammar();
@@ -243,16 +251,16 @@ trait IsOfDescendantsRelation
                 $this->getRecursiveQuery($grammar, $selectPath)
             );
 
-        $query->withRecursiveExpression($name, $expression);
+        $query->getQuery()->withRecursiveExpression($name, $expression->getQuery());
 
         $query->withGlobalScope(get_class($this), function (Builder $query) use ($name) {
             $query->whereIn(
                 $this->getExpressionForeignKeyName(),
                 (new $this->parent())->setTable($name)
                     ->newQuery()
-                    ->select($this->getExpressionLocalKeyName())
                     ->withGlobalScopes($this->intermediateScopes)
                     ->withoutGlobalScopes($this->removedIntermediateScopes)
+                    ->select($this->getExpressionLocalKeyName())
             );
         });
 
@@ -266,7 +274,7 @@ trait IsOfDescendantsRelation
      * @param callable $constraint
      * @param string|null $alias
      * @param bool $selectPath
-     * @return \Illuminate\Database\Eloquent\Builder $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel>
      */
     protected function getInitialQuery(ExpressionGrammar $grammar, callable $constraint, $alias, $selectPath)
     {
@@ -276,9 +284,13 @@ trait IsOfDescendantsRelation
 
         $depth = $grammar->wrap($model->getDepthName());
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $query */
         $query = $model->newModelQuery();
 
-        $table = $alias ?: $query->getQuery()->from;
+        /** @var string $from */
+        $from = $query->getQuery()->from;
+
+        $table = $alias ?: $from;
 
         $query->select("$table.*")
             ->selectRaw("$initialDepth as $depth");
@@ -306,7 +318,7 @@ trait IsOfDescendantsRelation
      *
      * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
      * @param bool $selectPath
-     * @return \Illuminate\Database\Eloquent\Builder $query
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel>
      */
     protected function getRecursiveQuery(ExpressionGrammar $grammar, $selectPath)
     {
@@ -318,9 +330,13 @@ trait IsOfDescendantsRelation
 
         $recursiveDepth = "$depth + 1";
 
+        /** @var \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $query */
         $query = $model->newModelQuery();
 
-        $query->select($query->getQuery()->from.'.*')
+        /** @var string $from */
+        $from = $query->getQuery()->from;
+
+        $query->select("$from.*")
             ->selectRaw("$recursiveDepth as $depth")
             ->join(
                 $name,
@@ -362,10 +378,10 @@ trait IsOfDescendantsRelation
     /**
      * Add the constraints for a relationship query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel> $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $parentQuery
+     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel>
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -377,17 +393,21 @@ trait IsOfDescendantsRelation
             $alias = null;
         }
 
-        $constraint = function (Builder $query) use ($table) {
+        $constraint = function (AdjacencyListBuilder $query) use ($table) {
             $this->addExistenceExpressionWhereConstraints($query, $table);
         };
 
-        return $this->addExpression($constraint, $query->select($columns), $alias);
+        $query->select($columns);
+
+        $this->addExpression($constraint, $query, $alias);
+
+        return $query;
     }
 
     /**
      * Set the where clause on the recursive expression query for an existence query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
      * @param string $table
      * @return void
      */
@@ -417,12 +437,15 @@ trait IsOfDescendantsRelation
     /**
      * Get the path list separator.
      *
-     * @return string
+     * @return non-empty-string
      */
     protected function getPathListSeparator()
     {
+        /** @var non-empty-string $pathSeparator */
+        $pathSeparator = $this->parent->getPathSeparator();
+
         return str_repeat(
-            $this->parent->getPathSeparator(),
+            $pathSeparator,
             2
         );
     }

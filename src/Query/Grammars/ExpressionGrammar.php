@@ -29,7 +29,7 @@ interface ExpressionGrammar
      * Get the recursive path bindings.
      *
      * @param string $separator
-     * @return array
+     * @return list<string>
      */
     public function getRecursivePathBindings($separator);
 
@@ -74,7 +74,7 @@ interface ExpressionGrammar
      * Get the cycle detection bindings.
      *
      * @param string $pathSeparator
-     * @return array
+     * @return list<string>
      */
     public function getCycleDetectionBindings(string $pathSeparator): array;
 

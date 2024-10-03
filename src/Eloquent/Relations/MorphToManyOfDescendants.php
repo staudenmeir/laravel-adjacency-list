@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends BelongsToManyOfDescendants<TRelatedModel>
+ * @extends \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants<TRelatedModel, TDeclaringModel>
  */
 class MorphToManyOfDescendants extends BelongsToManyOfDescendants
 {
@@ -22,7 +23,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
     /**
      * The class name of the morph type constraint.
      *
-     * @var string
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $morphClass;
 
@@ -39,9 +40,9 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
      * Create a new morph to many of descendants relationship instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param TDeclaringModel $parent
      * @param string $name
-     * @param string $table
+     * @param class-string<TRelatedModel>|string $table
      * @param string $foreignPivotKey
      * @param string $relatedPivotKey
      * @param string $parentKey
@@ -61,9 +62,12 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         $inverse,
         $andSelf
     ) {
+        /** @var class-string<\Illuminate\Database\Eloquent\Model> $morphClass */
+        $morphClass = $inverse ? $query->getModel()->getMorphClass() : $parent->getMorphClass();
+
         $this->inverse = $inverse;
         $this->morphType = $name.'_type';
-        $this->morphClass = $inverse ? $query->getModel()->getMorphClass() : $parent->getMorphClass();
+        $this->morphClass = $morphClass;
 
         parent::__construct(
             $query,
@@ -77,12 +81,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return void
-     */
+    /** @inheritDoc */
     protected function addExpressionWhereConstraints(Builder $query)
     {
         parent::addExpressionWhereConstraints($query);
@@ -93,13 +92,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query for an eager load of the relation.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerExpressionWhereConstraints(Builder $query, array $models)
     {
         parent::addEagerExpressionWhereConstraints($query, $models);
@@ -110,13 +103,7 @@ class MorphToManyOfDescendants extends BelongsToManyOfDescendants
         );
     }
 
-    /**
-     * Set the where clause on the recursive expression query for an existence query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $table
-     * @return void
-     */
+    /** @inheritDoc */
     public function addExistenceExpressionWhereConstraints(Builder $query, $table)
     {
         parent::addExistenceExpressionWhereConstraints($query, $table);

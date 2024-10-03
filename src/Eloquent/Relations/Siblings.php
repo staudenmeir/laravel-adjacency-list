@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends HasMany<TRelatedModel>
+ * @extends \Illuminate\Database\Eloquent\Relations\HasMany<TRelatedModel, TDeclaringModel>
  */
 class Siblings extends HasMany
 {
@@ -24,8 +25,8 @@ class Siblings extends HasMany
     /**
      * Create a new siblings relationship instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
@@ -38,11 +39,7 @@ class Siblings extends HasMany
         parent::__construct($query, $parent, $foreignKey, $localKey);
     }
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         if (static::$constraints) {
@@ -62,14 +59,10 @@ class Siblings extends HasMany
         }
     }
 
-    /**
-     * Set the constraints for an eager load of the relation.
-     *
-     * @param array $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerConstraints(array $models)
     {
+        /** @var array<int, int|string|null> $keys */
         $keys = $this->getKeys($models, $this->localKey);
 
         $this->query->where(
@@ -83,14 +76,7 @@ class Siblings extends HasMany
         );
     }
 
-    /**
-     * Match the eagerly loaded results to their parents.
-     *
-     * @param array $models
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     * @param string $relation
-     * @return array
-     */
+    /** @inheritDoc */
     public function match(array $models, Collection $results, $relation)
     {
         $dictionary = $this->buildDictionary($results);
@@ -114,24 +100,13 @@ class Siblings extends HasMany
         return $models;
     }
 
-    /**
-     * Get the results of the relationship.
-     *
-     * @phpstan-return \Traversable<int, TRelatedModel>
-     */
+    /** @inheritDoc */
     public function getResults()
     {
         return $this->query->get();
     }
 
-    /**
-     * Add the constraints for a relationship query.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+    /** @inheritDoc */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($query->getQuery()->from === $parentQuery->getQuery()->from) {
@@ -160,14 +135,7 @@ class Siblings extends HasMany
         return $query;
     }
 
-    /**
-     * Add the constraints for a relationship query on the same table.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+    /** @inheritDoc */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         $table = $this->getRelationCountHash();

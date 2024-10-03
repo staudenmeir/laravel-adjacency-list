@@ -9,13 +9,7 @@ class SingleStoreGrammar extends Grammar implements ExpressionGrammar
 {
     use CompilesMySqlAdjacencyLists;
 
-    /**
-     * Compile an initial path.
-     *
-     * @param string $column
-     * @param string $alias
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileInitialPath($column, $alias)
     {
         return 'cast(' . $this->wrap($column) . ' as char(8192)) as ' . $this->wrap($alias);

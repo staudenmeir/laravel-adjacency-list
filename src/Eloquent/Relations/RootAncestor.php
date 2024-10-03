@@ -9,11 +9,13 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsAncestorRelatio
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends HasOne<TRelatedModel>
+ * @extends \Illuminate\Database\Eloquent\Relations\HasOne<TRelatedModel, TDeclaringModel>
  */
 class RootAncestor extends HasOne
 {
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsAncestorRelation<TRelatedModel, TDeclaringModel> */
     use IsAncestorRelation {
         __construct as baseConstruct;
         addConstraints as baseAddConstraints;
@@ -22,8 +24,8 @@ class RootAncestor extends HasOne
     /**
      * Create a new root ancestor relationship instance.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param TDeclaringModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @return void
@@ -33,11 +35,7 @@ class RootAncestor extends HasOne
         $this->baseConstruct($query, $parent, $foreignKey, $localKey, false);
     }
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         $this->baseAddConstraints();

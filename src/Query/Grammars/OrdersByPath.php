@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 trait OrdersByPath
 {
+    /**
+     * @var \Illuminate\Database\Eloquent\Model
+     */
     protected $model;
 
     public function __construct(Model $model)
@@ -13,11 +16,7 @@ trait OrdersByPath
         $this->model = $model;
     }
 
-    /**
-     * Compile an "order by path" clause.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileOrderByPath()
     {
         $path = $this->model->getPathName();

@@ -13,21 +13,20 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelati
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends HasMany<TRelatedModel>
+ * @extends \Illuminate\Database\Eloquent\Relations\HasMany<TRelatedModel, TDeclaringModel>
  */
 class Descendants extends HasMany implements ConcatenableRelation
 {
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\Concatenation\IsConcatenableDescendantsRelation<TRelatedModel, TDeclaringModel> */
     use IsConcatenableDescendantsRelation;
+    /** @use \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Traits\IsRecursiveRelation<TRelatedModel, TDeclaringModel> */
     use IsRecursiveRelation {
         buildDictionary as baseBuildDictionary;
     }
 
-    /**
-     * Set the base constraints on the relation query.
-     *
-     * @return void
-     */
+    /** @inheritDoc */
     public function addConstraints()
     {
         if (static::$constraints) {
@@ -44,12 +43,7 @@ class Descendants extends HasMany implements ConcatenableRelation
         }
     }
 
-    /**
-     * Set the constraints for an eager load of the relation.
-     *
-     * @param array $models
-     * @return void
-     */
+    /** @inheritDoc */
     public function addEagerConstraints(array $models)
     {
         $whereIn = $this->whereInMethod($this->parent, $this->localKey);
@@ -65,14 +59,7 @@ class Descendants extends HasMany implements ConcatenableRelation
         $this->addExpression($constraint);
     }
 
-    /**
-     * Match the eagerly loaded results to their parents.
-     *
-     * @param array $models
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     * @param string $relation
-     * @return array
-     */
+    /** @inheritDoc */
     public function match(array $models, Collection $results, $relation)
     {
         $dictionary = $this->buildDictionary($results);
@@ -90,12 +77,7 @@ class Descendants extends HasMany implements ConcatenableRelation
         return $models;
     }
 
-    /**
-     * Build model dictionary.
-     *
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     * @return array
-     */
+    /** @inheritDoc */
     protected function buildDictionary(Collection $results)
     {
         if ($this->andSelf) {
@@ -118,12 +100,12 @@ class Descendants extends HasMany implements ConcatenableRelation
     }
 
     /**
-     * Add the constraints for a relationship query.
+     * Add the constraints for an internal relationship existence query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
+     * @param \Illuminate\Database\Eloquent\Builder<TDeclaringModel> $parentQuery
+     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -131,8 +113,11 @@ class Descendants extends HasMany implements ConcatenableRelation
             return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
         }
 
+        /** @var string $from */
+        $from = $query->getQuery()->from;
+
         $first = $this->andSelf
-            ? $query->getQuery()->from.'.'.$this->localKey
+            ? "$from.$this->localKey"
             : $this->foreignKey;
 
         $constraint = function (Builder $query) use ($first) {
@@ -143,17 +128,12 @@ class Descendants extends HasMany implements ConcatenableRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns));
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query);
     }
 
-    /**
-     * Add the constraints for a relationship query on the same table.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
-     * @param array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
+    /** @inheritDoc */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         if ($columns instanceof Expression) {
@@ -178,16 +158,18 @@ class Descendants extends HasMany implements ConcatenableRelation
             );
         };
 
-        return $this->addExpression($constraint, $query->select($columns), $from);
+        $query->select($columns);
+
+        return $this->addExpression($constraint, $query, $from);
     }
 
     /**
      * Add a recursive expression to the query.
      *
      * @param callable $constraint
-     * @param \Illuminate\Database\Eloquent\Builder|null $query
+     * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel>|null $query
      * @param string|null $from
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     protected function addExpression(callable $constraint, ?Builder $query = null, $from = null)
     {
