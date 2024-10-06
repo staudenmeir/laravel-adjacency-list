@@ -41,35 +41,49 @@ class CollectionTest extends TestCase
 
     public function testLoadTreePathRelations()
     {
-        $limit = User::count();
+ $totalUsers = User::count();
 
         $loaded = 0;
 
-        User::retrieved(function () use (&$count) {
-            $count++;
+        User::retrieved(function () use (&$loaded) {
+            $loaded++;
         });
-        
+
         $tree = User::query()
             ->tree()
             ->get()
             ->loadTreePathRelations()
-            ->each(fn ($s) => $s->setAppends(['display_path', 'reverse_display_path']))
-	    ->toTree()
-	    ->sortBy('id')
+            ->each(fn (User $treeUser) => $treeUser->setAppends(['display_path', 'reverse_display_path']))
+            ->toTree()
+            ->sortBy('id')
             ->values();
 
-        $this->assertLessThanOrEqual($limit, $loaded);
+        self::assertSame($totalUsers, $loaded);
 
-        $this->assertEquals('user-1', $tree[0]->display_path);
-	$this->assertEquals('user-11', $tree[1]->display_path);
+        $tree->each(function (User $treeUser): void {
+            self::assertSame($treeUser->ancestorsAndSelf->count(), $treeUser->ancestors->count() + 1);
 
-	$children = $tree[0]->children->sortBy('id')->values();
-        $this->assertEquals('user-1 > user-2', $children[0]->display_path);
-        $this->assertEquals('user-1 > user-3', $children[1]->display_path);
-	$this->assertEquals('user-1 > user-4', $children[2]->display_path);
+            $treeUser->children->each(function (User $childUser): void {
+                $childUser->ancestors->each(function (User $ancestor): void {
+                    self::assertGreaterThanOrEqual(1, $ancestor->children->count());
+                });
 
-        $this->assertEquals('user-1 > user-2 > user-5', $children[0]->children[0]->display_path);
-        $this->assertEquals('user-1 > user-2 > user-5 > user-8', $children[0]->children[0]->children[0]->display_path);
-        $this->assertEquals('user-11 > user-12', $tree[1]->children[0]->display_path);
+                self::assertSame($childUser->ancestorsAndSelf->count(), $childUser->ancestors->count() + 1);
+            });
+        });
+
+        self::assertSame($totalUsers, $loaded);
+
+        self::assertSame('user-1', $tree[0]->display_path);
+        self::assertSame('user-11', $tree[1]->display_path);
+
+        $children = $tree[0]->children->sortBy('id')->values();
+        self::assertSame('user-1 > user-2', $children[0]->display_path);
+        self::assertSame('user-1 > user-3', $children[1]->display_path);
+        self::assertSame('user-1 > user-4', $children[2]->display_path);
+
+        self::assertSame('user-1 > user-2 > user-5', $children[0]->children[0]->display_path);
+        self::assertSame('user-1 > user-2 > user-5 > user-8', $children[0]->children[0]->children[0]->display_path);
+        self::assertSame('user-11 > user-12', $tree[1]->children[0]->display_path);
     }
 }
