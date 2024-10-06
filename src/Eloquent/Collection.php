@@ -101,7 +101,7 @@ class Collection extends Base
 
             $model->setRelation('parent', count($path) > 1 ? $lookup[$path[1]] : null);
             $model->setRelation('ancestorsAndSelf', $ancestorsAndSelf);
-            $model->setRelation('ancestors', $ancestorsAndSelf->slice(0, -1));
+            $model->setRelation('ancestors', $ancestorsAndSelf->slice(1));
         }
 
         return $this;
