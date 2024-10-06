@@ -67,7 +67,7 @@ class Collection extends Base
 
         if (! method_exists($instance, 'getPathName') || ! method_exists($instance, 'getPathSeparator')) {
             throw new RuntimeException(sprintf(
-                'Model [%s] does not have recusive relations.',
+                'Model [%s] does not have recursive relations.',
                 $instance::class,
             ));
         }
