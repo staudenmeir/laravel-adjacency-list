@@ -14,7 +14,7 @@ class RecursiveRelationsHookTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testTreeRelations()
+    public function testTreeRelations(): void
     {
         $command = Mockery::mock(ModelsCommand::class);
         $command->shouldReceive('setProperty')->times(2);
@@ -49,7 +49,7 @@ class RecursiveRelationsHookTest extends TestCase
         $hook->run($command, new User());
     }
 
-    public function testGraphRelations()
+    public function testGraphRelations(): void
     {
         $command = Mockery::mock(ModelsCommand::class);
         $command->shouldReceive('setProperty')->times(2);

@@ -7,7 +7,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class BloodlineTest extends TestCase
 {
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $bloodline = User::find(5)->bloodline()->breadthFirst()->get();
 
@@ -17,7 +17,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals(['user-5/user-2/user-1', 'user-5/user-2', 'user-5', 'user-5/user-8'], $bloodline->pluck('slug_path')->all());
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $users = User::with([
             'bloodline' => fn (Bloodline $query) => $query->getQuery()->breadthFirst()->orderBy('id'),
@@ -30,7 +30,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals(['user-5/user-2/user-1', 'user-5/user-2', 'user-5', 'user-5/user-8'], $users[4]->bloodline->pluck('slug_path')->all());
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $users = User::orderBy('id')->get()->load([
             'bloodline' => fn (Bloodline $query) => $query->getQuery()->breadthFirst()->orderBy('id'),
@@ -43,7 +43,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals(['user-5/user-2/user-1', 'user-5/user-2', 'user-5', 'user-5/user-8'], $users[4]->bloodline->pluck('slug_path')->all());
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -54,7 +54,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals([4, 7], $descendants->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -65,7 +65,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals([4, 7, 11, 12], $users->pluck('id')->all());
     }
 
-    public function testIncrement()
+    public function testIncrement(): void
     {
         if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -79,7 +79,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals(1, User::find(3)->followers);
     }
 
-    public function testDecrement()
+    public function testDecrement(): void
     {
         if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();

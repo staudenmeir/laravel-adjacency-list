@@ -6,7 +6,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class RootAncestorOrSelfTest extends TestCase
 {
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $rootAncestorOrSelf = User::find(8)->rootAncestorOrSelf;
 
@@ -15,7 +15,7 @@ class RootAncestorOrSelfTest extends TestCase
         $this->assertEquals('8.5.2.1', $rootAncestorOrSelf->path);
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $users = User::with('rootAncestorOrSelf')->orderBy('id')->get();
 
@@ -27,7 +27,7 @@ class RootAncestorOrSelfTest extends TestCase
         $this->assertEquals('8.5.2.1', $users[7]->rootAncestorOrSelf->path);
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $users = User::orderBy('id')->get()->load('rootAncestorOrSelf');
         ;
@@ -40,7 +40,7 @@ class RootAncestorOrSelfTest extends TestCase
         $this->assertEquals('8.5.2.1', $users[7]->rootAncestorOrSelf->path);
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -51,7 +51,7 @@ class RootAncestorOrSelfTest extends TestCase
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8, 9], $descendants->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -62,7 +62,7 @@ class RootAncestorOrSelfTest extends TestCase
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12], $users->pluck('id')->all());
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();

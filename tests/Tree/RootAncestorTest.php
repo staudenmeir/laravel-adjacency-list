@@ -6,7 +6,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class RootAncestorTest extends TestCase
 {
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $rootAncestor = User::find(8)->rootAncestor;
 
@@ -15,7 +15,7 @@ class RootAncestorTest extends TestCase
         $this->assertEquals('5.2.1', $rootAncestor->path);
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $users = User::with('rootAncestor')->orderBy('id')->get();
 
@@ -26,7 +26,7 @@ class RootAncestorTest extends TestCase
         $this->assertEquals('5.2.1', $users[7]->rootAncestor->path);
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $users = User::orderBy('id')->get()->load('rootAncestor');
 
@@ -37,7 +37,7 @@ class RootAncestorTest extends TestCase
         $this->assertEquals('5.2.1', $users[7]->rootAncestor->path);
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -48,7 +48,7 @@ class RootAncestorTest extends TestCase
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8, 9], $descendants->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -59,7 +59,7 @@ class RootAncestorTest extends TestCase
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8, 9, 12], $users->pluck('id')->all());
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();

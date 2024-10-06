@@ -7,7 +7,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class DescendantsTest extends TestCase
 {
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $descendants = User::find(2)->descendants;
 
@@ -18,7 +18,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(['user-5', 'user-8/user-5'], $descendants->pluck('reverse_slug_path')->all());
     }
 
-    public function testLazyLoadingAndSelf()
+    public function testLazyLoadingAndSelf(): void
     {
         $descendantsAndSelf = User::find(2)->descendantsAndSelf()->orderBy('id')->get();
 
@@ -31,14 +31,14 @@ class DescendantsTest extends TestCase
         );
     }
 
-    public function testLazyLoadingWithoutParentKey()
+    public function testLazyLoadingWithoutParentKey(): void
     {
         $descendants = (new User())->descendants()->get();
 
         $this->assertEmpty($descendants);
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $users = User::with([
             'descendants' => fn (Descendants $query) => $query->orderBy('id'),
@@ -51,7 +51,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(['2', '3', '4', '2.5', '3.6', '4.7', '2.5.8', '3.6.9'], $users[0]->descendants->pluck('path')->all());
     }
 
-    public function testEagerLoadingAndSelf()
+    public function testEagerLoadingAndSelf(): void
     {
         $users = User::with([
             'descendantsAndSelf' => fn (Descendants $query) => $query->orderBy('id'),
@@ -64,7 +64,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(['1', '1.2', '1.3', '1.4', '1.2.5', '1.3.6', '1.4.7', '1.2.5.8', '1.3.6.9'], $users[0]->descendantsAndSelf->pluck('path')->all());
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $users = User::orderBy('id')->get()->load([
             'descendants' => fn (Descendants $query) => $query->orderBy('id'),
@@ -77,7 +77,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(['2', '3', '4', '2.5', '3.6', '4.7', '2.5.8', '3.6.9'], $users[0]->descendants->pluck('path')->all());
     }
 
-    public function testLazyEagerLoadingAndSelf()
+    public function testLazyEagerLoadingAndSelf(): void
     {
         $users = User::orderBy('id')->get()->load([
             'descendantsAndSelf' => fn (Descendants $query) => $query->orderBy('id'),
@@ -90,7 +90,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(['1', '1.2', '1.3', '1.4', '1.2.5', '1.3.6', '1.4.7', '1.2.5.8', '1.3.6.9'], $users[0]->descendantsAndSelf->pluck('path')->all());
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -101,7 +101,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1], $ancestors->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelf()
+    public function testExistenceQueryAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -112,7 +112,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([2, 1], $ancestors->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -123,7 +123,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 3, 4, 5, 6, 11], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelationAndSelf()
+    public function testExistenceQueryForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -134,7 +134,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 3], $users->pluck('id')->all());
     }
 
-    public function testWithSumForSelfRelation()
+    public function testWithSumForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -145,7 +145,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(2, $user->descendants_sum_followers);
     }
 
-    public function testWithSumForSelfRelationAndSelf()
+    public function testWithSumForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -156,7 +156,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(3, $user->descendants_and_self_sum_followers);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -169,7 +169,7 @@ class DescendantsTest extends TestCase
         $this->assertNull(User::find(3)->deleted_at);
     }
 
-    public function testForceDelete()
+    public function testForceDelete(): void
     {
         if (in_array($this->connection, ['mariadb', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();

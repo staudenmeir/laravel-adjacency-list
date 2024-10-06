@@ -7,7 +7,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Node;
 
 class EloquentTest extends TestCase
 {
-    public function testScopeSubgraph()
+    public function testScopeSubgraph(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -20,7 +20,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([3, 5, 6, 7, 8, 8], $graph->pluck('id')->all());
     }
 
-    public function testScopeSubgraphWithMaxDepth()
+    public function testScopeSubgraphWithMaxDepth(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -33,7 +33,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([3, 5, 6, 7, 8], $graph->pluck('id')->all());
     }
 
-    public function testChildren()
+    public function testChildren(): void
     {
         $children = Node::find(1)->children;
 
@@ -51,7 +51,7 @@ class EloquentTest extends TestCase
         );
     }
 
-    public function testChildrenAndSelf()
+    public function testChildrenAndSelf(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -62,7 +62,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([1, 2, 3, 4, 5], $childrenAndSelf->pluck('id')->all());
     }
 
-    public function testParents()
+    public function testParents(): void
     {
         $parents = Node::find(5)->parents;
 
@@ -80,7 +80,7 @@ class EloquentTest extends TestCase
         );
     }
 
-    public function testParentsAndSelf()
+    public function testParentsAndSelf(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -91,28 +91,28 @@ class EloquentTest extends TestCase
         $this->assertEquals([5, 1, 2, 10], $parentsAndSelf->pluck('id')->all());
     }
 
-    public function testScopeWhereDepth()
+    public function testScopeWhereDepth(): void
     {
         $nodes = Node::find(1)->descendants()->whereDepth(1)->get();
 
         $this->assertEquals([2, 3, 4, 5], $nodes->pluck('id')->all());
     }
 
-    public function testScopeWhereDepthWithOperator()
+    public function testScopeWhereDepthWithOperator(): void
     {
         $nodes = Node::find(1)->descendants()->whereDepth('>', 2)->orderBy('id')->get();
 
         $this->assertEquals([7, 8, 8, 8], $nodes->pluck('id')->all());
     }
 
-    public function testScopeBreadthFirst()
+    public function testScopeBreadthFirst(): void
     {
         $nodes = Node::find(1)->descendants()->breadthFirst()->orderByDesc('id')->get();
 
         $this->assertEquals([5, 4, 3, 2, 8, 7, 6, 5, 8, 8, 7, 8], $nodes->pluck('id')->all());
     }
 
-    public function testScopeDepthFirst()
+    public function testScopeDepthFirst(): void
     {
         if ($this->connection === 'firebird') {
             $this->markTestSkipped();
@@ -123,7 +123,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([2, 5, 7, 8, 8, 3, 6, 4, 5, 7, 8, 8], $nodes->pluck('id')->all());
     }
 
-    public function testWithInitialQueryConstraint()
+    public function testWithInitialQueryConstraint(): void
     {
         $nodes = Node::withInitialQueryConstraint(function (Builder $query) {
             $query->where('edges.weight', '<', 2);
@@ -138,7 +138,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8], $nodes->pluck('id')->all());
     }
 
-    public function testWithRecursiveQueryConstraint()
+    public function testWithRecursiveQueryConstraint(): void
     {
         $nodes = Node::withRecursiveQueryConstraint(function (Builder $query) {
             $query->where('edges.weight', '<', 5);
@@ -153,7 +153,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8], $nodes->pluck('id')->all());
     }
 
-    public function testSetRecursiveQueryConstraint()
+    public function testSetRecursiveQueryConstraint(): void
     {
         Node::setRecursiveQueryConstraint(
             fn (Builder $query) => $query->where('edges.weight', '<', 5)
@@ -170,7 +170,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8], $nodes->pluck('id')->all());
     }
 
-    public function testWithQueryConstraint()
+    public function testWithQueryConstraint(): void
     {
         $nodes = Node::withQueryConstraint(
             fn (Builder $query) => $query->where('edges.weight', '<', 4),
@@ -184,7 +184,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 8], $nodes->pluck('id')->all());
     }
 
-    public function testWithMaxDepth()
+    public function testWithMaxDepth(): void
     {
         $nodes = Node::withMaxDepth(
             2,
@@ -194,7 +194,7 @@ class EloquentTest extends TestCase
         $this->assertEquals([5, 7, 8], $nodes->pluck('id')->all());
     }
 
-    public function testWithMaxDepthWithNegativeDepth()
+    public function testWithMaxDepthWithNegativeDepth(): void
     {
         $nodes = Node::withMaxDepth(
             -1,

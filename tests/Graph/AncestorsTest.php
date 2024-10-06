@@ -10,7 +10,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetectionAn
 
 class AncestorsTest extends TestCase
 {
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $ancestors = Node::find(5)->ancestors()->orderByDesc('depth')->orderBy('id')->get();
 
@@ -69,7 +69,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([0, 0, 0, 1], $ancestors->pluck('is_cycle')->all());
     }
 
-    public function testLazyLoadingAndSelf()
+    public function testLazyLoadingAndSelf(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -111,7 +111,7 @@ class AncestorsTest extends TestCase
         );
     }
 
-    public function testLazyLoadingAndSelfWithCycleDetection()
+    public function testLazyLoadingAndSelfWithCycleDetection(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -125,7 +125,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([0, -1, -2], $ancestorsAndSelf->pluck('depth')->all());
     }
 
-    public function testLazyLoadingAndSelfWithCycleDetectionAndStart()
+    public function testLazyLoadingAndSelfWithCycleDetectionAndStart(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -140,7 +140,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([0, 0, 0, 1], $ancestorsAndSelf->pluck('is_cycle')->all());
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $nodes = Node::with([
             'ancestors' => fn (Ancestors $query) => $query->orderByDesc('depth')->orderBy('id'),
@@ -199,7 +199,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([0, 0, 0, 1], $nodes[0]->ancestors->pluck('is_cycle')->all());
     }
 
-    public function testEagerLoadingAndSelf()
+    public function testEagerLoadingAndSelf(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -238,7 +238,7 @@ class AncestorsTest extends TestCase
         );
     }
 
-    public function testEagerLoadingAndSelfWithCycleDetection()
+    public function testEagerLoadingAndSelfWithCycleDetection(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -252,7 +252,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([0, -1, -2], $nodes[0]->ancestorsAndSelf->pluck('depth')->all());
     }
 
-    public function testEagerLoadingAndSelfWithCycleDetectionAndStart()
+    public function testEagerLoadingAndSelfWithCycleDetectionAndStart(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -267,7 +267,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([0, 0, 0, 1], $nodes[0]->ancestorsAndSelf->pluck('is_cycle')->all());
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $nodes = Node::all()->load([
             'ancestors' => fn (Ancestors $query) => $query->orderByDesc('depth')->orderBy('id'),
@@ -291,7 +291,7 @@ class AncestorsTest extends TestCase
         );
     }
 
-    public function testLazyEagerLoadingAndSelf()
+    public function testLazyEagerLoadingAndSelf(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -330,7 +330,7 @@ class AncestorsTest extends TestCase
         );
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -341,7 +341,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([5, 5, 7, 8, 7, 8, 8, 8], $descendants->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelf()
+    public function testExistenceQueryAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -352,7 +352,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([2, 5, 5, 6, 7, 8, 7, 8, 8, 8], $descendants->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
@@ -363,7 +363,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8], $nodes->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelationAndSelf()
+    public function testExistenceQueryForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -374,7 +374,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([2, 5, 6, 7, 8], $nodes->pluck('id')->all());
     }
 
-    public function testWithSumForSelfRelation()
+    public function testWithSumForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
@@ -385,7 +385,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals(1 + 4 + 5 + 10 + 11, $node->ancestors_sum_pivot_weight);
     }
 
-    public function testWithSumForSelfRelationAndSelf()
+    public function testWithSumForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -396,7 +396,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals(1 + 4 + 5 + 10 + 11, $node->ancestors_and_self_sum_pivot_weight);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();

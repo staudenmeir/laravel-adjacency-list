@@ -6,7 +6,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class CollectionTest extends TestCase
 {
-    public function testToTree()
+    public function testToTree(): void
     {
         $users = User::tree()->orderBy('id')->get();
 
@@ -19,7 +19,7 @@ class CollectionTest extends TestCase
         $this->assertEquals([12], $tree[1]->children->pluck('id')->all());
     }
 
-    public function testToTreeWithRelationship()
+    public function testToTreeWithRelationship(): void
     {
         $users = User::find(1)->descendants()->orderBy('id')->get();
 
@@ -30,7 +30,7 @@ class CollectionTest extends TestCase
         $this->assertEquals([8], $tree[0]->children[0]->children->pluck('id')->all());
     }
 
-    public function testToTreeWithEmptyCollection()
+    public function testToTreeWithEmptyCollection(): void
     {
         $users = User::tree(1)->where('id', 0)->get();
 

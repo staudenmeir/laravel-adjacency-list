@@ -10,28 +10,28 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\TestCase;
 
 class DescendantsTest extends TestCase
 {
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $posts = User::find(2)->descendantPosts()->orderBy('id')->get();
 
         $this->assertEquals([50, 80], $posts->pluck('id')->all());
     }
 
-    public function testLazyLoadingAndSelf()
+    public function testLazyLoadingAndSelf(): void
     {
         $posts = User::find(2)->descendantPostsAndSelf()->orderBy('id')->get();
 
         $this->assertEquals([20, 50, 80], $posts->pluck('id')->all());
     }
 
-    public function testLazyLoadingWithoutParentKey()
+    public function testLazyLoadingWithoutParentKey(): void
     {
         $posts = (new User())->descendantPosts()->get();
 
         $this->assertEmpty($posts);
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $users = User::with([
             'descendantPosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
@@ -43,7 +43,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([100, 110], $users[9]->descendantPosts->pluck('id')->all());
     }
 
-    public function testEagerLoadingAndSelf()
+    public function testEagerLoadingAndSelf(): void
     {
         $users = User::with([
             'descendantPostsAndSelf' => fn (HasManyDeep $query) => $query->orderBy('id'),
@@ -55,7 +55,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([100, 110], $users[9]->descendantPostsAndSelf->pluck('id')->all());
     }
 
-    public function testEagerLoadingWithHasOneDeep()
+    public function testEagerLoadingWithHasOneDeep(): void
     {
         $users = User::with([
             'descendantPost' => fn (HasOneDeep $query) => $query->orderBy('id'),
@@ -67,7 +67,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(100, $users[9]->descendantPost->id);
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $users = User::orderBy('id')->get()->load([
             'descendantPosts' => fn (HasManyDeep $query) => $query->orderBy('id'),
@@ -79,7 +79,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([100, 110], $users[9]->descendantPosts->pluck('id')->all());
     }
 
-    public function testLazyEagerLoadingAndSelf()
+    public function testLazyEagerLoadingAndSelf(): void
     {
         $users = User::orderBy('id')->get()->load([
             'descendantPostsAndSelf' => fn (HasManyDeep $query) => $query->orderBy('id'),
@@ -91,7 +91,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([100, 110], $users[9]->descendantPostsAndSelf->pluck('id')->all());
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -102,7 +102,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([2, 1], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelf()
+    public function testExistenceQueryAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore', 'firebird'])) {
             $this->markTestSkipped();
@@ -113,7 +113,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([2, 1], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
@@ -124,7 +124,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 11], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelationAndSelf()
+    public function testExistenceQueryForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
@@ -135,7 +135,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2], $users->pluck('id')->all());
     }
 
-    public function testUnsupportedPosition()
+    public function testUnsupportedPosition(): void
     {
         $this->expectExceptionMessage('Descendants can only be at the beginning of deep relationships at the moment.');
 

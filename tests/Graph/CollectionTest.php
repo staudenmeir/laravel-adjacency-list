@@ -9,7 +9,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetectionAn
 
 class CollectionTest extends TestCase
 {
-    public function testToTree()
+    public function testToTree(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -28,7 +28,7 @@ class CollectionTest extends TestCase
         $this->assertEquals([6], $graph[1]->children->pluck('id')->all());
     }
 
-    public function testToTreeWithRelationship()
+    public function testToTreeWithRelationship(): void
     {
         $nodes = Node::find(2)->descendants()->orderBy('id')->get();
 
@@ -39,7 +39,7 @@ class CollectionTest extends TestCase
         $this->assertEquals([8], $graph[0]->children[0]->children->pluck('id')->all());
     }
 
-    public function testToTreeWithCycle()
+    public function testToTreeWithCycle(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -59,7 +59,7 @@ class CollectionTest extends TestCase
         $this->assertEmpty($graph[0]->children[0]->children[0]->children);
     }
 
-    public function testToTreeWithCycleAndStart()
+    public function testToTreeWithCycleAndStart(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -79,7 +79,7 @@ class CollectionTest extends TestCase
         $this->assertEquals([12], $graph[0]->children[0]->children[0]->children->pluck('id')->all());
     }
 
-    public function testToTreeWithEmptyCollection()
+    public function testToTreeWithEmptyCollection(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();

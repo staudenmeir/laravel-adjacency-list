@@ -21,28 +21,28 @@ class HasManyOfDescendantsTest extends TestCase
         }
     }
 
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $posts = User::find(2)->posts;
 
         $this->assertEquals([50, 80], $posts->pluck('id')->all());
     }
 
-    public function testLazyLoadingAndSelf()
+    public function testLazyLoadingAndSelf(): void
     {
         $posts = User::find(2)->postsAndSelf;
 
         $this->assertEquals([20, 50, 80], $posts->pluck('id')->all());
     }
 
-    public function testLazyLoadingWithoutParentKey()
+    public function testLazyLoadingWithoutParentKey(): void
     {
         $posts = (new User())->posts()->get();
 
         $this->assertEmpty($posts);
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $users = User::with([
             'posts' => fn (HasManyOfDescendants $query) => $query->orderBy('id'),
@@ -55,7 +55,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->posts[0]);
     }
 
-    public function testEagerLoadingAndSelf()
+    public function testEagerLoadingAndSelf(): void
     {
         $users = User::with([
             'postsAndSelf' => fn (HasManyOfDescendants $query) => $query->orderBy('id'),
@@ -68,7 +68,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->postsAndSelf[0]);
     }
 
-    public function testNestedEagerLoadingWithEmptyResults()
+    public function testNestedEagerLoadingWithEmptyResults(): void
     {
         Post::query()->delete();
 
@@ -77,7 +77,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEmpty($roles[0]->users[0]->posts);
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $users = User::orderBy('id')->get()->load([
             'posts' => fn (HasManyOfDescendants $query) => $query->orderBy('id'),
@@ -90,7 +90,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->posts[0]);
     }
 
-    public function testLazyEagerLoadingAndSelf()
+    public function testLazyEagerLoadingAndSelf(): void
     {
         $users = User::orderBy('id')->get()->load([
             'postsAndSelf' => fn (HasManyOfDescendants $query) => $query->orderBy('id'),
@@ -103,7 +103,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->postsAndSelf[0]);
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -114,7 +114,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals([2, 1], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelf()
+    public function testExistenceQueryAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -125,7 +125,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals([2, 1], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -136,7 +136,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals([1, 2, 11], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelationAndSelf()
+    public function testExistenceQueryForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -147,7 +147,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals([1, 2], $users->pluck('id')->all());
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
@@ -160,7 +160,7 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals(1, Post::find(10)->user_id);
     }
 
-    public function testUpdateAndSelf()
+    public function testUpdateAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
@@ -173,21 +173,21 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals(11, Post::find(10)->user_id);
     }
 
-    public function testWithTrashedDescendants()
+    public function testWithTrashedDescendants(): void
     {
         $posts = User::find(4)->posts()->withTrashedDescendants()->get();
 
         $this->assertEquals([70, 90], $posts->pluck('id')->all());
     }
 
-    public function testWithIntermediateScope()
+    public function testWithIntermediateScope(): void
     {
         $posts = User::find(2)->posts()->withIntermediateScope('depth', new DepthScope())->get();
 
         $this->assertEquals([50], $posts->pluck('id')->all());
     }
 
-    public function testWithoutIntermediateScope()
+    public function testWithoutIntermediateScope(): void
     {
         $posts = User::find(2)->posts()
             ->withIntermediateScope('depth', new DepthScope())
@@ -197,14 +197,14 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals([50, 80], $posts->pluck('id')->all());
     }
 
-    public function testWithoutIntermediateScopeWithObject()
+    public function testWithoutIntermediateScopeWithObject(): void
     {
         $posts = User::find(4)->posts()->withoutIntermediateScope(new SoftDeletingScope())->get();
 
         $this->assertEquals([70, 90], $posts->pluck('id')->all());
     }
 
-    public function testWithoutIntermediateScopes()
+    public function testWithoutIntermediateScopes(): void
     {
         $posts = User::find(2)->posts()
             ->withIntermediateScope('depth', new DepthScope())
@@ -214,14 +214,14 @@ class HasManyOfDescendantsTest extends TestCase
         $this->assertEquals([50, 80], $posts->pluck('id')->all());
     }
 
-    public function testIntermediateScopes()
+    public function testIntermediateScopes(): void
     {
         $relationship = User::find(2)->posts()->withIntermediateScope('depth', new DepthScope());
 
         $this->assertArrayHasKey('depth', $relationship->intermediateScopes());
     }
 
-    public function testRemovedIntermediateScopes()
+    public function testRemovedIntermediateScopes(): void
     {
         $relationship = User::find(2)->posts()
             ->withIntermediateScope('depth', new DepthScope())

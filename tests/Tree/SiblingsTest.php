@@ -8,42 +8,42 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class SiblingsTest extends TestCase
 {
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $siblings = User::find(2)->siblings()->orderBy('id')->get();
 
         $this->assertEquals([3, 4], $siblings->pluck('id')->all());
     }
 
-    public function testLazyLoadingWithRoot()
+    public function testLazyLoadingWithRoot(): void
     {
         $siblings = User::find(1)->siblings;
 
         $this->assertEquals([11], $siblings->pluck('id')->all());
     }
 
-    public function testLazyLoadingAndSelf()
+    public function testLazyLoadingAndSelf(): void
     {
         $siblingsAndSelf = User::find(2)->siblingsAndSelf()->orderBy('id')->get();
 
         $this->assertEquals([2, 3, 4], $siblingsAndSelf->pluck('id')->all());
     }
 
-    public function testLazyLoadingAndSelfWithRoot()
+    public function testLazyLoadingAndSelfWithRoot(): void
     {
         $siblingsAndSelf = User::find(1)->siblingsAndSelf()->orderBy('id')->get();
 
         $this->assertEquals([1, 11], $siblingsAndSelf->pluck('id')->all());
     }
 
-    public function testLazyLoadingWithoutParentKey()
+    public function testLazyLoadingWithoutParentKey(): void
     {
         $siblings = (new User())->siblings;
 
         $this->assertEmpty($siblings);
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $users = User::with([
             'siblings' => fn (Siblings $query) => $query->orderBy('id'),
@@ -53,7 +53,7 @@ class SiblingsTest extends TestCase
         $this->assertEquals([3, 4], $users[1]->siblings->pluck('id')->all());
     }
 
-    public function testEagerLoadingAndSelf()
+    public function testEagerLoadingAndSelf(): void
     {
         $users = User::with([
             'siblingsAndSelf' => fn (Siblings $query) => $query->orderBy('id'),
@@ -63,7 +63,7 @@ class SiblingsTest extends TestCase
         $this->assertEquals([2, 3, 4], $users[1]->siblingsAndSelf->pluck('id')->all());
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $users = User::orderBy('id')->get()->load([
             'siblings' => fn (Siblings $query) => $query->orderBy('id'),
@@ -73,7 +73,7 @@ class SiblingsTest extends TestCase
         $this->assertEquals([3, 4], $users[1]->siblings->pluck('id')->all());
     }
 
-    public function testLazyEagerLoadingAndSelf()
+    public function testLazyEagerLoadingAndSelf(): void
     {
         $users = User::orderBy('id')->get()->load([
             'siblingsAndSelf' => fn (Siblings $query) => $query->orderBy('id'),
@@ -83,7 +83,7 @@ class SiblingsTest extends TestCase
         $this->assertEquals([2, 3, 4], $users[1]->siblingsAndSelf->pluck('id')->all());
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if ($this->connection === 'singlestore') {
             $this->markTestSkipped();
@@ -94,7 +94,7 @@ class SiblingsTest extends TestCase
         $this->assertEquals([2, 3, 4], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelf()
+    public function testExistenceQueryAndSelf(): void
     {
         if ($this->connection === 'singlestore') {
             $this->markTestSkipped();
@@ -105,14 +105,14 @@ class SiblingsTest extends TestCase
         $this->assertEquals([2, 3, 4], $descendants->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         $users = User::has('siblings')->orderBy('id')->get();
 
         $this->assertEquals([1, 2, 3, 4, 11], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelationAndSelf()
+    public function testExistenceQueryForSelfRelationAndSelf(): void
     {
         $users = User::whereHas(
             'siblingsAndSelf',

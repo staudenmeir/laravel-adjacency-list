@@ -10,7 +10,7 @@ use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\NodeWithCycleDetectionAn
 
 class DescendantsTest extends TestCase
 {
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $descendants = Node::find(2)->descendants()->orderBy('depth')->get();
 
@@ -69,7 +69,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([0, 0, 0, 1], $descendants->pluck('is_cycle')->all());
     }
 
-    public function testLazyLoadingAndSelf()
+    public function testLazyLoadingAndSelf(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -111,7 +111,7 @@ class DescendantsTest extends TestCase
         );
     }
 
-    public function testLazyLoadingAndSelfWithCycleDetection()
+    public function testLazyLoadingAndSelfWithCycleDetection(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -125,7 +125,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([0, 1, 2], $descendantsAndSelf->pluck('depth')->all());
     }
 
-    public function testLazyLoadingAndSelfWithCycleDetectionAndStart()
+    public function testLazyLoadingAndSelfWithCycleDetectionAndStart(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -140,7 +140,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([0, 0, 0, 1], $descendantsAndSelf->pluck('is_cycle')->all());
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $nodes = Node::with([
             'descendants' => fn (Descendants $query) => $query->orderBy('id')->orderBy('depth'),
@@ -207,7 +207,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([0, 0, 0, 1], $nodes[0]->descendants->pluck('is_cycle')->all());
     }
 
-    public function testEagerLoadingAndSelf()
+    public function testEagerLoadingAndSelf(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -254,7 +254,7 @@ class DescendantsTest extends TestCase
         );
     }
 
-    public function testEagerLoadingAndSelfWithCycleDetection()
+    public function testEagerLoadingAndSelfWithCycleDetection(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -268,7 +268,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([0, 1, 2], $nodes[0]->descendantsAndSelf->pluck('depth')->all());
     }
 
-    public function testEagerLoadingAndSelfWithCycleDetectionAndStart()
+    public function testEagerLoadingAndSelfWithCycleDetectionAndStart(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -283,7 +283,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([0, 0, 0, 1], $nodes[0]->descendantsAndSelf->pluck('is_cycle')->all());
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $nodes = Node::all()->load([
             'descendants' => fn (Descendants $query) => $query->orderBy('id')->orderBy('depth')
@@ -315,7 +315,7 @@ class DescendantsTest extends TestCase
         );
     }
 
-    public function testLazyEagerLoadingAndSelf()
+    public function testLazyEagerLoadingAndSelf(): void
     {
         if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -362,7 +362,7 @@ class DescendantsTest extends TestCase
         );
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -373,7 +373,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 10, 1, 9], $ancestors->pluck('id')->all());
     }
 
-    public function testExistenceQueryWithCycleDetection()
+    public function testExistenceQueryWithCycleDetection(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -386,7 +386,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([14, 13, 12], $ancestors->pluck('id')->all());
     }
 
-    public function testExistenceQueryWithCycleDetectionAndStart()
+    public function testExistenceQueryWithCycleDetectionAndStart(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -399,7 +399,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([14, 13, 12, 14], $ancestors->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelf()
+    public function testExistenceQueryAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -410,7 +410,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 10, 1, 9], $ancestors->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelfWithCycleDetection()
+    public function testExistenceQueryAndSelfWithCycleDetection(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -423,7 +423,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([14, 13, 12], $ancestors->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelfWithCycleDetectionAndStart()
+    public function testExistenceQueryAndSelfWithCycleDetectionAndStart(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -436,7 +436,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([14, 13, 12, 14], $ancestors->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
@@ -447,7 +447,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 3, 5, 7, 9, 10], $nodes->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelationAndSelf()
+    public function testExistenceQueryForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -458,7 +458,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 5, 9, 10], $nodes->pluck('id')->all());
     }
 
-    public function testWithSumForSelfRelation()
+    public function testWithSumForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
@@ -469,7 +469,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(5 + 7 + 8 + 9, $node->descendants_sum_pivot_weight);
     }
 
-    public function testWithSumForSelfRelationAndSelf()
+    public function testWithSumForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -480,7 +480,7 @@ class DescendantsTest extends TestCase
         $this->assertEquals(5 + 7 + 8 + 9, $node->descendants_and_self_sum_pivot_weight);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();

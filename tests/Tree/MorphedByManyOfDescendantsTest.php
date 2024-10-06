@@ -19,21 +19,21 @@ class MorphedByManyOfDescendantsTest extends TestCase
         }
     }
 
-    public function testLazyLoading()
+    public function testLazyLoading(): void
     {
         $videos = User::find(2)->videos;
 
         $this->assertEquals([53, 83], $videos->pluck('id')->all());
     }
 
-    public function testLazyLoadingAndSelf()
+    public function testLazyLoadingAndSelf(): void
     {
         $videos = User::find(2)->videosAndSelf;
 
         $this->assertEquals([23, 53, 83], $videos->pluck('id')->all());
     }
 
-    public function testEagerLoading()
+    public function testEagerLoading(): void
     {
         $users = User::with([
             'videos' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
@@ -46,7 +46,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->videos[0]);
     }
 
-    public function testEagerLoadingAndSelf()
+    public function testEagerLoadingAndSelf(): void
     {
         $users = User::with([
             'videosAndSelf' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
@@ -59,7 +59,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->videosAndSelf[0]);
     }
 
-    public function testLazyEagerLoading()
+    public function testLazyEagerLoading(): void
     {
         $users = User::orderBy('id')->get()->load([
             'videos' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
@@ -72,7 +72,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->videos[0]);
     }
 
-    public function testLazyEagerLoadingAndSelf()
+    public function testLazyEagerLoadingAndSelf(): void
     {
         $users = User::orderBy('id')->get()->load([
             'videosAndSelf' => fn (BelongsToManyOfDescendants $query) => $query->orderBy('id'),
@@ -85,7 +85,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertArrayNotHasKey('laravel_paths', $users[0]->videosAndSelf[0]);
     }
 
-    public function testExistenceQuery()
+    public function testExistenceQuery(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -96,7 +96,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertEquals([2, 1], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryAndSelf()
+    public function testExistenceQueryAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -107,7 +107,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertEquals([2, 1], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelation()
+    public function testExistenceQueryForSelfRelation(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
             $this->markTestSkipped();
@@ -118,7 +118,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertEquals([1, 2, 11], $users->pluck('id')->all());
     }
 
-    public function testExistenceQueryForSelfRelationAndSelf()
+    public function testExistenceQueryForSelfRelationAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
@@ -129,7 +129,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertEquals([1, 2], $users->pluck('id')->all());
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
@@ -142,7 +142,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertNull(Video::find(13)->deleted_at);
     }
 
-    public function testDeleteAndSelf()
+    public function testDeleteAndSelf(): void
     {
         if (in_array($this->connection, ['mariadb', 'firebird'])) {
             $this->markTestSkipped();
@@ -155,21 +155,21 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertNotNull(Video::withTrashed()->find(13)->deleted_at);
     }
 
-    public function testWithTrashedDescendants()
+    public function testWithTrashedDescendants(): void
     {
         $videos = User::find(4)->videos()->withTrashedDescendants()->get();
 
         $this->assertEquals([73, 93], $videos->pluck('id')->all());
     }
 
-    public function testWithIntermediateScope()
+    public function testWithIntermediateScope(): void
     {
         $videos = User::find(2)->videos()->withIntermediateScope('depth', new DepthScope())->get();
 
         $this->assertEquals([53], $videos->pluck('id')->all());
     }
 
-    public function testWithoutIntermediateScope()
+    public function testWithoutIntermediateScope(): void
     {
         $videos = User::find(2)->videos()
             ->withIntermediateScope('depth', new DepthScope())
@@ -179,14 +179,14 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertEquals([53, 83], $videos->pluck('id')->all());
     }
 
-    public function testWithoutIntermediateScopeWithObject()
+    public function testWithoutIntermediateScopeWithObject(): void
     {
         $videos = User::find(4)->videos()->withoutIntermediateScope(new SoftDeletingScope())->get();
 
         $this->assertEquals([73, 93], $videos->pluck('id')->all());
     }
 
-    public function testWithoutIntermediateScopes()
+    public function testWithoutIntermediateScopes(): void
     {
         $videos = User::find(2)->videos()
             ->withIntermediateScope('depth', new DepthScope())
@@ -196,14 +196,14 @@ class MorphedByManyOfDescendantsTest extends TestCase
         $this->assertEquals([53, 83], $videos->pluck('id')->all());
     }
 
-    public function testIntermediateScopes()
+    public function testIntermediateScopes(): void
     {
         $relationship = User::find(2)->videos()->withIntermediateScope('depth', new DepthScope());
 
         $this->assertArrayHasKey('depth', $relationship->intermediateScopes());
     }
 
-    public function testRemovedIntermediateScopes()
+    public function testRemovedIntermediateScopes(): void
     {
         $relationship = User::find(2)->videos()
             ->withIntermediateScope('depth', new DepthScope())
