@@ -57,7 +57,7 @@ class Collection extends Base
      *
      * @return static<int, TModel>
      */
-    public function loadTreePathRelations()
+    public function loadTreePathRelations(): self
     {
         $instance = $this->first();
 
