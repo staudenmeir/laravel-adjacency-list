@@ -176,6 +176,22 @@ $tree = User::tree(3)->get();
 $tree = User::treeOf($constraint, 3)->get();
 ```
 
+You can also chaperone tree relations to load parent/ancestor relations already present in the tree to (potentially) reduce 1+n queries:
+
+```php
+$tree = User::tree(3)->get();
+
+$tree->loadTreePathRelations();
+```
+
+Or via `toTree`:
+
+```php
+$users = User::tree(1)->get();
+
+$tree = $users->toTree()->loadTreePathRelations();
+```
+
 #### Filters
 
 The trait provides query scopes to filter models by their position in the tree:
