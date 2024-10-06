@@ -82,8 +82,7 @@ trait BuildsAdjacencyListQueries
         /** @var \Illuminate\Database\Connection $connection */
         $connection = $this->query->getConnection();
 
-        /** @var \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar */
-        $grammar = match ($connection->getDriverName()) {
+        return match ($connection->getDriverName()) {
             'mysql' => $this->getMySqlExpressionGrammar($connection),
             'mariadb' => $connection->withTablePrefix(
                 new MariaDbGrammar($this->model)
@@ -105,8 +104,6 @@ trait BuildsAdjacencyListQueries
             ),
             default => throw new RuntimeException('This database is not supported.'),
         };
-
-        return $grammar;
     }
 
     /**
