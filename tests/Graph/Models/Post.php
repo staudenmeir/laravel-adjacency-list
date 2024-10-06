@@ -9,9 +9,6 @@ use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
-/**
- * @property \Illuminate\Support\Carbon|null $deleted_at
- */
 class Post extends Model
 {
     use HasRelationships;

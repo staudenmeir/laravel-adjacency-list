@@ -35,7 +35,6 @@ class EloquentTest extends TestCase
 
     public function testChildren()
     {
-        /** @var \Illuminate\Support\Collection<Node> $children */
         $children = Node::find(1)->children;
 
         $this->assertEquals([2, 3, 4, 5], $children->pluck('id')->all());

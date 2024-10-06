@@ -12,13 +12,6 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Staudenmeir\EloquentHasManyDeep\HasTableAlias;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasGraphRelationships;
 
-/**
- * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @property-read \Illuminate\Database\Eloquent\Relations\Pivot $pivot
- * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Post|null $ancestorPost
- * @property-read \Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Post|null $descendantPost
- */
 class Node extends Model
 {
     use HasGraphRelationships {

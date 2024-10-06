@@ -12,17 +12,17 @@ use function PHPStan\Testing\assertType;
 function test(User $user): void
 {
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->ancestors()
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->ancestorsAndSelf()
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Bloodline<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->bloodline()
     );
 
@@ -32,17 +32,17 @@ function test(User $user): void
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->childrenAndSelf()
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->descendants()
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->descendantsAndSelf()
     );
 
@@ -52,27 +52,27 @@ function test(User $user): void
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Ancestors<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->parentAndSelf()
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestor<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->rootAncestor()
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestorOrSelf<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\RootAncestorOrSelf<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->rootAncestorOrSelf()
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->siblings()
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->siblingsAndSelf()
     );
     assertType(

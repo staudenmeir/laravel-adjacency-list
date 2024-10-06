@@ -153,7 +153,6 @@ class AncestorsTest extends TestCase
 
         $user = User::withSum('ancestors', 'followers')->find(8);
 
-        // @phpstan-ignore property.notFound
         $this->assertEquals(3, $user->ancestors_sum_followers);
     }
 
@@ -165,7 +164,6 @@ class AncestorsTest extends TestCase
 
         $user = User::withSum('ancestorsAndSelf', 'followers')->find(8);
 
-        // @phpstan-ignore property.notFound
         $this->assertEquals(4, $user->ancestors_and_self_sum_followers);
     }
 

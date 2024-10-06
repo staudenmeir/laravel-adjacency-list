@@ -295,7 +295,6 @@ class EloquentTest extends TestCase
 
     public function testLazyLoadingWithMultipleScopes()
     {
-        /** @var User $user */
         $user = User::find(8);
 
         $ancestorsAndSelf = $user->ancestorAndSelfWithMultipleScopes()->get();
@@ -305,7 +304,6 @@ class EloquentTest extends TestCase
 
     public function testEagerLoadingWithMultipleScopes()
     {
-        /** @var User $user */
         $user = User::find(8);
 
         $ancestorsAndSelf = $user->ancestorAndSelfWithMultipleScopes;

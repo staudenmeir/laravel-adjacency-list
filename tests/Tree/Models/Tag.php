@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
-/**
- * @property \Illuminate\Support\Carbon|null $deleted_at
- */
 class Tag extends Model
 {
     use QueriesExpressions;

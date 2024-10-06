@@ -466,7 +466,6 @@ class DescendantsTest extends TestCase
 
         $node = Node::withSum('descendants', 'pivot_weight')->find(2);
 
-        // @phpstan-ignore property.notFound
         $this->assertEquals(5 + 7 + 8 + 9, $node->descendants_sum_pivot_weight);
     }
 
@@ -478,7 +477,6 @@ class DescendantsTest extends TestCase
 
         $node = Node::withSum('descendantsAndSelf', 'pivot_weight')->find(2);
 
-        // @phpstan-ignore property.notFound
         $this->assertEquals(5 + 7 + 8 + 9, $node->descendants_and_self_sum_pivot_weight);
     }
 

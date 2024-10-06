@@ -14,7 +14,6 @@ class IdeHelperServiceProviderTest extends TestCase
         $this->app->loadDeferredProvider(BarryvdhIdeHelperServiceProvider::class);
         $this->app->loadDeferredProvider(IdeHelperServiceProvider::class);
 
-        /** @var \Illuminate\Contracts\Config\Repository $config */
         $config = $this->app->get('config');
 
         $this->assertContains(
