@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
+use Illuminate\Support\Facades\DB;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class CollectionTest extends TestCase
@@ -35,6 +36,53 @@ class CollectionTest extends TestCase
         $users = User::tree(1)->where('id', 0)->get();
 
         $tree = $users->toTree();
+
+        $this->assertEmpty($tree);
+    }
+
+    public function testLoadTreePathRelations(): void
+    {
+        DB::enableQueryLog();
+
+        $tree = User::tree()->get()->loadTreePathRelations();
+
+        $this->assertCount(1, DB::getQueryLog());
+
+        foreach ($tree as $user) {
+            $this->assertTrue($user->relationLoaded('ancestors'));
+            $this->assertTrue($user->relationLoaded('ancestorsAndSelf'));
+            $this->assertTrue($user->relationLoaded('parent'));
+
+            $this->assertEquals($user->ancestors()->orderByDesc('depth')->pluck('id')->all(), $user->ancestors->pluck('id')->all());
+            $this->assertEquals($user->ancestorsAndSelf()->orderByDesc('depth')->pluck('id')->all(), $user->ancestorsAndSelf->pluck('id')->all());
+            $this->assertEquals($user->parent()->first()?->id, $user->parent?->id);
+        }
+    }
+
+    public function testLoadTreePathRelationsWithMissingModels(): void
+    {
+        DB::enableQueryLog();
+
+        $tree = User::tree()->where('id', '>', 5)->get()->loadTreePathRelations();
+
+        $this->assertCount(2, DB::getQueryLog());
+
+        foreach ($tree as $user) {
+            $this->assertTrue($user->relationLoaded('ancestors'));
+            $this->assertTrue($user->relationLoaded('ancestorsAndSelf'));
+            $this->assertTrue($user->relationLoaded('parent'));
+
+            $this->assertEquals($user->ancestors()->orderByDesc('depth')->pluck('id')->all(), $user->ancestors->pluck('id')->all());
+            $this->assertEquals($user->ancestorsAndSelf()->orderByDesc('depth')->pluck('id')->all(), $user->ancestorsAndSelf->pluck('id')->all());
+            $this->assertEquals($user->parent()->first()?->id, $user->parent?->id);
+        }
+    }
+
+    public function testLoadTreePathRelationsWithEmptyCollection(): void
+    {
+        $users = User::tree(1)->where('id', 0)->get();
+
+        $tree = $users->toTree()->loadTreePathRelations();
 
         $this->assertEmpty($tree);
     }
