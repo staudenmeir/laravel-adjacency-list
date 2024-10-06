@@ -237,7 +237,7 @@ class User extends Model
     {
         return Attribute::get(
             fn (): string => (string) $this->ancestorsAndSelf
-                ->reduce(function ($carry, $user) {
+                ->reduce(function (?string $carry, self $user): ?string {
                     return $carry ? "{$carry} < {$user->slug}" : $user->slug;
                 }),
         );
