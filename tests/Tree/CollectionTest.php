@@ -53,8 +53,8 @@ class CollectionTest extends TestCase
             $this->assertTrue($user->relationLoaded('ancestorsAndSelf'));
             $this->assertTrue($user->relationLoaded('parent'));
 
-            $this->assertEquals($user->ancestors()->pluck('id')->all(), $user->ancestors->pluck('id')->all());
-            $this->assertEquals($user->ancestorsAndSelf()->pluck('id')->all(), $user->ancestorsAndSelf->pluck('id')->all());
+            $this->assertEquals($user->ancestors()->orderByDesc('depth')->pluck('id')->all(), $user->ancestors->pluck('id')->all());
+            $this->assertEquals($user->ancestorsAndSelf()->orderByDesc('depth')->pluck('id')->all(), $user->ancestorsAndSelf->pluck('id')->all());
             $this->assertEquals($user->parent()->first()?->id, $user->parent?->id);
         }
     }
@@ -72,8 +72,8 @@ class CollectionTest extends TestCase
             $this->assertTrue($user->relationLoaded('ancestorsAndSelf'));
             $this->assertTrue($user->relationLoaded('parent'));
 
-            $this->assertEquals($user->ancestors()->pluck('id')->all(), $user->ancestors->pluck('id')->all());
-            $this->assertEquals($user->ancestorsAndSelf()->pluck('id')->all(), $user->ancestorsAndSelf->pluck('id')->all());
+            $this->assertEquals($user->ancestors()->orderByDesc('depth')->pluck('id')->all(), $user->ancestors->pluck('id')->all());
+            $this->assertEquals($user->ancestorsAndSelf()->orderByDesc('depth')->pluck('id')->all(), $user->ancestorsAndSelf->pluck('id')->all());
             $this->assertEquals($user->parent()->first()?->id, $user->parent?->id);
         }
     }
