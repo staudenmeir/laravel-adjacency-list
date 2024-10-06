@@ -87,7 +87,9 @@ class Collection extends Base
         $missing = $keys->diff($lookup->modelKeys());
 
         if ($missing->isNotEmpty()) {
-            $lookup->merge($instance->newQuery()->findMany($missing)->keyBy($keyName));
+            $lookup = $lookup->union(
+                $instance->newQuery()->findMany($missing)->keyBy($keyName)
+            );
         }
 
         foreach ($this->all() as $model) {
