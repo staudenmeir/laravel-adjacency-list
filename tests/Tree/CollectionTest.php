@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
+use Illuminate\Support\Facades\DB;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 
 class CollectionTest extends TestCase
@@ -39,51 +40,50 @@ class CollectionTest extends TestCase
         $this->assertEmpty($tree);
     }
 
-    public function testLoadTreePathRelations()
+    public function testLoadTreePathRelations(): void
     {
- $totalUsers = User::count();
+        DB::enableQueryLog();
 
-        $loaded = 0;
+        $tree = User::tree()->get()->loadTreePathRelations();
 
-        User::retrieved(function () use (&$loaded) {
-            $loaded++;
-        });
+        $this->assertCount(1, DB::getQueryLog());
 
-        $tree = User::query()
-            ->tree()
-            ->get()
-            ->loadTreePathRelations()
-            ->each(fn (User $treeUser) => $treeUser->setAppends(['display_path', 'reverse_display_path']))
-            ->toTree()
-            ->sortBy('id')
-            ->values();
+        foreach ($tree as $user) {
+            $this->assertTrue($user->relationLoaded('ancestors'));
+            $this->assertTrue($user->relationLoaded('ancestorsAndSelf'));
+            $this->assertTrue($user->relationLoaded('parent'));
 
-        self::assertSame($totalUsers, $loaded);
+            $this->assertEquals($user->ancestors()->pluck('id')->all(), $user->ancestors->pluck('id')->all());
+            $this->assertEquals($user->ancestorsAndSelf()->pluck('id')->all(), $user->ancestorsAndSelf->pluck('id')->all());
+            $this->assertEquals($user->parent()->first()?->id, $user->parent?->id);
+        }
+    }
 
-        $tree->each(function (User $treeUser): void {
-            self::assertSame($treeUser->ancestorsAndSelf->count(), $treeUser->ancestors->count() + 1);
+    public function testLoadTreePathRelationsWithMissingModels(): void
+    {
+        DB::enableQueryLog();
 
-            $treeUser->children->each(function (User $childUser): void {
-                $childUser->ancestors->each(function (User $ancestor): void {
-                    self::assertGreaterThanOrEqual(1, $ancestor->children->count());
-                });
+        $tree = User::tree()->where('id', '>', 5)->get()->loadTreePathRelations();
 
-                self::assertSame($childUser->ancestorsAndSelf->count(), $childUser->ancestors->count() + 1);
-            });
-        });
+        $this->assertCount(2, DB::getQueryLog());
 
-        self::assertSame($totalUsers, $loaded);
+        foreach ($tree as $user) {
+            $this->assertTrue($user->relationLoaded('ancestors'));
+            $this->assertTrue($user->relationLoaded('ancestorsAndSelf'));
+            $this->assertTrue($user->relationLoaded('parent'));
 
-        self::assertSame('user-1', $tree[0]->display_path);
-        self::assertSame('user-11', $tree[1]->display_path);
+            $this->assertEquals($user->ancestors()->pluck('id')->all(), $user->ancestors->pluck('id')->all());
+            $this->assertEquals($user->ancestorsAndSelf()->pluck('id')->all(), $user->ancestorsAndSelf->pluck('id')->all());
+            $this->assertEquals($user->parent()->first()?->id, $user->parent?->id);
+        }
+    }
 
-        $children = $tree[0]->children->sortBy('id')->values();
-        self::assertSame('user-1 > user-2', $children[0]->display_path);
-        self::assertSame('user-1 > user-3', $children[1]->display_path);
-        self::assertSame('user-1 > user-4', $children[2]->display_path);
+    public function testLoadTreePathRelationsWithEmptyCollection(): void
+    {
+        $users = User::tree(1)->where('id', 0)->get();
 
-        self::assertSame('user-1 > user-2 > user-5', $children[0]->children[0]->display_path);
-        self::assertSame('user-1 > user-2 > user-5 > user-8', $children[0]->children[0]->children[0]->display_path);
-        self::assertSame('user-11 > user-12', $tree[1]->children[0]->display_path);
+        $tree = $users->toTree()->loadTreePathRelations();
+
+        $this->assertEmpty($tree);
     }
 }

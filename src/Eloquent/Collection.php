@@ -3,7 +3,6 @@
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent;
 
 use Illuminate\Database\Eloquent\Collection as Base;
-use RuntimeException;
 
 /**
  * @template TKey of array-key
@@ -53,57 +52,57 @@ class Collection extends Base
     }
 
     /**
-     * Load parent/anscestor relations already present in the tree.
+     * Load parent/ancestor relations already present in the tree.
      *
-     * @return static<int, TModel>
+     * @return static
      */
-    public function loadTreePathRelations(): self
+    public function loadTreePathRelations(): static
     {
-        $instance = $this->first();
-
-        if (is_null($instance)) {
+        if ($this->isEmpty()) {
             return $this;
         }
 
-        if (! method_exists($instance, 'getPathName') || ! method_exists($instance, 'getPathSeparator')) {
-            throw new RuntimeException(sprintf(
-                'Model [%s] does not have recursive relations.',
-                $instance::class,
-            ));
-        }
+        /** @var TModel $instance */
+        $instance = $this->first();
 
-        $keyName       = $instance->getKeyName();
-        $pathName      = $instance->getPathName();
+        $keyName = $instance->getKeyName();
+        $pathName = $instance->getPathName();
         $pathSeparator = $instance->getPathSeparator();
 
+        /** @var static<TKey, TModel> $lookup */
         $lookup = $this->keyBy($keyName);
 
-        $keys = $this
-            ->pluck($pathName)
-            ->flatMap(fn (string $path): array => explode($pathSeparator, $path))
-            ->unique()
+        /** @var \Illuminate\Support\Collection<int, string> $paths */
+        $paths = $this->pluck($pathName);
+
+        $keys = $paths
+            ->flatMap(
+                fn (string $path): array => explode($pathSeparator, $path)
+            )->unique()
             ->values();
 
-        $missing = $keys->diff($lookup->modelKeys());
+        $missing = $keys->diff(
+            $lookup->modelKeys()
+        );
 
-        if ($missing->isNotEmpty()) {
-            $lookup = $lookup->union(
-                $instance->newQuery()->findMany($missing)->keyBy($keyName)
+        $lookup = $lookup->union(
+            $instance->newQuery()->findMany($missing)->keyBy($keyName)
+        );
+
+        foreach ($this as $model) {
+            $pathSegments = array_reverse(
+                explode($pathSeparator, $model->$pathName)
             );
-        }
-
-        foreach ($this->all() as $model) {
-            $path = array_reverse(explode($pathSeparator, $model->getAttribute($pathName)));
 
             $ancestorsAndSelf = array_reduce(
-                $path,
-                fn ($collection, $step) => $collection->push($lookup[$step] ?? null),
+                $pathSegments,
+                fn ($collection, string $key) => $collection->push($lookup[$key]),
                 $instance->newCollection(),
             );
 
-            $model->setRelation('parent', count($path) > 1 ? $lookup[$path[1]] : null);
-            $model->setRelation('ancestorsAndSelf', $ancestorsAndSelf);
             $model->setRelation('ancestors', $ancestorsAndSelf->slice(1));
+            $model->setRelation('ancestorsAndSelf', $ancestorsAndSelf);
+            $model->setRelation('parent', count($pathSegments) > 1 ? $lookup[$pathSegments[1]] : null);
         }
 
         return $this;

@@ -2,7 +2,6 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
@@ -154,32 +153,5 @@ class User extends Model
     public function videosAndSelf(): MorphToManyOfDescendants
     {
         return $this->morphedByManyOfDescendantsAndSelf(Video::class, 'authorable');
-    }
-
-    /**
-     * @return Attribute<string,never>
-     */
-    protected function displayPath(): Attribute
-    {
-        return Attribute::get(
-            fn (): string => (string) $this->ancestorsAndSelf
-                ->reverse()
-                ->reduce(function (?string $carry, self $user): ?string {
-                    return $carry ? "{$carry} > {$user->slug}" : $user->slug;
-                }),
-        );
-    }
-
-    /**
-     * @return Attribute<string,never>
-     */
-    protected function reverseDisplayPath(): Attribute
-    {
-        return Attribute::get(
-            fn (): string => (string) $this->ancestorsAndSelf
-                ->reduce(function (?string $carry, self $user): ?string {
-                    return $carry ? "{$carry} < {$user->slug}" : $user->slug;
-                }),
-        );
     }
 }
