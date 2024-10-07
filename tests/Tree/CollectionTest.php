@@ -44,11 +44,11 @@ class CollectionTest extends TestCase
     {
         DB::enableQueryLog();
 
-        $tree = User::tree()->get()->loadTreePathRelations();
+        $users = User::tree()->get()->loadTreePathRelations();
 
         $this->assertCount(1, DB::getQueryLog());
 
-        foreach ($tree as $user) {
+        foreach ($users as $user) {
             $this->assertTrue($user->relationLoaded('ancestors'));
             $this->assertTrue($user->relationLoaded('ancestorsAndSelf'));
             $this->assertTrue($user->relationLoaded('parent'));
@@ -63,11 +63,11 @@ class CollectionTest extends TestCase
     {
         DB::enableQueryLog();
 
-        $tree = User::tree()->where('id', '>', 5)->get()->loadTreePathRelations();
+        $users = User::tree()->where('id', '>', 5)->get()->loadTreePathRelations();
 
         $this->assertCount(2, DB::getQueryLog());
 
-        foreach ($tree as $user) {
+        foreach ($users as $user) {
             $this->assertTrue($user->relationLoaded('ancestors'));
             $this->assertTrue($user->relationLoaded('ancestorsAndSelf'));
             $this->assertTrue($user->relationLoaded('parent'));
@@ -80,10 +80,8 @@ class CollectionTest extends TestCase
 
     public function testLoadTreePathRelationsWithEmptyCollection(): void
     {
-        $users = User::tree(1)->where('id', 0)->get();
+        $users = User::tree(1)->where('id', 0)->get()->loadTreePathRelations();
 
-        $tree = $users->toTree()->loadTreePathRelations();
-
-        $this->assertEmpty($tree);
+        $this->assertEmpty($users);
     }
 }
