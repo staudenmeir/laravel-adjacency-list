@@ -7,4 +7,5 @@
 docker-compose.ci.yml   export-ignore
 docker-compose.yml      export-ignore
 phpstan.neon.dist       export-ignore
+phpstan.types.neon.dist export-ignore
 phpunit.xml.dist        export-ignore
