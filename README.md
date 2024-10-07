@@ -189,7 +189,7 @@ Or via `toTree`:
 ```php
 $users = User::tree(1)->get();
 
-$tree = $users->toTree()->loadTreePathRelations();
+$tree = $users->loadTreePathRelations()->toTree();
 ```
 
 #### Filters
