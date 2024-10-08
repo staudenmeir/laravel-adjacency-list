@@ -16,7 +16,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
-        "harrygulliford/laravel-firebird": "dev-laravel-11.x",
+        "harrygulliford/laravel-firebird": "^3.3",
         "larastan/larastan": "^2.0",
         "mockery/mockery": "^1.5.1",
         "orchestra/testbench": "^9.0",
