@@ -17,7 +17,7 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
         "harrygulliford/laravel-firebird": "^3.3",
-        "larastan/larastan": "^2.0",
+        "larastan/larastan": "2.9.8",
         "mockery/mockery": "^1.5.1",
         "orchestra/testbench": "^9.0",
         "phpunit/phpunit": "^11.0",
