@@ -40,11 +40,11 @@ class CollectionTest extends TestCase
         $this->assertEmpty($tree);
     }
 
-    public function testLoadTreePathRelations(): void
+    public function testLoadTreeRelationships(): void
     {
         DB::enableQueryLog();
 
-        $users = User::tree()->get()->loadTreePathRelations();
+        $users = User::tree()->get()->loadTreeRelationships();
 
         $this->assertCount(1, DB::getQueryLog());
 
@@ -59,11 +59,11 @@ class CollectionTest extends TestCase
         }
     }
 
-    public function testLoadTreePathRelationsWithMissingModels(): void
+    public function testLoadTreeRelationshipsWithMissingModels(): void
     {
         DB::enableQueryLog();
 
-        $users = User::tree()->where('id', '>', 5)->get()->loadTreePathRelations();
+        $users = User::tree()->where('id', '>', 5)->get()->loadTreeRelationships();
 
         $this->assertCount(2, DB::getQueryLog());
 
@@ -78,9 +78,9 @@ class CollectionTest extends TestCase
         }
     }
 
-    public function testLoadTreePathRelationsWithEmptyCollection(): void
+    public function testLoadTreeRelationshipsWithEmptyCollection(): void
     {
-        $users = User::tree(1)->where('id', 0)->get()->loadTreePathRelations();
+        $users = User::tree(1)->where('id', 0)->get()->loadTreeRelationships();
 
         $this->assertEmpty($users);
     }

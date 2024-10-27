@@ -176,20 +176,21 @@ $tree = User::tree(3)->get();
 $tree = User::treeOf($constraint, 3)->get();
 ```
 
-You can also chaperone tree relations to load parent/ancestor relations already present in the tree to (potentially) reduce 1+n queries:
+You can also chaperone tree relationships to load `ancestors` and `parent` relationships already present in the tree to
+(potentially) reduce N+1 queries:
 
 ```php
-$tree = User::tree(3)->get();
+$users = User::tree(3)->get();
 
-$tree->loadTreePathRelations();
+$users->loadTreeRelationships();
 ```
 
-Or via `toTree`:
+Or with `toTree()`:
 
 ```php
 $users = User::tree(1)->get();
 
-$tree = $users->loadTreePathRelations()->toTree();
+$tree = $users->loadTreeRelationships()->toTree();
 ```
 
 #### Filters

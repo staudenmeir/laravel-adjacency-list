@@ -52,11 +52,11 @@ class Collection extends Base
     }
 
     /**
-     * Load parent/ancestor relations already present in the tree.
+     * Load ancestor and parent relationships already present in the tree.
      *
      * @return static
      */
-    public function loadTreePathRelations(): static
+    public function loadTreeRelationships(): static
     {
         if ($this->isEmpty()) {
             return $this;
