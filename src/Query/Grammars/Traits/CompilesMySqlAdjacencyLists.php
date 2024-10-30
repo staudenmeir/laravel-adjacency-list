@@ -106,7 +106,7 @@ SQL;
         }
 
         $cast = match ($typeName) {
-            'bigint', 'boolean', 'integer', 'smallint', 'tinyint' => 'signed',
+            'bigint', 'boolean', 'integer', 'int', 'smallint', 'tinyint' => 'signed',
             'decimal' => "decimal($precision, $scale)",
             'timestamp' => 'datetime',
             'varchar' => 'char(65535)',
