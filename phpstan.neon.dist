@@ -2,7 +2,10 @@ parameters:
     level: 9
     paths:
         - src
+    treatPhpDocTypesAsCertain: false
     ignoreErrors:
+        -
+            identifier: trait.unused
         - '#Unsafe usage of new static\(\).#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$laravel_through_key#'
         - '#Call to an undefined method TRelatedModel of Illuminate\\Database\\Eloquent\\Model#'
