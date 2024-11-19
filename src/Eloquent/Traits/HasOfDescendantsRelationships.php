@@ -71,13 +71,13 @@ trait HasOfDescendantsRelationships
      * Instantiate a new HasManyOfDescendants relationship.
      *
      * @template TRelatedModel of Model
-     *
+     * @template TDeclaringModel of $this
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
      * @param TRelatedModel $parent
      * @param string $foreignKey
      * @param string $localKey
      * @param bool $andSelf
-     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants<TRelatedModel>
+     * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants<TRelatedModel,TDeclaringModel>
      */
     protected function newHasManyOfDescendants(Builder $query, Model $parent, $foreignKey, $localKey, $andSelf)
     {
