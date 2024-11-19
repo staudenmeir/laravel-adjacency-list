@@ -56,7 +56,7 @@ trait BuildsAdjacencyListQueries
     /**
      * Replace the separator in a PostgreSQL path column.
      *
-     * @param list<object> $items
+     * @param array<int, object> $items
      * @param string $path
      * @param string $separator
      * @return void

@@ -4,6 +4,9 @@ namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasRecursiveRelationshipHelpers
 {
     /**

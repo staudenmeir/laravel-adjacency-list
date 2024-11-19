@@ -70,7 +70,7 @@ trait IsConcatenableDescendantsRelation
      * Build the model dictionary for a deep relation.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<int|string, list<\Illuminate\Database\Eloquent\Model>>
+     * @return array<int|string, array<int, \Illuminate\Database\Eloquent\Model>>
      */
     protected function buildDictionaryForDeepRelationship(Collection $results): array
     {

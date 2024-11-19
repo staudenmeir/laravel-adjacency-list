@@ -87,7 +87,7 @@ trait IsOfDescendantsRelation
      * Set the where clause on the recursive expression query for an eager load of the relation.
      *
      * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
-     * @param list<TDeclaringModel> $models
+     * @param array<int, TDeclaringModel> $models
      * @return void
      */
     public function addEagerExpressionWhereConstraints(Builder $query, array $models)

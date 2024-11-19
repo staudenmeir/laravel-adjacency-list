@@ -27,7 +27,7 @@ function test(User $user): void
     );
 
     assertType(
-        'Illuminate\Database\Eloquent\Relations\HasMany<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
+        'Illuminate\Database\Eloquent\Relations\HasMany<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->children()
     );
 
@@ -75,33 +75,34 @@ function test(User $user): void
         'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->siblingsAndSelf()
     );
+
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Role>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Role, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->belongsToManyOfDescendants(Role::class)
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Role>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\BelongsToManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Role, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->belongsToManyOfDescendantsAndSelf(Role::class)
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Post>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Post, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->hasManyOfDescendantsAndSelf(Post::class)
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Post>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\HasManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Post, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->hasManyOfDescendantsAndSelf(Post::class)
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Tag>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Tag, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->morphToManyOfDescendants(Tag::class, 'taggable')
     );
 
     assertType(
-        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Tag>',
+        'Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\MorphToManyOfDescendants<Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\Tag, Staudenmeir\LaravelAdjacencyList\Types\Tree\Models\User>',
         $user->morphToManyOfDescendantsAndSelf(Tag::class, 'taggable')
     );
 }

@@ -9,7 +9,7 @@ interface ExpressionGrammar
     /**
      * Compile an initial path.
      *
-     * @param string $column
+     * @param string|\Illuminate\Contracts\Database\Query\Expression $column
      * @param string $alias
      * @return string
      */
@@ -18,7 +18,7 @@ interface ExpressionGrammar
     /**
      * Compile a recursive path.
      *
-     * @param string $column
+     * @param string|\Illuminate\Contracts\Database\Query\Expression $column
      * @param string $alias
      * @param bool $reverse
      * @return string

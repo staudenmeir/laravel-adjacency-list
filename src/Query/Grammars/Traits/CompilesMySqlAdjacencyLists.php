@@ -15,14 +15,7 @@ trait CompilesMySqlAdjacencyLists
         return 'cast(' . $this->wrap($column) . ' as char(65535)) as ' . $this->wrap($alias);
     }
 
-    /**
-     * Compile a recursive path.
-     *
-     * @param string $column
-     * @param string $alias
-     * @param bool $reverse
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileRecursivePath($column, $alias, bool $reverse = false)
     {
         $wrappedColumn = $this->wrap($column);

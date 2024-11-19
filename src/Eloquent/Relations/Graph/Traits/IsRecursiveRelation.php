@@ -51,7 +51,7 @@ trait IsRecursiveRelation
     /**
      * Add the recursive expression for an eager load of the relation.
      *
-     * @param list<TDeclaringModel> $models
+     * @param array<int, TDeclaringModel> $models
      * @param string $column
      * @return void
      */
@@ -80,7 +80,7 @@ trait IsRecursiveRelation
      * Build model dictionary.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, \Illuminate\Database\Eloquent\Model> $results
-     * @return array<int|string, list<\Illuminate\Database\Eloquent\Model>>
+     * @return array<int|string, array<int, \Illuminate\Database\Eloquent\Model>>
      */
     protected function buildDictionary(Collection $results)
     {

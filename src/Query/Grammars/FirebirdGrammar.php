@@ -10,11 +10,13 @@ class FirebirdGrammar extends Base implements ExpressionGrammar
 {
     use OrdersByPath;
 
+    /** @inheritDoc */
     public function compileInitialPath($column, $alias)
     {
         return 'cast(' . $this->wrap($column) . ' as varchar(8191)) as ' . $this->wrap($alias);
     }
 
+    /** @inheritDoc */
     public function compileRecursivePath($column, $alias, bool $reverse = false)
     {
         $wrappedColumn = $this->wrap($column);

@@ -18,6 +18,8 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants;
  * @property-read Collection<int, static> $descendantsAndSelf
  * @property-read Collection<int, static> $parents
  * @property-read Collection<int, static> $parentsAndSelf
+ *
+ * @phpstan-ignore trait.unused
  */
 trait HasGraphAdjacencyList
 {

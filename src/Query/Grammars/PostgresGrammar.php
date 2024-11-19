@@ -9,13 +9,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
 {
     use OrdersByPath;
 
-    /**
-     * Compile an initial path.
-     *
-     * @param string $column
-     * @param string $alias
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileInitialPath($column, $alias)
     {
         if (is_string($column) && $this->model->isIntegerAttribute($column)) {
@@ -25,14 +19,7 @@ class PostgresGrammar extends Base implements ExpressionGrammar
         return 'array[('.$this->wrap($column)." || '')::varchar] as ".$this->wrap($alias);
     }
 
-    /**
-     * Compile a recursive path.
-     *
-     * @param string $column
-     * @param string $alias
-     * @param bool $reverse
-     * @return string
-     */
+    /** @inheritDoc */
     public function compileRecursivePath($column, $alias, bool $reverse = false)
     {
         $wrappedColumn = $this->wrap($column);
