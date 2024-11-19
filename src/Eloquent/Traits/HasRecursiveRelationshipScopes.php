@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasRecursiveRelationshipScopes
 {
     /**

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasGraphRelationshipScopes
 {
     /**

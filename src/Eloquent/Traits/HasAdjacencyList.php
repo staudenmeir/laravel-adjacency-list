@@ -26,6 +26,8 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings;
  * @property-read static $rootAncestorOrSelf
  * @property-read Collection<int, static> $siblings
  * @property-read Collection<int, static> $siblingsAndSelf
+ *
+ * @phpstan-ignore trait.unused
  */
 trait HasAdjacencyList
 {

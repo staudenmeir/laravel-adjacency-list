@@ -41,7 +41,7 @@ trait IsRecursiveRelation
      * Build model dictionary.
      *
      * @param \Illuminate\Database\Eloquent\Collection<array-key, TRelatedModel> $results
-     * @return array<int|string, list<TRelatedModel>>
+     * @return array<int|string, array<int, TRelatedModel>>
      */
     protected function buildDictionary(Collection $results)
     {

@@ -2,6 +2,9 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasQueryConstraints
 {
     /**
