@@ -128,6 +128,7 @@ class RecursiveRelationsHook implements ModelHookInterface
     public function run(ModelsCommand $command, Model $model): void
     {
         $traits = class_uses_recursive($model);
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible same usage as in ide-helper
         $useGenericsSyntax = $command->getLaravel()['config']->get('ide-helper.use_generics_annotations', true);
 
         if (in_array(HasRecursiveRelationships::class, $traits)) {
@@ -167,6 +168,7 @@ class RecursiveRelationsHook implements ModelHookInterface
             !$relationship['manyRelation']
         );
 
+        // @phpstan-ignore offsetAccess.nonOffsetAccessible same usage as in ide-helper
         $addCountProperties = $command->getLaravel()['config']->get('ide-helper.write_model_relation_count_properties', true);
 
         if ($relationship['manyRelation'] && $addCountProperties) {
