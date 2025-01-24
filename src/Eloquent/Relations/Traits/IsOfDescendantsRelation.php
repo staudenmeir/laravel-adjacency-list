@@ -380,7 +380,7 @@ trait IsOfDescendantsRelation
      *
      * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel> $query
      * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TDeclaringModel> $parentQuery
-     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>>|string|\Illuminate\Database\Query\Expression<*> $columns
      * @return \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<TRelatedModel>
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
