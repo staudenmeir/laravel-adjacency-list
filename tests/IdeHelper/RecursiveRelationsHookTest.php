@@ -16,11 +16,15 @@ class RecursiveRelationsHookTest extends TestCase
 
     public function testTreeRelations(): void
     {
+        $config = Mockery::mock();
+        $config->shouldReceive('get')->andReturn(true);
+
         $command = Mockery::mock(ModelsCommand::class);
+        $command->shouldReceive('getLaravel')->andReturn(['config' => $config]);
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',
-            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Collection|\Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper\Models\User[]',
+            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Collection<int, \Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper\Models\User>',
             true,
             false,
             "The model's recursive parents and itself.",
@@ -51,11 +55,15 @@ class RecursiveRelationsHookTest extends TestCase
 
     public function testGraphRelations(): void
     {
+        $config = Mockery::mock();
+        $config->shouldReceive('get')->andReturn(true);
+
         $command = Mockery::mock(ModelsCommand::class);
+        $command->shouldReceive('getLaravel')->andReturn(['config' => $config]);
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',
-            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection|\Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper\Models\Node[]',
+            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection<int, \Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper\Models\Node>',
             true,
             false,
             "The node's recursive parents and itself.",

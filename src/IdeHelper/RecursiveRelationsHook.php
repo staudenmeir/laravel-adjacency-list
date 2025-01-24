@@ -128,11 +128,14 @@ class RecursiveRelationsHook implements ModelHookInterface
     public function run(ModelsCommand $command, Model $model): void
     {
         $traits = class_uses_recursive($model);
+        $useGenericsSyntax = $command->getLaravel()['config']->get('ide-helper.use_generics_annotations', true);
 
         if (in_array(HasRecursiveRelationships::class, $traits)) {
             foreach (static::$treeRelationships as $relationship) {
                 $type = $relationship['manyRelation']
-                    ? '\\' . TreeCollection::class . '|\\' . $model::class . '[]'
+                    ? ($useGenericsSyntax
+                        ? '\\' . TreeCollection::class . '<int, \\' . $model::class . '>'
+                        : '\\' . TreeCollection::class . '|\\' . $model::class . '[]')
                     : '\\' . $model::class;
 
                 $this->addRelationship($command, $relationship, $type);
@@ -141,7 +144,9 @@ class RecursiveRelationsHook implements ModelHookInterface
 
         if (in_array(HasGraphRelationships::class, $traits)) {
             foreach (static::$graphRelationships as $relationship) {
-                $type = '\\' . GraphCollection::class . '|\\' . $model::class . '[]';
+                $type = $useGenericsSyntax
+                    ? '\\' . GraphCollection::class . '<int, \\' . $model::class . '>'
+                    : '\\' . GraphCollection::class . '|\\' . $model::class . '[]';
 
                 $this->addRelationship($command, $relationship, $type);
             }
@@ -162,7 +167,9 @@ class RecursiveRelationsHook implements ModelHookInterface
             !$relationship['manyRelation']
         );
 
-        if ($relationship['manyRelation']) {
+        $addCountProperties = $command->getLaravel()['config']->get('ide-helper.write_model_relation_count_properties', true);
+
+        if ($relationship['manyRelation'] && $addCountProperties) {
             $command->setProperty(
                 Str::snake($relationship['name']) . '_count',
                 'int',
