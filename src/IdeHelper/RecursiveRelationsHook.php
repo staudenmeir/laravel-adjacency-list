@@ -127,9 +127,12 @@ class RecursiveRelationsHook implements ModelHookInterface
 
     public function run(ModelsCommand $command, Model $model): void
     {
+        /** @var \Illuminate\Config\Repository $config */
+        $config = $command->getLaravel()->make('config');
+
         $traits = class_uses_recursive($model);
-        // @phpstan-ignore offsetAccess.nonOffsetAccessible
-        $useGenericsSyntax = $command->getLaravel()['config']->get('ide-helper.use_generics_annotations', true);
+
+        $useGenericsSyntax = $config->get('ide-helper.use_generics_annotations', true);
 
         if (in_array(HasRecursiveRelationships::class, $traits)) {
             foreach (static::$treeRelationships as $relationship) {
@@ -159,6 +162,9 @@ class RecursiveRelationsHook implements ModelHookInterface
      */
     protected function addRelationship(ModelsCommand $command, array $relationship, string $type): void
     {
+        /** @var \Illuminate\Config\Repository $config */
+        $config = $command->getLaravel()->make('config');
+
         $command->setProperty(
             $relationship['name'],
             $type,
@@ -168,8 +174,7 @@ class RecursiveRelationsHook implements ModelHookInterface
             !$relationship['manyRelation']
         );
 
-        // @phpstan-ignore offsetAccess.nonOffsetAccessible
-        $addCountProperties = $command->getLaravel()['config']->get('ide-helper.write_model_relation_count_properties', true);
+        $addCountProperties = $config->get('ide-helper.write_model_relation_count_properties', true);
 
         if ($relationship['manyRelation'] && $addCountProperties) {
             $command->setProperty(
