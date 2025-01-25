@@ -127,7 +127,7 @@ class RecursiveRelationsHook implements ModelHookInterface
 
     public function run(ModelsCommand $command, Model $model): void
     {
-        /** @var \Illuminate\Config\Repository $config */
+        /** @var \Illuminate\Contracts\Config\Repository $config */
         $config = $command->getLaravel()->make('config');
 
         $traits = class_uses_recursive($model);
@@ -162,7 +162,7 @@ class RecursiveRelationsHook implements ModelHookInterface
      */
     protected function addRelationship(ModelsCommand $command, array $relationship, string $type): void
     {
-        /** @var \Illuminate\Config\Repository $config */
+        /** @var \Illuminate\Contracts\Config\Repository $config */
         $config = $command->getLaravel()->make('config');
 
         $command->setProperty(

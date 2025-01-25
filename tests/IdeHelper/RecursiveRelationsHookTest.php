@@ -3,6 +3,8 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper;
 
 use Barryvdh\LaravelIdeHelper\Console\ModelsCommand;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
@@ -16,11 +18,14 @@ class RecursiveRelationsHookTest extends TestCase
 
     public function testTreeRelations(): void
     {
-        $config = Mockery::mock();
+        $config = Mockery::mock(Repository::class);
         $config->shouldReceive('get')->andReturn(true);
 
+        $app = Mockery::mock(Application::class);
+        $app->shouldReceive('make')->andReturn($config);
+
         $command = Mockery::mock(ModelsCommand::class);
-        $command->shouldReceive('getLaravel')->andReturn(['config' => $config]);
+        $command->shouldReceive('getLaravel')->andReturn($app);
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',
@@ -55,11 +60,14 @@ class RecursiveRelationsHookTest extends TestCase
 
     public function testGraphRelations(): void
     {
-        $config = Mockery::mock();
+        $config = Mockery::mock(Repository::class);
         $config->shouldReceive('get')->andReturn(true);
 
+        $app = Mockery::mock(Application::class);
+        $app->shouldReceive('make')->andReturn($config);
+
         $command = Mockery::mock(ModelsCommand::class);
-        $command->shouldReceive('getLaravel')->andReturn(['config' => $config]);
+        $command->shouldReceive('getLaravel')->andReturn($app);
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',
