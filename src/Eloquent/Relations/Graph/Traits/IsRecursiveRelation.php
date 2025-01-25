@@ -121,8 +121,8 @@ trait IsRecursiveRelation
      * Replace table hash with expression name in self-relation aggregate queries.
      *
      * @param \Illuminate\Database\Eloquent\Builder<*> $query
-     * @param \Illuminate\Database\Query\Expression $expression
-     * @return \Illuminate\Database\Query\Expression
+     * @param \Illuminate\Database\Query\Expression<*> $expression
+     * @return \Illuminate\Database\Query\Expression<*>
      */
     protected function replaceTableHash(Builder $query, Expression $expression): Expression
     {

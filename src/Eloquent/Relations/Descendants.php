@@ -104,7 +104,7 @@ class Descendants extends HasMany implements ConcatenableRelation
      *
      * @param \Illuminate\Database\Eloquent\Builder<TRelatedModel> $query
      * @param \Illuminate\Database\Eloquent\Builder<TDeclaringModel> $parentQuery
-     * @param list<string|\Illuminate\Database\Query\Expression>|string|\Illuminate\Database\Query\Expression $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>>|string|\Illuminate\Database\Query\Expression<*> $columns
      * @return \Illuminate\Database\Eloquent\Builder<TRelatedModel>
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])

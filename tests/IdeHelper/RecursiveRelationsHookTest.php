@@ -3,6 +3,8 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper;
 
 use Barryvdh\LaravelIdeHelper\Console\ModelsCommand;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
@@ -16,11 +18,18 @@ class RecursiveRelationsHookTest extends TestCase
 
     public function testTreeRelations(): void
     {
+        $config = Mockery::mock(Repository::class);
+        $config->shouldReceive('get')->andReturn(true);
+
+        $app = Mockery::mock(Application::class);
+        $app->shouldReceive('make')->andReturn($config);
+
         $command = Mockery::mock(ModelsCommand::class);
+        $command->shouldReceive('getLaravel')->andReturn($app);
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',
-            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Collection|\Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper\Models\User[]',
+            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Collection<int, \Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper\Models\User>',
             true,
             false,
             "The model's recursive parents and itself.",
@@ -51,11 +60,18 @@ class RecursiveRelationsHookTest extends TestCase
 
     public function testGraphRelations(): void
     {
+        $config = Mockery::mock(Repository::class);
+        $config->shouldReceive('get')->andReturn(true);
+
+        $app = Mockery::mock(Application::class);
+        $app->shouldReceive('make')->andReturn($config);
+
         $command = Mockery::mock(ModelsCommand::class);
+        $command->shouldReceive('getLaravel')->andReturn($app);
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',
-            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection|\Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper\Models\Node[]',
+            '\Staudenmeir\LaravelAdjacencyList\Eloquent\Graph\Collection<int, \Staudenmeir\LaravelAdjacencyList\Tests\IdeHelper\Models\Node>',
             true,
             false,
             "The node's recursive parents and itself.",

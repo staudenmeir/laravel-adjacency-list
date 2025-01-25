@@ -19,7 +19,7 @@ trait BuildsAdjacencyListQueries
     /**
      * Get the hydrated models without eager loading.
      *
-     * @param list<string|\Illuminate\Database\Query\Expression>|string $columns
+     * @param list<string|\Illuminate\Database\Query\Expression<*>>|string $columns
      * @return list<\Illuminate\Database\Eloquent\Model>
      */
     public function getModels($columns = ['*'])
