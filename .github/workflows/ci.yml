@@ -19,7 +19,7 @@ jobs:
           - php: 8.4
             database: firebird
         include:
-          - php: 8.3
+          - php: 8.4
             release: stable
             coverage: true
 
