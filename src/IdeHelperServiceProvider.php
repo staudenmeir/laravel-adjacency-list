@@ -9,7 +9,10 @@ use Staudenmeir\LaravelAdjacencyList\IdeHelper\RecursiveRelationsHook;
 
 class IdeHelperServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    const ModelsCommandAlias = 'ModelsCommand__LaravelAdjacencyList__alias';
+    /**
+     * @var string
+     */
+    const ModelsCommandAlias = __NAMESPACE__ . '\\' . ModelsCommand::class;
 
     public function boot(): void
     {
