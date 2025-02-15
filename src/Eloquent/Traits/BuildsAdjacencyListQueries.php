@@ -83,48 +83,17 @@ trait BuildsAdjacencyListQueries
         $connection = $this->query->getConnection();
 
         return match ($connection->getDriverName()) {
-            'mysql' => $this->getMySqlExpressionGrammar($connection),
-            'mariadb' => $connection->withTablePrefix(
-                new MariaDbGrammar($this->model)
-            ),
-            'pgsql' => $connection->withTablePrefix(
-                new PostgresGrammar($this->model)
-            ),
-            'sqlite' => $connection->withTablePrefix(
-                new SQLiteGrammar($this->model)
-            ),
-            'sqlsrv' => $connection->withTablePrefix(
-                new SqlServerGrammar($this->model)
-            ),
-            'singlestore' => $connection->withTablePrefix(
-                new SingleStoreGrammar($this->model)
-            ),
-            'firebird' => $connection->withTablePrefix(
-                new FirebirdGrammar($this->model)
-            ),
+            'mysql' => $connection->isMaria()
+                ? new MariaDbGrammar($connection, $this->model)
+                : new MySqlGrammar($connection, $this->model),
+            'mariadb' => new MariaDbGrammar($connection, $this->model),
+            'pgsql' => new PostgresGrammar($connection, $this->model),
+            'sqlite' => new SQLiteGrammar($connection, $this->model),
+            'sqlsrv' => new SqlServerGrammar($connection, $this->model),
+            'singlestore' => new SingleStoreGrammar($connection, $this->model),
+            'firebird' => new FirebirdGrammar($connection, $this->model),
             default => throw new RuntimeException('This database is not supported.'),
         };
-    }
-
-    /**
-     * Get the MySQL expression grammar.
-     *
-     * @param \Illuminate\Database\Connection $connection
-     * @return \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar
-     */
-    protected function getMySqlExpressionGrammar(Connection $connection): ExpressionGrammar
-    {
-        /**
-         * @var \Illuminate\Database\MySqlConnection $connection
-         * @var \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
-         */
-        $grammar = $connection->withTablePrefix(
-            $connection->isMaria()
-                ? new MariaDbGrammar($this->model)
-                : new MySqlGrammar($this->model)
-        );
-
-        return $grammar;
     }
 
     /**
