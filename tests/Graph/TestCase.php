@@ -315,6 +315,7 @@ abstract class TestCase extends Base
 
     protected function getPackageProviders($app)
     {
-        return [FirebirdServiceProvider::class];
+        return [];
+        // return [FirebirdServiceProvider::class]; TODO[L12]
     }
 }

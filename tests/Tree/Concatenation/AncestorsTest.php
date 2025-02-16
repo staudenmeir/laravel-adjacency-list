@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree\Concatenation;
 
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasOneDeep;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\Role;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\TestCase;
@@ -57,7 +58,7 @@ class AncestorsTest extends TestCase
     public function testEagerLoadingWithHasOneDeep(): void
     {
         $users = User::with([
-            'ancestorPost' => fn (HasManyDeep $query) => $query->orderBy('id'),
+            'ancestorPost' => fn (HasOneDeep $query) => $query->orderBy('id'),
         ])->orderBy('id')->get();
 
         $this->assertNull($users[0]->ancestorPost);

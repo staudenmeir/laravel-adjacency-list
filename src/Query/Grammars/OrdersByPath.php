@@ -2,6 +2,7 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Query\Grammars;
 
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
 
 trait OrdersByPath
@@ -11,8 +12,10 @@ trait OrdersByPath
      */
     protected $model;
 
-    public function __construct(Model $model)
+    public function __construct(Connection $connection, Model $model)
     {
+        parent::__construct($connection);
+
         $this->model = $model;
     }
 
