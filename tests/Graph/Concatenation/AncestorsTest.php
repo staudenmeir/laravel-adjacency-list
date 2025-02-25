@@ -3,6 +3,7 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph\Concatenation;
 
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasOneDeep;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Node;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\Models\Post;
 use Staudenmeir\LaravelAdjacencyList\Tests\Graph\TestCase;
@@ -56,7 +57,7 @@ class AncestorsTest extends TestCase
     public function testEagerLoadingWithHasOneDeep(): void
     {
         $nodes = Node::with([
-            'ancestorPost' => fn (HasManyDeep $query) => $query->orderBy('id'),
+            'ancestorPost' => fn (HasOneDeep $query) => $query->orderBy('id'),
         ])->orderBy('id')->get();
 
         $this->assertNull($nodes[0]->ancestorPost);
