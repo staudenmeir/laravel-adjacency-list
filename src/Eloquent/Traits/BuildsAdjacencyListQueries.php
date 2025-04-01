@@ -90,7 +90,12 @@ trait BuildsAdjacencyListQueries
             'pgsql' => new PostgresGrammar($connection, $this->model),
             'sqlite' => new SQLiteGrammar($connection, $this->model),
             'sqlsrv' => new SqlServerGrammar($connection, $this->model),
-            'singlestore' => new SingleStoreGrammar($connection, $this->model),
+            'singlestore' => new SingleStoreGrammar(
+                connection: $connection,
+                ignoreOrderByInDeletes: $connection->getConfig('ignore_order_by_in_deletes'),
+                ignoreOrderByInUpdates: $connection->getConfig('ignore_order_by_in_updates'),
+                model: $this->model,
+            ),
             'firebird' => new FirebirdGrammar($connection, $this->model),
             default => throw new RuntimeException('This database is not supported.'),
         };
