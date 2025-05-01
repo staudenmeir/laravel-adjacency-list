@@ -90,7 +90,7 @@ class AncestorsTest extends TestCase
 
         $users = UserWithCycleDetection::with([
             'ancestors' => fn (Ancestors $query) => $query,
-        ])->findMany([13, 14, 15]);
+        ])->orderBy('id')->findMany([13, 14, 15]);
 
         $this->assertEquals([15, 14, 13], $users[0]->ancestors->pluck('id')->all());
         $this->assertEquals([-1, -2, -3], $users[0]->ancestors->pluck('depth')->all());
@@ -102,7 +102,7 @@ class AncestorsTest extends TestCase
 
         $users = UserWithCycleDetectionAndStart::with([
             'ancestors' => fn (Ancestors $query) => $query->orderByDesc('depth'),
-        ])->findMany([13, 14, 15]);
+        ])->orderBy('id')->findMany([13, 14, 15]);
 
         $this->assertEquals([15, 14, 13, 15], $users[0]->ancestors->pluck('id')->all());
         $this->assertEquals([-1, -2, -3, -4], $users[0]->ancestors->pluck('depth')->all());

@@ -80,7 +80,7 @@ class DescendantsTest extends TestCase
 
         $users = UserWithCycleDetection::with([
             'descendants' => fn (Descendants $query) => $query->orderBy('depth'),
-        ])->findMany([13, 14, 15]);
+        ])->orderBy('id')->findMany([13, 14, 15]);
 
         $this->assertEquals([14, 15, 13], $users[0]->descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3], $users[0]->descendants->pluck('depth')->all());
@@ -92,7 +92,7 @@ class DescendantsTest extends TestCase
 
         $users = UserWithCycleDetectionAndStart::with([
             'descendants' => fn (Descendants $query) => $query->orderBy('depth'),
-        ])->findMany([13, 14, 15]);
+        ])->orderBy('id')->findMany([13, 14, 15]);
 
         $this->assertEquals([14, 15, 13, 14], $users[0]->descendants->pluck('id')->all());
         $this->assertEquals([1, 2, 3, 4], $users[0]->descendants->pluck('depth')->all());
