@@ -26,6 +26,8 @@ class User extends Model
 
     public $incrementing = false;
 
+    protected $table = 'users';
+
     protected $casts = [
         'id' => 'int',
     ];

@@ -231,6 +231,8 @@ trait HasRecursiveRelationshipScopes
             );
         }
 
+        $this->addInitialQueryCycleDetection($query, $grammar);
+
         $constraint($query);
 
         if (static::$initialQueryConstraint) {
@@ -301,6 +303,8 @@ trait HasRecursiveRelationshipScopes
                 $grammar->getRecursivePathBindings($path['separator'])
             );
         }
+
+        $this->addRecursiveQueryCycleDetection($query, $grammar);
 
         $this->addRecursiveQueryJoinsAndConstraints($query, $direction, $name, $joinColumns);
 

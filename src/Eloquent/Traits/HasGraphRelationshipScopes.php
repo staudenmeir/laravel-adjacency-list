@@ -221,24 +221,6 @@ trait HasGraphRelationshipScopes
     }
 
     /**
-     * Add cycle detection to the initial query for a relationship expression.
-     *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
-     * @return void
-     */
-    protected function addInitialQueryCycleDetection(Builder $query, ExpressionGrammar $grammar): void
-    {
-        if ($this->enableCycleDetection() && $this->includeCycleStart()) {
-            $query->selectRaw(
-                $grammar->compileCycleDetectionInitialSelect(
-                    $this->getCycleDetectionColumnName()
-                )
-            );
-        }
-    }
-
-    /**
      * Add join clauses to the initial query for a relationship expression.
      *
      * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
@@ -364,44 +346,6 @@ trait HasGraphRelationshipScopes
 
         foreach ($columns as $column) {
             $query->addSelect("$pivotTable.$column as pivot_$column");
-        }
-    }
-
-    /**
-     * Add cycle detection to the recursive query for a relationship expression.
-     *
-     * @param \Staudenmeir\LaravelAdjacencyList\Eloquent\Builder<static> $query
-     * @param \Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar $grammar
-     * @return void
-     */
-    protected function addRecursiveQueryCycleDetection(Builder $query, ExpressionGrammar $grammar): void
-    {
-        if (!$this->enableCycleDetection()) {
-            return;
-        }
-
-        $sql = $grammar->compileCycleDetection(
-            $this->getQualifiedLocalKeyName(),
-            $this->getPathName()
-        );
-
-        $bindings = $grammar->getCycleDetectionBindings(
-            $this->getPathSeparator()
-        );
-
-        if ($this->includeCycleStart()) {
-            $cycleDetectionColumn = $this->getCycleDetectionColumnName();
-
-            $query->selectRaw(
-                $grammar->compileCycleDetectionRecursiveSelect($sql, $cycleDetectionColumn),
-                $bindings
-            );
-
-            $query->whereRaw(
-                $grammar->compileCycleDetectionStopConstraint($cycleDetectionColumn)
-            );
-        } else {
-            $query->whereRaw("not($sql)", $bindings);
         }
     }
 

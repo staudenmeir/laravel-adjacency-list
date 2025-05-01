@@ -66,6 +66,7 @@ Supports Laravel 5.5+.
 - [Custom Paths](#custom-paths)
 - [Nested Results](#nested-results)
 - [Initial & Recursive Query Constraints](#initial--recursive-query-constraints)
+- [Cycle Detection](#cycle-detection)
 - [Additional Methods](#additional-methods)
 - [Custom Relationships](#custom-relationships)
 - [Deep Relationship Concatenation](#deep-relationship-concatenation)
@@ -419,6 +420,44 @@ $tree = User::withQueryConstraint(function (Builder $query) {
 
  You can also add a custom constraint to only the initial or recursive query using `withInitialQueryConstraint()`/
  `withRecursiveQueryConstraint()`.
+
+#### Cycle Detection
+
+If your tree contains cycles, you need to enable cycle detection to prevent infinite loops:
+
+```php
+class User extends Model
+{
+    public function enableCycleDetection(): bool
+    {
+        return true;
+    }
+}
+```
+
+You can also retrieve the start of a cycle, i.e., the first duplicate node. With this option, the query results include
+an `is_cycle` column that indicates whether the node is part of a cycle:
+
+```php
+class User extends Model
+{
+    public function enableCycleDetection(): bool
+    {
+        return true;
+    }
+
+    public function includeCycleStart(): bool
+    {
+        return true;
+    }
+}
+
+$users = User::find($id)->descendants;
+
+foreach ($users as $user) {
+    dump($user->is_cycle);
+}
+```
 
 #### Additional Methods
 
@@ -846,7 +885,7 @@ class Node extends Model
 }
 ```
 
-You can also retrieve the start of a cycle, i.e. the first duplicate node. With this option, the query results include
+You can also retrieve the start of a cycle, i.e., the first duplicate node. With this option, the query results include
 an `is_cycle` column that indicates whether the node is part of a cycle:
 
 ```php
