@@ -31,6 +31,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Siblings;
  */
 trait HasAdjacencyList
 {
+    use HasCycleDetection;
     use HasOfDescendantsRelationships;
     use HasQueryConstraints;
     use HasRecursiveRelationshipHelpers;

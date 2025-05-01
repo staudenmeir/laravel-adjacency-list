@@ -4,6 +4,8 @@ namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants;
 use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\User;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\UserWithCycleDetection;
+use Staudenmeir\LaravelAdjacencyList\Tests\Tree\Models\UserWithCycleDetectionAndStart;
 
 class DescendantsTest extends TestCase
 {
@@ -16,6 +18,27 @@ class DescendantsTest extends TestCase
         $this->assertEquals(['5', '5.8'], $descendants->pluck('path')->all());
         $this->assertEquals(['user-5', 'user-5/user-8'], $descendants->pluck('slug_path')->all());
         $this->assertEquals(['user-5', 'user-8/user-5'], $descendants->pluck('reverse_slug_path')->all());
+    }
+
+    public function testLazyLoadingWithCycleDetection(): void
+    {
+        $this->seedCycle();
+
+        $descendants = UserWithCycleDetection::find(13)->descendants()->orderBy('depth')->get();
+
+        $this->assertEquals([14, 15, 13], $descendants->pluck('id')->all());
+        $this->assertEquals([1, 2, 3], $descendants->pluck('depth')->all());
+    }
+
+    public function testLazyLoadingWithCycleDetectionAndStart(): void
+    {
+        $this->seedCycle();
+
+        $descendants = UserWithCycleDetectionAndStart::find(13)->descendants()->orderBy('depth')->get();
+
+        $this->assertEquals([14, 15, 13, 14], $descendants->pluck('id')->all());
+        $this->assertEquals([1, 2, 3, 4], $descendants->pluck('depth')->all());
+        $this->assertEquals([0, 0, 0, 1], $descendants->pluck('is_cycle')->all());
     }
 
     public function testLazyLoadingAndSelf(): void
@@ -49,6 +72,31 @@ class DescendantsTest extends TestCase
         $this->assertEquals([], $users[10]->descendants->pluck('id')->all());
         $this->assertEquals([1, 1, 1, 2, 2, 2, 3, 3], $users[0]->descendants->pluck('depth')->all());
         $this->assertEquals(['2', '3', '4', '2.5', '3.6', '4.7', '2.5.8', '3.6.9'], $users[0]->descendants->pluck('path')->all());
+    }
+
+    public function testEagerLoadingWithCycleDetection(): void
+    {
+        $this->seedCycle();
+
+        $users = UserWithCycleDetection::with([
+            'descendants' => fn (Descendants $query) => $query->orderBy('depth'),
+        ])->findMany([13, 14, 15]);
+
+        $this->assertEquals([14, 15, 13], $users[0]->descendants->pluck('id')->all());
+        $this->assertEquals([1, 2, 3], $users[0]->descendants->pluck('depth')->all());
+    }
+
+    public function testEagerLoadingWithCycleDetectionAndStart(): void
+    {
+        $this->seedCycle();
+
+        $users = UserWithCycleDetectionAndStart::with([
+            'descendants' => fn (Descendants $query) => $query->orderBy('depth'),
+        ])->findMany([13, 14, 15]);
+
+        $this->assertEquals([14, 15, 13, 14], $users[0]->descendants->pluck('id')->all());
+        $this->assertEquals([1, 2, 3, 4], $users[0]->descendants->pluck('depth')->all());
+        $this->assertEquals([0, 0, 0, 1], $users[0]->descendants->pluck('is_cycle')->all());
     }
 
     public function testEagerLoadingAndSelf(): void

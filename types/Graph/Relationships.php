@@ -19,7 +19,7 @@ function test(Node $node): void
     );
 
     assertType(
-        'Illuminate\Database\Eloquent\Relations\BelongsToMany<Staudenmeir\LaravelAdjacencyList\Types\Graph\Models\Node>',
+        "Illuminate\Database\Eloquent\Relations\BelongsToMany<Staudenmeir\LaravelAdjacencyList\Types\Graph\Models\Node, Illuminate\Database\Eloquent\Relations\Pivot, 'pivot'>",
         $node->children()
     );
 
@@ -39,7 +39,7 @@ function test(Node $node): void
     );
 
     assertType(
-        'Illuminate\Database\Eloquent\Relations\BelongsToMany<Staudenmeir\LaravelAdjacencyList\Types\Graph\Models\Node>',
+        "Illuminate\Database\Eloquent\Relations\BelongsToMany<Staudenmeir\LaravelAdjacencyList\Types\Graph\Models\Node, Illuminate\Database\Eloquent\Relations\Pivot, 'pivot'>",
         $node->parents()
     );
 

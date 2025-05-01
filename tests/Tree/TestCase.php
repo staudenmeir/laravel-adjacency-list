@@ -282,6 +282,19 @@ abstract class TestCase extends Base
         Model::reguard();
     }
 
+    protected function seedCycle(): void
+    {
+        Model::unguard();
+
+        User::create(['id' => 13, 'slug' => 'user-13', 'parent_id' => null, 'followers' => 1, 'deleted_at' => null]);
+        User::create(['id' => 14, 'slug' => 'user-14', 'parent_id' => 13, 'followers' => 1, 'deleted_at' => null]);
+        User::create(['id' => 15, 'slug' => 'user-15', 'parent_id' => 14, 'followers' => 1, 'deleted_at' => null]);
+
+        User::whereKey(13)->update(['parent_id' => 15]);
+
+        Model::reguard();
+    }
+
     protected function getEnvironmentSetUp($app)
     {
         $config = require __DIR__.'/../config/database.php';

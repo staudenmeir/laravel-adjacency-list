@@ -23,6 +23,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Graph\Descendants;
  */
 trait HasGraphAdjacencyList
 {
+    use HasCycleDetection;
     use HasGraphRelationshipScopes;
     use HasQueryConstraints;
 
@@ -153,36 +154,6 @@ trait HasGraphAdjacencyList
     public function getExpressionName(): string
     {
         return 'laravel_cte';
-    }
-
-    /**
-     * Whether to enable cycle detection.
-     *
-     * @return bool
-     */
-    public function enableCycleDetection(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Whether to include the first row of the cycle in the query results.
-     *
-     * @return bool
-     */
-    public function includeCycleStart(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the name of the cycle detection column.
-     *
-     * @return string
-     */
-    public function getCycleDetectionColumnName(): string
-    {
-        return 'is_cycle';
     }
 
     /**
