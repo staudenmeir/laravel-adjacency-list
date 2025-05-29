@@ -170,9 +170,9 @@ abstract class TestCase extends Base
 
         User::create(['id' => 1, 'slug' => 'user-1', 'parent_id' => null, 'followers' => 1, 'deleted_at' => null]);
         User::create(['id' => 2, 'slug' => 'user-2', 'parent_id' => 1, 'followers' => 1, 'deleted_at' => null]);
-        User::create(['id' => 3, 'slug' => 'user-3,', 'parent_id' => 1, 'followers' => 1, 'deleted_at' => null]);
+        User::create(['id' => 3, 'slug' => 'user-3', 'parent_id' => 1, 'followers' => 1, 'deleted_at' => null]);
         User::create(['id' => 4, 'slug' => 'user-4', 'parent_id' => 1, 'followers' => 1, 'deleted_at' => null]);
-        User::create(['id' => 5, 'slug' => 'user-5', 'parent_id' => 2, 'followers' => 1, 'deleted_at' => null]);
+        User::create(['id' => 5, 'slug' => 'user-5,', 'parent_id' => 2, 'followers' => 1, 'deleted_at' => null]);
         User::create(['id' => 6, 'slug' => 'user-6', 'parent_id' => 3, 'followers' => 1, 'deleted_at' => null]);
         User::create(['id' => 7, 'slug' => 'user-7', 'parent_id' => 4, 'followers' => 1, 'deleted_at' => null]);
         User::create(['id' => 8, 'slug' => 'user-8', 'parent_id' => 5, 'followers' => 1, 'deleted_at' => null]);

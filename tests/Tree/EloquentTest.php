@@ -47,11 +47,11 @@ class EloquentTest extends TestCase
             $users->pluck('path')->all()
         );
         $this->assertEquals(
-            ['user-1', 'user-1/user-2', 'user-1/user-3,'],
+            ['user-1', 'user-1/user-2', 'user-1/user-3'],
             $users->pluck('slug_path')->slice(0, 3)->all()
         );
         $this->assertEquals(
-            ['user-1', 'user-2/user-1', 'user-3,/user-1'],
+            ['user-1', 'user-2/user-1', 'user-3/user-1'],
             $users->pluck('reverse_slug_path')->slice(0, 3)->all()
         );
         $this->assertEquals('users', $users[0]->getTable());
