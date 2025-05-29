@@ -18,11 +18,11 @@ class DescendantsTest extends TestCase
         $this->assertEquals([1, 2, 2, 3], $descendants->pluck('depth')->all());
         $this->assertEquals(['5', '5.7', '5.8', '5.7.8'], $descendants->pluck('path')->all());
         $this->assertEquals(
-            ['node-5', 'node-5/node-7', 'node-5/node-8', 'node-5/node-7/node-8'],
+            ['node-5,', 'node-5,/node-7', 'node-5,/node-8', 'node-5,/node-7/node-8'],
             $descendants->pluck('slug_path')->all()
         );
         $this->assertEquals(
-            ['node-5', 'node-7/node-5', 'node-8/node-5', 'node-8/node-7/node-5'],
+            ['node-5,', 'node-7/node-5,', 'node-8/node-5,', 'node-8/node-7/node-5,'],
             $descendants->pluck('reverse_slug_path')->all()
         );
         $this->assertEquals(
@@ -84,7 +84,7 @@ class DescendantsTest extends TestCase
             $descendantsAndSelf->pluck('path')->all()
         );
         $this->assertEquals(
-            ['node-2', 'node-2/node-5', 'node-2/node-5/node-7', 'node-2/node-5/node-8', 'node-2/node-5/node-7/node-8'],
+            ['node-2', 'node-2/node-5,', 'node-2/node-5,/node-7', 'node-2/node-5,/node-8', 'node-2/node-5,/node-7/node-8'],
             $descendantsAndSelf->pluck('slug_path')->all()
         );
         $this->assertEquals(

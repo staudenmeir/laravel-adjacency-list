@@ -84,7 +84,7 @@ class AncestorsTest extends TestCase
             $ancestorsAndSelf->pluck('path')->all()
         );
         $this->assertEquals(
-            ['node-5', 'node-5/node-1', 'node-5/node-2', 'node-5/node-10', 'node-5/node-2/node-1', 'node-5/node-2/node-9'],
+            ['node-5,', 'node-5,/node-1', 'node-5,/node-2', 'node-5,/node-10', 'node-5,/node-2/node-1', 'node-5,/node-2/node-9'],
             $ancestorsAndSelf->pluck('slug_path')->all()
         );
         $this->assertEquals(
