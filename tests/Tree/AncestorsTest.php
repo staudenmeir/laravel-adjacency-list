@@ -89,7 +89,7 @@ class AncestorsTest extends TestCase
         $this->seedCycle();
 
         $users = UserWithCycleDetection::with([
-            'ancestors' => fn (Ancestors $query) => $query,
+            'ancestors' => fn (Ancestors $query) => $query->orderByDesc('depth'),
         ])->orderBy('id')->findMany([13, 14, 15]);
 
         $this->assertEquals([15, 14, 13], $users[0]->ancestors->pluck('id')->all());
