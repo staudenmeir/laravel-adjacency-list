@@ -14,7 +14,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals([1, 2, 5, 8], $bloodline->pluck('id')->all());
         $this->assertEquals([-2, -1, 0, 1], $bloodline->pluck('depth')->all());
         $this->assertEquals(['5.2.1', '5.2', '5', '5.8'], $bloodline->pluck('path')->all());
-        $this->assertEquals(['user-5/user-2/user-1', 'user-5/user-2', 'user-5', 'user-5/user-8'], $bloodline->pluck('slug_path')->all());
+        $this->assertEquals(['user-5,/user-2/user-1', 'user-5,/user-2', 'user-5,', 'user-5,/user-8'], $bloodline->pluck('slug_path')->all());
     }
 
     public function testEagerLoading(): void
@@ -27,7 +27,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals([1, 2, 5, 8], $users[1]->bloodline->pluck('id')->all());
         $this->assertEquals([1, 2, 5, 8], $users[4]->bloodline->pluck('id')->all());
         $this->assertEquals(['5.2.1', '5.2', '5', '5.8'], $users[4]->bloodline->pluck('path')->all());
-        $this->assertEquals(['user-5/user-2/user-1', 'user-5/user-2', 'user-5', 'user-5/user-8'], $users[4]->bloodline->pluck('slug_path')->all());
+        $this->assertEquals(['user-5,/user-2/user-1', 'user-5,/user-2', 'user-5,', 'user-5,/user-8'], $users[4]->bloodline->pluck('slug_path')->all());
     }
 
     public function testLazyEagerLoading(): void
@@ -40,7 +40,7 @@ class BloodlineTest extends TestCase
         $this->assertEquals([1, 2, 5, 8], $users[1]->bloodline->pluck('id')->all());
         $this->assertEquals([1, 2, 5, 8], $users[4]->bloodline->pluck('id')->all());
         $this->assertEquals(['5.2.1', '5.2', '5', '5.8'], $users[4]->bloodline->pluck('path')->all());
-        $this->assertEquals(['user-5/user-2/user-1', 'user-5/user-2', 'user-5', 'user-5/user-8'], $users[4]->bloodline->pluck('slug_path')->all());
+        $this->assertEquals(['user-5,/user-2/user-1', 'user-5,/user-2', 'user-5,', 'user-5,/user-8'], $users[4]->bloodline->pluck('slug_path')->all());
     }
 
     public function testExistenceQuery(): void

@@ -64,11 +64,20 @@ trait BuildsAdjacencyListQueries
     protected function replacePathSeparator(array $items, $path, $separator)
     {
         foreach ($items as $item) {
-            $item->$path = str_replace(
-                ',',
-                $separator,
-                substr($item->$path, 1, -1)
-            );
+            if (str_contains($item->$path, '"')) {
+                $item->$path = implode(
+                    $separator,
+                    str_getcsv(
+                        trim($item->$path, '{}')
+                    )
+                );
+            } else {
+                $item->$path = str_replace(
+                    ',',
+                    $separator,
+                    trim($item->$path, '{}')
+                );
+            }
         }
     }
 
