@@ -93,11 +93,20 @@ trait IsConcatenableRelation
     protected function replacePathSeparator(Collection $models, string $column, string $separator): void
     {
         foreach ($models as $model) {
-            $model->$column = str_replace(
-                ',',
-                $separator,
-                substr($model->$column, 1, -1)
-            );
+            if (str_contains($model->$column, '"')) {
+                $model->$column = implode(
+                    $separator,
+                    str_getcsv(
+                        trim($model->$column, '{}')
+                    )
+                );
+            } else {
+                $model->$column = str_replace(
+                    ',',
+                    $separator,
+                    trim($model->$column, '{}')
+                );
+            }
         }
     }
 

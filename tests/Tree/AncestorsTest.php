@@ -15,9 +15,9 @@ class AncestorsTest extends TestCase
         $this->assertEquals([1, 2, 5], $ancestors->pluck('id')->all());
         $this->assertEquals([-3, -2, -1], $ancestors->pluck('depth')->all());
         $this->assertEquals(['5.2.1', '5.2', '5'], $ancestors->pluck('path')->all());
-        $this->assertEquals(['user-5/user-2/user-1', 'user-5/user-2', 'user-5'], $ancestors->pluck('slug_path')->all());
+        $this->assertEquals(['user-5,/user-2/user-1', 'user-5,/user-2', 'user-5,'], $ancestors->pluck('slug_path')->all());
         $this->assertEquals(
-            ['user-1/user-2/user-5', 'user-2/user-5', 'user-5'],
+            ['user-1/user-2/user-5,', 'user-2/user-5,', 'user-5,'],
             $ancestors->pluck('reverse_slug_path')->all()
         );
     }
@@ -37,7 +37,7 @@ class AncestorsTest extends TestCase
         $this->assertEquals([-3, -2, -1, 0], $ancestorsAndSelf->pluck('depth')->all());
         $this->assertEquals(['8.5.2.1', '8.5.2', '8.5', '8', ], $ancestorsAndSelf->pluck('path')->all());
         $this->assertEquals(
-            ['user-8/user-5/user-2/user-1', 'user-8/user-5/user-2', 'user-8/user-5', 'user-8'],
+            ['user-8/user-5,/user-2/user-1', 'user-8/user-5,/user-2', 'user-8/user-5,', 'user-8'],
             $ancestorsAndSelf->pluck('slug_path')->all()
         );
     }

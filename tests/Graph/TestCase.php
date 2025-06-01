@@ -96,7 +96,7 @@ abstract class TestCase extends Base
         Node::create(['id' => 2, 'slug' => 'node-2', 'uuid' => 'b0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b']);
         Node::create(['id' => 3, 'slug' => 'node-3', 'uuid' => 'c0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b']);
         Node::create(['id' => 4, 'slug' => 'node-4', 'uuid' => 'd0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b']);
-        Node::create(['id' => 5, 'slug' => 'node-5', 'uuid' => 'e0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b']);
+        Node::create(['id' => 5, 'slug' => 'node-5,', 'uuid' => 'e0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b']);
         Node::create(['id' => 6, 'slug' => 'node-6', 'uuid' => 'f0f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b']);
         Node::create(['id' => 7, 'slug' => 'node-7', 'uuid' => 'a1f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b']);
         Node::create(['id' => 8, 'slug' => 'node-8', 'uuid' => 'b1f1b2c3-d4e5-4f6a-8b9b-0c1d2e3f4a5b']);
