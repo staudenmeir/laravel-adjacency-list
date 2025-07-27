@@ -8,4 +8,15 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 class User extends Model
 {
     use HasRecursiveRelationships;
+
+    public function getCustomPaths()
+    {
+        return [
+            [
+                'name' => 'slug_path',
+                'column' => 'slug',
+                'separator' => '/',
+            ],
+        ];
+    }
 }

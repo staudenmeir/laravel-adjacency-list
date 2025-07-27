@@ -135,6 +135,8 @@ class RecursiveRelationsHook implements ModelHookInterface
         $useGenericsSyntax = $config->get('ide-helper.use_generics_annotations', true);
 
         if (in_array(HasRecursiveRelationships::class, $traits)) {
+            $this->addDepthAndPaths($command, $model);
+
             foreach (static::$treeRelationships as $relationship) {
                 $type = $relationship['manyRelation']
                     ? ($useGenericsSyntax
@@ -147,6 +149,8 @@ class RecursiveRelationsHook implements ModelHookInterface
         }
 
         if (in_array(HasGraphRelationships::class, $traits)) {
+            $this->addDepthAndPaths($command, $model);
+
             foreach (static::$graphRelationships as $relationship) {
                 $type = $useGenericsSyntax
                     ? '\\' . GraphCollection::class . '<int, \\' . $model::class . '>'
@@ -154,6 +158,32 @@ class RecursiveRelationsHook implements ModelHookInterface
 
                 $this->addRelationship($command, $relationship, $type);
             }
+        }
+    }
+
+    protected function addDepthAndPaths(ModelsCommand $command, Model $model): void
+    {
+        $command->setProperty(
+            $model->getDepthName(),
+            'int',
+            true,
+            false
+        );
+
+        $command->setProperty(
+            $model->getPathName(),
+            'string',
+            true,
+            false
+        );
+
+        foreach ($model->getCustomPaths() as $path) {
+            $command->setProperty(
+                $path['name'],
+                'string',
+                true,
+                false
+            );
         }
     }
 
