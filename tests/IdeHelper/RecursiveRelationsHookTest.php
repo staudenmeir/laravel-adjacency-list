@@ -26,6 +26,9 @@ class RecursiveRelationsHookTest extends TestCase
 
         $command = Mockery::mock(ModelsCommand::class);
         $command->shouldReceive('getLaravel')->andReturn($app);
+        $command->shouldReceive('setProperty')->once()->with('depth', 'int', true, false);
+        $command->shouldReceive('setProperty')->once()->with('path', 'string', true, false);
+        $command->shouldReceive('setProperty')->once()->with('slug_path', 'string', true, false);
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',
@@ -68,6 +71,9 @@ class RecursiveRelationsHookTest extends TestCase
 
         $command = Mockery::mock(ModelsCommand::class);
         $command->shouldReceive('getLaravel')->andReturn($app);
+        $command->shouldReceive('setProperty')->once()->with('depth', 'int', true, false);
+        $command->shouldReceive('setProperty')->once()->with('path', 'string', true, false);
+        $command->shouldReceive('setProperty')->once()->with('slug_path', 'string', true, false);
         $command->shouldReceive('setProperty')->times(2);
         $command->shouldReceive('setProperty')->once()->with(
             'ancestorsAndSelf',

@@ -13,4 +13,15 @@ class Node extends Model
     {
         return 'edges';
     }
+
+    public function getCustomPaths(): array
+    {
+        return [
+            [
+                'name' => 'slug_path',
+                'column' => 'slug',
+                'separator' => '/',
+            ],
+        ];
+    }
 }
