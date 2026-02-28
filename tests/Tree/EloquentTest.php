@@ -158,10 +158,6 @@ class EloquentTest extends TestCase
 
     public function testScopeDepthFirst(): void
     {
-        if ($this->connection === 'firebird') {
-            $this->markTestSkipped();
-        }
-
         $users = User::tree()->depthFirst()->get();
 
         $this->assertEquals([1, 2, 5, 8, 3, 6, 9, 4, 7, 11, 12], $users->pluck('id')->all());
@@ -169,7 +165,7 @@ class EloquentTest extends TestCase
 
     public function testScopeDepthFirstWithNaturalSorting(): void
     {
-        if (in_array($this->connection, ['sqlite', 'sqlsrv', 'singlestore', 'firebird'])) {
+        if (in_array($this->connection, ['sqlite', 'sqlsrv', 'singlestore'])) {
             $this->markTestSkipped();
         }
 
@@ -182,10 +178,6 @@ class EloquentTest extends TestCase
 
     public function testScopeDepthFirstWithStringKey(): void
     {
-        if ($this->connection === 'firebird') {
-            $this->markTestSkipped();
-        }
-
         $categories = Category::tree()->depthFirst()->get();
 
         $this->assertEquals(['a', 'b', 'c', 'd'], $categories->pluck('id')->all());

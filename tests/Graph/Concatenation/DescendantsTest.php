@@ -19,7 +19,7 @@ class DescendantsTest extends TestCase
 
     public function testLazyLoadingAndSelf(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -40,7 +40,7 @@ class DescendantsTest extends TestCase
 
     public function testEagerLoadingAndSelf(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -74,7 +74,7 @@ class DescendantsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -88,7 +88,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQuery(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -99,7 +99,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -110,7 +110,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -121,7 +121,7 @@ class DescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 

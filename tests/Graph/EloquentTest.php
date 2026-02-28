@@ -9,7 +9,7 @@ class EloquentTest extends TestCase
 {
     public function testScopeSubgraph(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -22,7 +22,7 @@ class EloquentTest extends TestCase
 
     public function testScopeSubgraphWithMaxDepth(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -53,7 +53,7 @@ class EloquentTest extends TestCase
 
     public function testChildrenAndSelf(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -82,7 +82,7 @@ class EloquentTest extends TestCase
 
     public function testParentsAndSelf(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -114,10 +114,6 @@ class EloquentTest extends TestCase
 
     public function testScopeDepthFirst(): void
     {
-        if ($this->connection === 'firebird') {
-            $this->markTestSkipped();
-        }
-
         $nodes = Node::find(1)->descendants()->depthFirst()->get();
 
         $this->assertEquals([2, 5, 7, 8, 8, 3, 6, 4, 5, 7, 8, 8], $nodes->pluck('id')->all());

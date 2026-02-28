@@ -3,7 +3,6 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Tree;
 
 use Carbon\Carbon;
-use HarryGulliford\Firebird\FirebirdServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -306,7 +305,8 @@ abstract class TestCase extends Base
 
     protected function getPackageProviders($app)
     {
-        return [SingleStoreProvider::class];
-        // return [FirebirdServiceProvider::class]; TODO[L12]
+        // TODO[L13]
+        return [];
+        //return [SingleStoreProvider::class];
     }
 }

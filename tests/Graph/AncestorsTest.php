@@ -71,7 +71,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyLoadingAndSelf(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -113,7 +113,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyLoadingAndSelfWithCycleDetection(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -127,7 +127,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyLoadingAndSelfWithCycleDetectionAndStart(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -201,7 +201,7 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelf(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -240,7 +240,7 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelfWithCycleDetection(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -254,7 +254,7 @@ class AncestorsTest extends TestCase
 
     public function testEagerLoadingAndSelfWithCycleDetectionAndStart(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -293,7 +293,7 @@ class AncestorsTest extends TestCase
 
     public function testLazyEagerLoadingAndSelf(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -332,7 +332,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQuery(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -343,7 +343,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -365,7 +365,7 @@ class AncestorsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -387,7 +387,7 @@ class AncestorsTest extends TestCase
 
     public function testWithSumForSelfRelationAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -398,7 +398,7 @@ class AncestorsTest extends TestCase
 
     public function testDelete(): void
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb'])) {
             $this->markTestSkipped();
         }
 
