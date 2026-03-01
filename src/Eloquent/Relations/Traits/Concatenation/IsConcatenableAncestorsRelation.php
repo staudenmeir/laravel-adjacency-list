@@ -50,7 +50,7 @@ trait IsConcatenableAncestorsRelation
         foreach ($models as $model) {
             $key = $model->$attribute;
 
-            if (isset($dictionary[$key])) {
+            if (!is_null($key) && isset($dictionary[$key])) {
                 $value = $dictionary[$key];
 
                 $value = $type === 'one' ? reset($value) : $this->related->newCollection($value);
