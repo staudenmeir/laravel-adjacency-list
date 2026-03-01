@@ -87,7 +87,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testExistenceQuery(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -98,7 +98,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -109,7 +109,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -131,7 +131,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testDelete(): void
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb'])) {
             $this->markTestSkipped();
         }
 
@@ -144,7 +144,7 @@ class MorphedByManyOfDescendantsTest extends TestCase
 
     public function testDeleteAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb'])) {
             $this->markTestSkipped();
         }
 

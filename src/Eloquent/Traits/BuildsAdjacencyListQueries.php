@@ -2,11 +2,8 @@
 
 namespace Staudenmeir\LaravelAdjacencyList\Eloquent\Traits;
 
-use Illuminate\Database\Connection;
 use Illuminate\Database\PostgresConnection;
 use RuntimeException;
-use Staudenmeir\LaravelAdjacencyList\Query\Grammars\ExpressionGrammar;
-use Staudenmeir\LaravelAdjacencyList\Query\Grammars\FirebirdGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MariaDbGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\MySqlGrammar;
 use Staudenmeir\LaravelAdjacencyList\Query\Grammars\PostgresGrammar;
@@ -105,7 +102,6 @@ trait BuildsAdjacencyListQueries
                 ignoreOrderByInUpdates: $connection->getConfig('ignore_order_by_in_updates'),
                 model: $this->model,
             ),
-            'firebird' => new FirebirdGrammar($connection, $this->model),
             default => throw new RuntimeException('This database is not supported.'),
         };
     }

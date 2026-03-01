@@ -3,7 +3,6 @@
 namespace Staudenmeir\LaravelAdjacencyList\Tests\Graph;
 
 use Carbon\Carbon;
-use HarryGulliford\Firebird\FirebirdServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -311,11 +310,5 @@ abstract class TestCase extends Base
         $app['config']->set('database.default', 'testing');
 
         $app['config']->set('database.connections.testing', $config[$this->connection]);
-    }
-
-    protected function getPackageProviders($app)
-    {
-        return [];
-        // return [FirebirdServiceProvider::class]; TODO[L12]
     }
 }

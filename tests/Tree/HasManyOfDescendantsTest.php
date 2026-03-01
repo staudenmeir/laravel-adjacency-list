@@ -105,7 +105,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQuery(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -116,7 +116,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -127,7 +127,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelation(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -138,7 +138,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testExistenceQueryForSelfRelationAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb', 'sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -149,7 +149,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testUpdate(): void
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb'])) {
             $this->markTestSkipped();
         }
 
@@ -162,7 +162,7 @@ class HasManyOfDescendantsTest extends TestCase
 
     public function testUpdateAndSelf(): void
     {
-        if (in_array($this->connection, ['mariadb', 'firebird'])) {
+        if (in_array($this->connection, ['mariadb'])) {
             $this->markTestSkipped();
         }
 

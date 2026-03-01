@@ -11,7 +11,7 @@ class CollectionTest extends TestCase
 {
     public function testToTree(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -41,7 +41,7 @@ class CollectionTest extends TestCase
 
     public function testToTreeWithCycle(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -61,7 +61,7 @@ class CollectionTest extends TestCase
 
     public function testToTreeWithCycleAndStart(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 
@@ -81,7 +81,7 @@ class CollectionTest extends TestCase
 
     public function testToTreeWithEmptyCollection(): void
     {
-        if (in_array($this->connection, ['sqlsrv', 'firebird'])) {
+        if (in_array($this->connection, ['sqlsrv'])) {
             $this->markTestSkipped();
         }
 

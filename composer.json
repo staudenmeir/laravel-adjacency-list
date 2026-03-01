@@ -9,20 +9,19 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "illuminate/database": "^12.0",
-        "staudenmeir/eloquent-has-many-deep-contracts": "^1.3",
-        "staudenmeir/laravel-cte": "^1.12.1"
+        "php": "^8.3",
+        "illuminate/database": "^13.0",
+        "staudenmeir/eloquent-has-many-deep-contracts": "^1.4",
+        "staudenmeir/laravel-cte": "^1.13"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
         "larastan/larastan": "^3.0",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^13.0",
         "mockery/mockery": "^1.5.1",
-        "orchestra/testbench-core": "^10.0",
-        "phpunit/phpunit": "^11.0",
-        "singlestoredb/singlestoredb-laravel": "^2.0",
-        "staudenmeir/eloquent-has-many-deep": "^1.21"
+        "orchestra/testbench-core": "^11.0",
+        "phpunit/phpunit": "^12.5",
+        "staudenmeir/eloquent-has-many-deep": "dev-l13"
     },
     "suggest": {
         "barryvdh/laravel-ide-helper": "Provide type hints for attributes and relations."
