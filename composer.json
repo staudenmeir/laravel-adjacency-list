@@ -21,7 +21,7 @@
         "mockery/mockery": "^1.5.1",
         "orchestra/testbench-core": "^11.0",
         "phpunit/phpunit": "^12.5",
-        "staudenmeir/eloquent-has-many-deep": "dev-l13"
+        "staudenmeir/eloquent-has-many-deep": "^1.22"
     },
     "suggest": {
         "barryvdh/laravel-ide-helper": "Provide type hints for attributes and relations."
