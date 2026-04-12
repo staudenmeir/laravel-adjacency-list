@@ -100,6 +100,16 @@ class Siblings extends HasMany
     }
 
     /** @inheritDoc */
+    protected function buildDictionary(Collection $results)
+    {
+        $foreign = $this->getForeignKeyName();
+
+        return $results->mapToDictionary(function ($result) use ($foreign) {
+            return [$this->getDictionaryKey($result->{$foreign}) => $result];
+        })->all();
+    }
+
+    /** @inheritDoc */
     public function getResults()
     {
         return $this->query->get();
