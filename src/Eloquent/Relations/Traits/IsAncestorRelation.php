@@ -70,7 +70,7 @@ trait IsAncestorRelation
         foreach ($models as $model) {
             $key = $model->{$attribute};
 
-            if (isset($dictionary[$key])) {
+            if ($key !== null && isset($dictionary[$key])) {
                 $value = $this->getRelationValue($dictionary, $key, $type);
 
                 $model->setRelation($relation, $value);
